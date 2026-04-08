@@ -1,0 +1,1099 @@
+[
+  {
+    "internal_name": "BizyTRD_Wan27Image",
+    "class_name": "BizyTRDWan27Image",
+    "display_name": "BizyTRD Wan 2.7 Image",
+    "display_name_zh": "BizyTRD 万相 2.7 生图",
+    "category": "BizyTRD/Wan",
+    "model_key": "wan2.7-image",
+    "output_type": "image",
+    "adapter": {
+      "kind": "structured",
+      "context": [
+        {
+          "name": "image_items",
+          "input": "images",
+          "transform": {
+            "name": "collect_counted_inputs",
+            "count": {"input": "inputcount"},
+            "max_count": 9,
+            "extra_input_pattern": "image_{index}",
+            "item_transform": "image_batches"
+          }
+        },
+        {
+          "name": "input_image_count",
+          "context": "image_items",
+          "transform": "count"
+        },
+        {
+          "name": "resolved_size",
+          "input": "size",
+          "transform": {
+            "name": "resolve_custom_size",
+            "model": {"input": "model"},
+            "custom_width": {"input": "custom_width"},
+            "custom_height": {"input": "custom_height"},
+            "has_input_images": {"context": "input_image_count"},
+            "enable_sequential": {"input": "enable_sequential"}
+          }
+        },
+        {
+          "name": "uploaded_urls",
+          "context": "image_items",
+          "transform": {
+            "name": "upload_media_list",
+            "media_type": "IMAGE",
+            "input_name": "images",
+            "file_name_prefix": "wan27_image_{index}",
+            "total_pixels": 64000000,
+            "max_size": 20971520
+          }
+        },
+        {
+          "name": "parsed_bbox_list",
+          "input": "bbox_list",
+          "transform": {
+            "name": "parse_bbox_list",
+            "image_count": {"context": "input_image_count"}
+          }
+        },
+        {
+          "name": "parsed_color_palette",
+          "input": "color_palette",
+          "transform": {
+            "name": "parse_color_palette",
+            "enable_sequential": {"input": "enable_sequential"}
+          }
+        }
+      ],
+      "validators": [
+        {
+          "name": "max_count",
+          "value": {"context": "image_items"},
+          "max": 9,
+          "message": "Wan2.7 Image supports at most 9 input images"
+        },
+        {
+          "name": "int_range",
+          "value": {"input": "n"},
+          "min": 1,
+          "max": 12,
+          "when": {"source": "input", "key": "enable_sequential", "op": "is_true"},
+          "message": "n must be between 1 and 12 when enable_sequential=true"
+        },
+        {
+          "name": "int_range",
+          "value": {"input": "n"},
+          "min": 1,
+          "max": 4,
+          "when": {"source": "input", "key": "enable_sequential", "op": "is_false"},
+          "message": "n must be between 1 and 4 when enable_sequential=false"
+        },
+        {
+          "name": "require_any_non_empty",
+          "refs": [
+            {"input": "prompt"},
+            {"context": "uploaded_urls"}
+          ],
+          "message": "At least a prompt or one input image is required"
+        }
+      ],
+      "payload": [
+        {
+          "field": "model",
+          "input": "model"
+        },
+        {
+          "field": "size",
+          "context": "resolved_size"
+        },
+        {
+          "field": "n",
+          "input": "n"
+        },
+        {
+          "field": "watermark",
+          "input": "watermark"
+        },
+        {
+          "field": "prompt",
+          "input": "prompt",
+          "when": {"source": "input", "key": "prompt", "op": "non_empty"}
+        },
+        {
+          "field": "urls",
+          "context": "uploaded_urls",
+          "when": {"source": "context", "key": "uploaded_urls", "op": "non_empty"}
+        },
+        {
+          "field": "enable_sequential",
+          "const": true,
+          "when": {"source": "input", "key": "enable_sequential", "op": "is_true"}
+        },
+        {
+          "field": "thinking_mode",
+          "input": "thinking_mode",
+          "when": {
+            "all": [
+              {"source": "input", "key": "enable_sequential", "op": "is_false"},
+              {"source": "context", "key": "uploaded_urls", "op": "empty"}
+            ]
+          }
+        },
+        {
+          "field": "bbox_list",
+          "context": "parsed_bbox_list",
+          "when": {"source": "context", "key": "parsed_bbox_list", "op": "exists"}
+        },
+        {
+          "field": "color_palette",
+          "context": "parsed_color_palette",
+          "when": {"source": "context", "key": "parsed_color_palette", "op": "exists"}
+        },
+        {
+          "field": "seed",
+          "input": "seed",
+          "when": {"source": "input", "key": "seed", "op": "gte", "value": 0}
+        }
+      ]
+    },
+    "params": [
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "提示词。可为空，但至少需要与参考图二选一提供。"
+      },
+      {
+        "name": "model",
+        "api_field": "model",
+        "type": "LIST",
+        "required": false,
+        "default": "wan2.7-image-pro",
+        "options": ["wan2.7-image-pro", "wan2.7-image"],
+        "description_zh": "模型版本。`wan2.7-image-pro` 支持更高质量与 4K 纯文生图。"
+      },
+      {
+        "name": "size",
+        "api_field": "size",
+        "type": "LIST",
+        "required": false,
+        "default": "2K",
+        "options": ["1K", "2K", "4K", "Custom"],
+        "description_zh": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。"
+      },
+      {
+        "name": "custom_width",
+        "api_field": "custom_width",
+        "type": "INT",
+        "required": false,
+        "default": 2048,
+        "min": 768,
+        "max": 4096,
+        "description_zh": "自定义输出宽度。仅在 `size=Custom` 时生效。"
+      },
+      {
+        "name": "custom_height",
+        "api_field": "custom_height",
+        "type": "INT",
+        "required": false,
+        "default": 2048,
+        "min": 768,
+        "max": 4096,
+        "description_zh": "自定义输出高度。仅在 `size=Custom` 时生效。"
+      },
+      {
+        "name": "n",
+        "api_field": "n",
+        "type": "INT",
+        "required": false,
+        "default": 4,
+        "min": 1,
+        "max": 12,
+        "description_zh": "生成张数。普通模式范围 1-4，组图模式范围 1-12。"
+      },
+      {
+        "name": "images",
+        "api_field": "urls",
+        "type": "IMAGE",
+        "required": false,
+        "multiple_inputs": true,
+        "max_inputs": 9,
+        "extra_input_pattern": "image_{index}",
+        "description_zh": "参考图输入。可为空，最多 9 张，用于图像编辑、多图参考生成或组图生成。"
+      },
+      {
+        "name": "inputcount",
+        "api_field": "inputcount",
+        "type": "INT",
+        "required": false,
+        "default": 1,
+        "min": 1,
+        "max": 9,
+        "description_zh": "参考图输入端口数量。`images` 为第 1 张，`image_2` 到 `image_9` 为附加端口；节点仅会读取前 `inputcount` 个端口。"
+      },
+      {
+        "name": "enable_sequential",
+        "api_field": "enable_sequential",
+        "type": "BOOLEAN",
+        "required": false,
+        "default": false,
+        "description_zh": "是否启用组图模式。开启后可生成一组保持主体一致性的图片。"
+      },
+      {
+        "name": "thinking_mode",
+        "api_field": "thinking_mode",
+        "type": "BOOLEAN",
+        "required": false,
+        "default": true,
+        "description_zh": "仅在纯文生图且未开启组图模式时生效。"
+      },
+      {
+        "name": "bbox_list",
+        "api_field": "bbox_list",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description_zh": "可选框选编辑区域 JSON 数组，长度需与输入图片数量一致。"
+      },
+      {
+        "name": "color_palette",
+        "api_field": "color_palette",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description_zh": "可选配色 JSON 数组，仅在未开启组图模式时生效。"
+      },
+      {
+        "name": "watermark",
+        "api_field": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "default": false,
+        "description_zh": "是否添加 AI 生成水印。"
+      },
+      {
+        "name": "seed",
+        "api_field": "seed",
+        "type": "INT",
+        "required": false,
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description_zh": "随机种子。设为 -1 时不传此参数，由服务端随机。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_wan_api.py",
+      "class": "Wan_V2_7_IMAGE_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Wan27VideoEdit",
+    "class_name": "BizyTRDWan27VideoEdit",
+    "display_name": "BizyTRD Wan 2.7 Video Edit",
+    "display_name_zh": "BizyTRD 万相 2.7 视频编辑",
+    "category": "BizyTRD/Wan",
+    "model_key": "wan2.7-videoedit",
+    "output_type": "video",
+    "adapter": {
+      "kind": "structured",
+      "payload": [
+        {
+          "field": "model",
+          "const": "wan2.7-videoedit"
+        },
+        {
+          "field": "media",
+          "build": "media_array",
+          "items": [
+            {
+              "input": "video",
+              "media_type": "VIDEO",
+              "item_type": "video",
+              "required": true,
+              "file_name_prefix": "wan27_videoedit_input",
+              "max_size": 104857600,
+              "enforce_duration_range": [2.0, 10.0]
+            },
+            {
+              "input": "first_frame_image",
+              "media_type": "IMAGE",
+              "item_type": "first_frame",
+              "file_name_prefix": "wan27_videoedit_first_frame",
+              "total_pixels": 64000000,
+              "max_size": 20971520
+            },
+            {
+              "input": "ref_image_1",
+              "media_type": "IMAGE",
+              "item_type": "reference_image",
+              "file_name_prefix": "wan27_videoedit_ref_image_1",
+              "total_pixels": 64000000,
+              "max_size": 20971520
+            },
+            {
+              "input": "ref_image_2",
+              "media_type": "IMAGE",
+              "item_type": "reference_image",
+              "file_name_prefix": "wan27_videoedit_ref_image_2",
+              "total_pixels": 64000000,
+              "max_size": 20971520
+            },
+            {
+              "input": "ref_image_3",
+              "media_type": "IMAGE",
+              "item_type": "reference_image",
+              "file_name_prefix": "wan27_videoedit_ref_image_3",
+              "total_pixels": 64000000,
+              "max_size": 20971520
+            }
+          ]
+        },
+        {
+          "field": "resolution",
+          "input": "resolution"
+        },
+        {
+          "field": "audio_setting",
+          "input": "audio_setting"
+        },
+        {
+          "field": "prompt_extend",
+          "input": "prompt_extend"
+        },
+        {
+          "field": "watermark",
+          "input": "watermark"
+        },
+        {
+          "field": "prompt",
+          "input": "prompt",
+          "when": {"source": "input", "key": "prompt", "op": "non_empty"}
+        },
+        {
+          "field": "negative_prompt",
+          "input": "negative_prompt",
+          "when": {"source": "input", "key": "negative_prompt", "op": "non_empty"}
+        },
+        {
+          "field": "ratio",
+          "input": "ratio",
+          "when": {"source": "input", "key": "ratio", "op": "ne", "value": "default"}
+        },
+        {
+          "field": "duration",
+          "input": "duration",
+          "when": {"source": "input", "key": "duration", "op": "not_in", "value": [null, 0]},
+          "validators": [
+            {
+              "name": "int_range",
+              "min": 2,
+              "max": 10,
+              "message": "Duration must be 0 or an integer between 2 and 10"
+            }
+          ]
+        },
+        {
+          "field": "seed",
+          "input": "seed",
+          "when": {"source": "input", "key": "seed", "op": "gte", "value": 0}
+        }
+      ]
+    },
+    "params": [
+      {
+        "name": "video",
+        "api_field": "media",
+        "type": "VIDEO",
+        "required": true,
+        "description": "Input video",
+        "description_zh": "输入视频。时长需在 2-10 秒之间。"
+      },
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description_zh": "正向提示词。描述希望如何编辑视频。"
+      },
+      {
+        "name": "negative_prompt",
+        "api_field": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description_zh": "反向提示词。描述不希望在结果中出现的内容。"
+      },
+      {
+        "name": "first_frame_image",
+        "api_field": "media",
+        "type": "IMAGE",
+        "required": false,
+        "description_zh": "可选首帧参考图，用于更精细地约束首帧表现。"
+      },
+      {
+        "name": "ref_image_1",
+        "api_field": "media",
+        "type": "IMAGE",
+        "required": false,
+        "description_zh": "可选参考图 1，用于约束角色、风格或主体。"
+      },
+      {
+        "name": "ref_image_2",
+        "api_field": "media",
+        "type": "IMAGE",
+        "required": false,
+        "description_zh": "可选参考图 2，用于约束角色、风格或主体。"
+      },
+      {
+        "name": "ref_image_3",
+        "api_field": "media",
+        "type": "IMAGE",
+        "required": false,
+        "description_zh": "可选参考图 3，用于约束角色、风格或主体。"
+      },
+      {
+        "name": "resolution",
+        "api_field": "resolution",
+        "type": "LIST",
+        "required": false,
+        "default": "1080P",
+        "options": ["720P", "1080P"],
+        "description_zh": "输出分辨率。"
+      },
+      {
+        "name": "ratio",
+        "api_field": "ratio",
+        "type": "LIST",
+        "required": false,
+        "default": "default",
+        "options": ["default", "16:9", "9:16", "1:1", "4:3", "3:4"],
+        "description_zh": "输出画幅比例。`default` 表示跟随输入视频比例。"
+      },
+      {
+        "name": "duration",
+        "api_field": "duration",
+        "type": "INT",
+        "required": false,
+        "default": 0,
+        "min": 0,
+        "max": 10,
+        "description_zh": "输出时长。0 表示保持输入视频时长，2-10 表示截断到指定秒数。"
+      },
+      {
+        "name": "audio_setting",
+        "api_field": "audio_setting",
+        "type": "LIST",
+        "required": false,
+        "default": "auto",
+        "options": ["auto", "origin"],
+        "description_zh": "音频处理方式。`auto` 自动判断，`origin` 尽量保留输入原声。"
+      },
+      {
+        "name": "prompt_extend",
+        "api_field": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "default": true,
+        "description_zh": "是否启用提示词智能改写。"
+      },
+      {
+        "name": "watermark",
+        "api_field": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "default": false,
+        "description_zh": "是否添加 AI 生成水印。"
+      },
+      {
+        "name": "seed",
+        "api_field": "seed",
+        "type": "INT",
+        "required": false,
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description_zh": "随机种子。设为 -1 时不传此参数，由服务端随机。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_wan_api.py",
+      "class": "Wan_V2_7_VIDEOEDIT_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Wan25TextToVideo",
+    "class_name": "BizyTRDWan25TextToVideo",
+    "display_name": "BizyTRD Wan 2.5 Text To Video",
+    "display_name_zh": "BizyTRD 万相 2.5 文生视频",
+    "category": "BizyTRD/Wan",
+    "model_key": "wan2.5-t2v-preview",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description": "User prompt",
+        "description_zh": "提示词。描述希望生成的视频内容。"
+      },
+      {
+        "name": "negative_prompt",
+        "api_field": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description": "Negative prompt",
+        "description_zh": "反向提示词。描述不希望出现的内容。"
+      },
+      {
+        "name": "size",
+        "api_field": "size",
+        "type": "LIST",
+        "required": false,
+        "default": "1920*1080",
+        "options": ["832*480", "480*832", "624*624", "1280*720", "720*1280", "960*960", "1088*832", "832*1088", "1920*1080", "1080*1920", "1440*1440", "1632*1248", "1248*1632"],
+        "description_zh": "输出分辨率与画幅。"
+      },
+      {
+        "name": "duration",
+        "api_field": "duration",
+        "type": "LIST",
+        "required": false,
+        "default": 5,
+        "options": [5, 10],
+        "description_zh": "输出时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "api_field": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "default": true,
+        "description_zh": "是否启用提示词智能改写。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_wan_api.py",
+      "class": "Wan_V2_5_T2V_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Wan25ImageToVideo",
+    "class_name": "BizyTRDWan25ImageToVideo",
+    "display_name": "BizyTRD Wan 2.5 Image To Video",
+    "display_name_zh": "BizyTRD 万相 2.5 图生视频",
+    "category": "BizyTRD/Wan",
+    "model_key": "wan2.5-i2v-preview",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "image",
+        "api_field": "image",
+        "type": "IMAGE",
+        "required": true,
+        "description": "Input image",
+        "description_zh": "输入首帧图片。"
+      },
+      {
+        "name": "audio",
+        "api_field": "audio",
+        "type": "AUDIO",
+        "required": false,
+        "description": "Optional guiding audio",
+        "description_zh": "可选引导音频。当前依赖服务端音频上传能力。"
+      },
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description_zh": "可选提示词，用于补充动作或场景描述。"
+      },
+      {
+        "name": "resolution",
+        "api_field": "resolution",
+        "type": "LIST",
+        "required": false,
+        "default": "1080P",
+        "options": ["480P", "720P", "1080P"],
+        "description_zh": "输出分辨率。"
+      },
+      {
+        "name": "duration",
+        "api_field": "duration",
+        "type": "LIST",
+        "required": false,
+        "default": 5,
+        "options": [5, 10],
+        "description_zh": "输出时长，单位秒。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_wan_api.py",
+      "class": "Wan_V2_5_I2V_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_ViduQ1TextToVideo",
+    "class_name": "BizyTRDViduQ1TextToVideo",
+    "display_name": "BizyTRD Vidu Q1 Text To Video",
+    "display_name_zh": "BizyTRD Vidu Q1 文生视频",
+    "category": "BizyTRD/Vidu",
+    "model_key": "vidu-q1-text2video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "提示词。描述希望生成的视频内容。"
+      },
+      {
+        "name": "seed",
+        "api_field": "seed",
+        "type": "INT",
+        "required": false,
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description_zh": "随机种子。相同参数下可用于复现结果。"
+      },
+      {
+        "name": "style",
+        "api_field": "style",
+        "type": "LIST",
+        "required": false,
+        "default": "general",
+        "options": ["general", "anime"],
+        "description_zh": "风格类型。"
+      },
+      {
+        "name": "duration",
+        "api_field": "duration",
+        "type": "LIST",
+        "required": false,
+        "default": 5,
+        "options": [5],
+        "description_zh": "输出时长。当前模型固定为 5 秒。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_vidu.py",
+      "class": "VIDU_Q1_T2V_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_ViduQ1ImageToVideo",
+    "class_name": "BizyTRDViduQ1ImageToVideo",
+    "display_name": "BizyTRD Vidu Q1 Image To Video",
+    "display_name_zh": "BizyTRD Vidu Q1 图生视频",
+    "category": "BizyTRD/Vidu",
+    "model_key": "vidu-q1-img2video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "提示词。描述希望生成的视频内容。"
+      },
+      {
+        "name": "first_frame_image",
+        "api_field": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "description_zh": "输入首帧图片。"
+      },
+      {
+        "name": "last_frame_image",
+        "api_field": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "description_zh": "可选末帧图片，用于约束结束画面。"
+      },
+      {
+        "name": "seed",
+        "api_field": "seed",
+        "type": "INT",
+        "required": false,
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description_zh": "随机种子。相同参数下可用于复现结果。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_vidu.py",
+      "class": "VIDU_Q1_I2V_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_GPTImage1TextToImage",
+    "class_name": "BizyTRDGPTImage1TextToImage",
+    "display_name": "BizyTRD GPT Image 1 Text To Image",
+    "display_name_zh": "BizyTRD GPT Image 1 文生图",
+    "category": "BizyTRD/OpenAI",
+    "model_key": "gpt-image-1",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "提示词。描述希望生成的图像内容。"
+      },
+      {
+        "name": "size",
+        "api_field": "size",
+        "type": "LIST",
+        "required": false,
+        "default": "1:1",
+        "options": ["1:1", "2:3", "3:2"],
+        "description_zh": "输出画幅比例。"
+      },
+      {
+        "name": "variants",
+        "api_field": "variants",
+        "type": "LIST",
+        "required": false,
+        "default": 1,
+        "options": [1, 2, 4],
+        "description_zh": "生成张数。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_gpt.py",
+      "class": "GPT_IMAGE_1_T2I_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_GPTImage1Edit",
+    "class_name": "BizyTRDGPTImage1Edit",
+    "display_name": "BizyTRD GPT Image Edit",
+    "display_name_zh": "BizyTRD GPT Image 编辑",
+    "category": "BizyTRD/OpenAI",
+    "model_key": "gpt-image-1-edit",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "images",
+        "api_field": "images",
+        "type": "IMAGE",
+        "required": true,
+        "multiple": true,
+        "max_inputs": 4,
+        "description_zh": "输入参考图。最多 4 张，用于图像编辑。"
+      },
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "编辑提示词。描述希望如何修改输入图片。"
+      },
+      {
+        "name": "size",
+        "api_field": "size",
+        "type": "LIST",
+        "required": false,
+        "default": "1:1",
+        "options": ["1:1", "2:3", "3:2"],
+        "description_zh": "输出画幅比例。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_gpt.py",
+      "class": "GPT_IMAGE_EDIT_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Seedance20MultimodalVideo",
+    "class_name": "BizyTRDSeedance20MultimodalVideo",
+    "display_name": "BizyTRD Seedance 2.0 Multimodal To Video",
+    "display_name_zh": "BizyTRD 超能视频 2.0 多模态生成视频",
+    "category": "BizyTRD/Doubao",
+    "model_key": "seedance-2-0-v2",
+    "output_type": "video",
+    "adapter": {
+      "kind": "structured",
+      "context": [
+        {
+          "name": "image_items",
+          "input": "images",
+          "transform": {
+            "name": "collect_counted_inputs",
+            "count": {"input": "image_inputcount"},
+            "max_count": 9,
+            "extra_input_pattern": "image_{index}",
+            "item_transform": "image_batches"
+          }
+        },
+        {
+          "name": "video_items",
+          "input": "video",
+          "transform": {
+            "name": "collect_counted_inputs",
+            "count": {"input": "video_inputcount"},
+            "max_count": 3,
+            "extra_input_pattern": "video_{index}"
+          }
+        },
+        {
+          "name": "audio_items",
+          "input": "audio",
+          "transform": {
+            "name": "collect_counted_inputs",
+            "count": {"input": "audio_inputcount"},
+            "max_count": 3,
+            "extra_input_pattern": "audio_{index}"
+          }
+        },
+        {
+          "name": "uploaded_image_urls",
+          "context": "image_items",
+          "transform": {
+            "name": "upload_media_list",
+            "media_type": "IMAGE",
+            "input_name": "images",
+            "file_name_prefix": "seedance_multimodal_image_{index}",
+            "total_pixels": 36000000,
+            "max_size": 31457280
+          }
+        },
+        {
+          "name": "uploaded_video_urls",
+          "context": "video_items",
+          "transform": {
+            "name": "upload_media_list",
+            "media_type": "VIDEO",
+            "input_name": "video",
+            "file_name_prefix": "seedance_multimodal_video_{index}",
+            "max_size": 104857600
+          }
+        },
+        {
+          "name": "uploaded_audio_urls",
+          "context": "audio_items",
+          "transform": {
+            "name": "upload_media_list",
+            "media_type": "AUDIO",
+            "input_name": "audio",
+            "file_name_prefix": "seedance_multimodal_audio_{index}",
+            "format": "mp3",
+            "max_size": 52428800
+          }
+        }
+      ],
+      "validators": [
+        {
+          "name": "max_count",
+          "value": {"context": "image_items"},
+          "max": 9,
+          "message": "Seedance 2.0 Multimodal supports at most 9 input images"
+        },
+        {
+          "name": "max_count",
+          "value": {"context": "video_items"},
+          "max": 3,
+          "message": "Seedance 2.0 Multimodal supports at most 3 input videos"
+        },
+        {
+          "name": "max_count",
+          "value": {"context": "audio_items"},
+          "max": 3,
+          "message": "Seedance 2.0 Multimodal supports at most 3 input audios"
+        },
+        {
+          "name": "require_any_non_empty",
+          "refs": [
+            {"input": "prompt"},
+            {"context": "uploaded_image_urls"},
+            {"context": "uploaded_video_urls"},
+            {"context": "uploaded_audio_urls"}
+          ],
+          "message": "At least a prompt or one media input is required"
+        }
+      ],
+      "payload": [
+        {
+          "field": "model",
+          "const": "multimodal-to-video"
+        },
+        {
+          "field": "mode",
+          "input": "mode"
+        },
+        {
+          "field": "prompt",
+          "input": "prompt"
+        },
+        {
+          "field": "resolution",
+          "input": "resolution"
+        },
+        {
+          "field": "duration",
+          "input": "duration"
+        },
+        {
+          "field": "generateAudio",
+          "input": "generate_audio"
+        },
+        {
+          "field": "ratio",
+          "input": "ratio"
+        },
+        {
+          "field": "imageUrls",
+          "context": "uploaded_image_urls",
+          "when": {"source": "context", "key": "uploaded_image_urls", "op": "non_empty"}
+        },
+        {
+          "field": "videoUrls",
+          "context": "uploaded_video_urls",
+          "when": {"source": "context", "key": "uploaded_video_urls", "op": "non_empty"}
+        },
+        {
+          "field": "audioUrls",
+          "context": "uploaded_audio_urls",
+          "when": {"source": "context", "key": "uploaded_audio_urls", "op": "non_empty"}
+        }
+      ]
+    },
+    "params": [
+      {
+        "name": "mode",
+        "api_field": "mode",
+        "type": "LIST",
+        "required": true,
+        "default": "std",
+        "options": ["std", "fast"],
+        "description_zh": "生成模式。`std` 质量更稳，`fast` 响应更快。"
+      },
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "视频生成提示词。可为空，但建议与多模态素材一起描述目标效果。"
+      },
+      {
+        "name": "resolution",
+        "api_field": "resolution",
+        "type": "LIST",
+        "required": true,
+        "default": "720p",
+        "options": ["480p", "720p", "1080p", "2k", "4k"],
+        "description_zh": "输出分辨率。"
+      },
+      {
+        "name": "duration",
+        "api_field": "duration",
+        "type": "INT",
+        "required": true,
+        "default": 5,
+        "min": 4,
+        "max": 15,
+        "description_zh": "视频时长，单位秒。"
+      },
+      {
+        "name": "images",
+        "api_field": "imageUrls",
+        "type": "IMAGE",
+        "required": false,
+        "multiple_inputs": true,
+        "max_inputs": 9,
+        "extra_input_pattern": "image_{index}",
+        "description_zh": "参考图片输入。最多 9 张，会作为 `imageUrls` 传给后端。"
+      },
+      {
+        "name": "image_inputcount",
+        "api_field": "image_inputcount",
+        "type": "INT",
+        "required": false,
+        "default": 1,
+        "min": 1,
+        "max": 9,
+        "description_zh": "图片输入端口数量。控制 `images` 到 `image_9` 的显示与读取范围。"
+      },
+      {
+        "name": "video",
+        "api_field": "videoUrls",
+        "type": "VIDEO",
+        "required": false,
+        "multiple_inputs": true,
+        "max_inputs": 3,
+        "extra_input_pattern": "video_{index}",
+        "description_zh": "参考视频输入。最多 3 个，会作为 `videoUrls` 传给后端。"
+      },
+      {
+        "name": "video_inputcount",
+        "api_field": "video_inputcount",
+        "type": "INT",
+        "required": false,
+        "default": 1,
+        "min": 1,
+        "max": 3,
+        "description_zh": "视频输入端口数量。控制 `video` 到 `video_3` 的显示与读取范围。"
+      },
+      {
+        "name": "audio",
+        "api_field": "audioUrls",
+        "type": "AUDIO",
+        "required": false,
+        "multiple_inputs": true,
+        "max_inputs": 3,
+        "extra_input_pattern": "audio_{index}",
+        "description_zh": "参考音频输入。最多 3 个，会作为 `audioUrls` 传给后端。"
+      },
+      {
+        "name": "audio_inputcount",
+        "api_field": "audio_inputcount",
+        "type": "INT",
+        "required": false,
+        "default": 1,
+        "min": 1,
+        "max": 3,
+        "description_zh": "音频输入端口数量。控制 `audio` 到 `audio_3` 的显示与读取范围。"
+      },
+      {
+        "name": "generate_audio",
+        "api_field": "generateAudio",
+        "type": "BOOLEAN",
+        "required": false,
+        "default": true,
+        "description_zh": "是否为输出视频生成音频。"
+      },
+      {
+        "name": "ratio",
+        "api_field": "ratio",
+        "type": "LIST",
+        "required": false,
+        "default": "adaptive",
+        "options": ["adaptive", "16:9", "4:3", "1:1", "3:4", "9:16", "21:9"],
+        "description_zh": "视频宽高比。`adaptive` 表示自动匹配。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
+      "class": "Seedance_2_0_Multimodal_API"
+    }
+  }
+]

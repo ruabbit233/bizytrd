@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bizytrd"
+version = "0.1.0"
+description = "Registry-driven ComfyUI nodes for BizyAir third-party model access"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["requests"]
+
+[tool.setuptools]
+packages = ["bizytrd", "bizytrd.core", "bizytrd.nodes"]
+package-dir = { "bizytrd" = ".", "bizytrd.core" = "core", "bizytrd.nodes" = "nodes" }
+include-package-data = true
+
+[tool.setuptools.package-data]
+"bizytrd" = ["models_registry.json", "web/js/*.js"]
+
+[tool.setuptools.exclude-package-data]
+"*" = ["__pycache__/*", "*/__pycache__/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

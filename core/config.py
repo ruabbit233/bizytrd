@@ -11,8 +11,15 @@ from urllib.parse import urlparse
 DEFAULT_API_BASE_URL = "https://uat-api.bizyair.cn/x/v1"
 DEFAULT_UPLOAD_BASE_URL = "https://uat-api.bizyair.cn/x/v1"
 DEFAULT_TIMEOUT = 60
-DEFAULT_POLLING_INTERVAL = 5.0
-DEFAULT_MAX_POLLING_TIME = 1800
+DEFAULT_POLLING_INTERVAL = 10.0
+DEFAULT_MAX_POLLING_TIME = 3600
+
+version_path = os.path.join(os.path.dirname(__file__), "..", "version.txt")
+try:
+    with open(version_path, "r") as f:
+        CLIENT_VERSION = f.read().strip()
+except FileNotFoundError:
+    CLIENT_VERSION = "0.1.0"
 
 
 def _plugin_root() -> Path:
@@ -110,7 +117,9 @@ def get_config() -> dict[str, Any]:
     bizyair_base_url = _shared_bizyair_base_url(env_values)
 
     api_base_url = (
-        os.getenv("BIZYTRD_API_BASE_URL")
+        os.getenv("BIZYAIR_TEST_TRD_BASE_URL")
+        or env_values.get("BIZYAIR_TEST_TRD_BASE_URL")
+        or os.getenv("BIZYTRD_API_BASE_URL")
         or env_values.get("BIZYTRD_API_BASE_URL")
         or bizyair_base_url
         or DEFAULT_API_BASE_URL

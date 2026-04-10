@@ -13,8 +13,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import quote, urlparse
 
-
-CLIENT_VERSION = "0.1.0"
+from .config import CLIENT_VERSION
 
 
 def _is_remote_reference(text: str) -> bool:

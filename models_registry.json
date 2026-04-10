@@ -828,7 +828,7 @@
     "display_name": "BizyTRD Seedance 2.0 Multimodal To Video",
     "display_name_zh": "BizyTRD 超能视频 2.0 多模态生成视频",
     "category": "BizyTRD/Doubao",
-    "model_key": "seedance-2-0-v2",
+    "model_key": "seedance-2-0-fast",
     "output_type": "video",
     "adapter": {
       "kind": "structured",

@@ -1,100 +1,101 @@
-"""Result normalization for bizytrd."""
+"""Result processing for bizytrd — download outputs, matching bizyengine."""
 
 from __future__ import annotations
 
+import io
 import json
-import os
-import tempfile
-import uuid
-from io import BytesIO
+import logging
 from typing import Any
 
 
-def _download_bytes(url: str, timeout: int = 180) -> bytes:
-    import requests
+async def download_outputs(
+    outputs: dict[str, Any],
+) -> tuple[list, list, list[str], str]:
+    """Download videos, images, and texts from task outputs.
 
-    response = requests.get(url, stream=True, timeout=timeout)
-    response.raise_for_status()
-    return response.content
+    Matches bizyengine's create_task_and_wait_for_completion output download loop:
+    - Videos: download and wrap in VideoFromFile
+    - Images: download and convert to tensor via bytesio_to_image_tensor
+    - Texts: extract as-is
+    - URLs: collected as a JSON string array
+    """
+    import aiohttp
 
+    videos: list[Any] = []
+    images: list[Any] = []
+    texts: list[str] = []
+    urls: list[str] = []
 
-def _output_dir() -> str:
-    try:
-        import folder_paths
+    async with aiohttp.ClientSession(
+        timeout=aiohttp.ClientTimeout(total=3600)
+    ) as session:
+        if "videos" in outputs:
+            for video_url in outputs["videos"]:
+                async with session.get(video_url) as video_resp:
+                    video_resp.raise_for_status()
+                    video_content = await video_resp.read()
+                    try:
+                        from comfy_api.latest._input_impl import VideoFromFile
+                        videos.append(VideoFromFile(io.BytesIO(video_content)))
+                    except ImportError:
+                        videos.append(io.BytesIO(video_content))
+                    urls.append(video_url)
 
-        return folder_paths.get_output_directory()
-    except Exception:
-        return tempfile.gettempdir()
+        if "images" in outputs:
+            for image_url in outputs["images"]:
+                async with session.get(image_url) as image_resp:
+                    image_resp.raise_for_status()
+                    image_content = await image_resp.read()
+                    try:
+                        from bizyairsdk import bytesio_to_image_tensor
+                        images.append(bytesio_to_image_tensor(io.BytesIO(image_content)))
+                    except ImportError:
+                        images.append(io.BytesIO(image_content))
+                    urls.append(image_url)
 
+    if "texts" in outputs:
+        for text in outputs["texts"]:
+            texts.append(text)
 
-def _download_video(url: str) -> Any:
-    suffix = os.path.splitext(url.split("?", 1)[0])[1] or ".mp4"
-    path = os.path.join(_output_dir(), f"bizytrd_{uuid.uuid4().hex}{suffix}")
-    with open(path, "wb") as handle:
-        handle.write(_download_bytes(url))
-
-    try:
-        from comfy_api.input_impl import VideoFromFile
-
-        return VideoFromFile(path)
-    except Exception:
-        return {"file_path": path}
-
-
-def _download_image_tensor(urls: list[str]) -> Any:
-    try:
-        import numpy as np
-        import torch
-        from PIL import Image
-    except Exception as exc:
-        raise RuntimeError("Image result support requires numpy, torch, and PIL") from exc
-
-    tensors = []
-    for url in urls:
-        image = Image.open(BytesIO(_download_bytes(url, timeout=120))).convert("RGB")
-        arr = np.array(image).astype("float32") / 255.0
-        tensors.append(torch.from_numpy(arr))
-    return torch.stack(tensors)
-
-
-def _download_audio(url: str) -> Any:
-    try:
-        import torch
-        import torchaudio
-    except Exception as exc:
-        raise RuntimeError("Audio result support requires torch and torchaudio") from exc
-
-    path = os.path.join(_output_dir(), f"bizytrd_{uuid.uuid4().hex}.wav")
-    with open(path, "wb") as handle:
-        handle.write(_download_bytes(url, timeout=120))
-
-    waveform, sample_rate = torchaudio.load(path)
-    if waveform.dim() == 2:
-        waveform = waveform.unsqueeze(0)
-    return {"waveform": waveform, "sample_rate": sample_rate}
+    urls_str = json.dumps(urls)
+    return videos, images, texts, urls_str
 
 
-def normalize_result(output_type: str, poll_payload: dict[str, Any]) -> tuple[Any, str, str]:
+def normalize_result(
+    output_type: str,
+    poll_payload: dict[str, Any],
+) -> tuple[Any, str, str]:
+    """Normalize poll result into (primary_output, urls_str, response_str).
+
+    This wraps the async download_outputs for use in the base node's execute method.
+    For output types that don't need downloading (e.g. string), falls back to
+    extracting directly from the response.
+    """
     data = poll_payload.get("data") or {}
     outputs = data.get("outputs") or {}
-    texts = list(outputs.get("texts") or [])
-    images = list(outputs.get("images") or [])
-    videos = list(outputs.get("videos") or [])
-    urls = images + videos
 
-    if output_type == "video":
-        if not videos:
-            raise RuntimeError(f"No video outputs found: {poll_payload}")
-        primary = _download_video(videos[0])
-    elif output_type == "image":
-        if not images:
-            raise RuntimeError(f"No image outputs found: {poll_payload}")
-        primary = _download_image_tensor(images)
-    elif output_type == "audio":
-        if not urls:
-            raise RuntimeError(f"No audio outputs found: {poll_payload}")
-        primary = _download_audio(urls[0])
-    else:
-        primary = texts[0] if texts else ""
+    if output_type in ("image", "video", "audio"):
+        # These require async download — handled in base.py directly.
+        # This path is a fallback for non-async contexts.
+        urls = []
+        if "videos" in outputs:
+            urls.extend(outputs["videos"])
+        if "images" in outputs:
+            urls.extend(outputs["images"])
+        urls_str = json.dumps(urls)
+        texts = outputs.get("texts", [])
+        response_str = json.dumps(poll_payload, ensure_ascii=False)
+        primary = urls[0] if urls else ""
+        return primary, urls_str, response_str
 
-    return primary, "\n".join(urls), json.dumps(poll_payload, ensure_ascii=False, indent=2)
+    # string / text output
+    texts = outputs.get("texts", [])
+    urls = []
+    if "videos" in outputs:
+        urls.extend(outputs["videos"])
+    if "images" in outputs:
+        urls.extend(outputs["images"])
+    urls_str = json.dumps(urls)
+    primary = "\n".join(texts) if texts else ""
+    response_str = json.dumps(poll_payload, ensure_ascii=False)
+    return primary, urls_str, response_str

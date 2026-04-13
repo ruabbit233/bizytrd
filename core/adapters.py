@@ -375,7 +375,7 @@ def _resolve_model_value(model_def: dict[str, Any], kwargs: dict[str, Any]) -> A
             return value
     if "request_model" in model_def:
         return model_def["request_model"]
-    return model_def["model_key"]
+    return model_def["api_node"]
 
 
 def _validate_required_any_of(

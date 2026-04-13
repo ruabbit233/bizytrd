@@ -93,7 +93,7 @@ def _get_prompt_id() -> str | None:
 class BizyTRDBaseNode(ABC):
     """Shared base class for registry-generated bizytrd nodes."""
 
-    MODEL_KEY = ""
+    API_NODE = ""
     MODEL_DEF: dict[str, Any] = {}
     PARAMS: list[dict[str, Any]] = []
     OUTPUT_TYPE = "string"
@@ -106,7 +106,7 @@ class BizyTRDBaseNode(ABC):
 
     def build_payload(self, config: dict[str, Any], **kwargs: Any) -> dict[str, Any]:
         model_def = self.MODEL_DEF or {
-            "model_key": self.MODEL_KEY,
+            "api_node": self.API_NODE,
             "params": self.PARAMS,
         }
         return build_payload_for_model(model_def, config, kwargs)
@@ -173,7 +173,7 @@ class BizyTRDBaseNode(ABC):
     ) -> tuple[list, list, list[str], str]:
         """Create a task and wait for completion, matching bizyengine's flow."""
         request_id, _ = await submit_task(
-            self.MODEL_KEY, payload, config, prompt_id=prompt_id
+            self.API_NODE, payload, config, prompt_id=prompt_id
         )
         poll_payload = await poll_task(
             request_id, config,

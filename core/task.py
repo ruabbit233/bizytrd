@@ -102,14 +102,14 @@ def _extract_request_id(data: dict[str, Any]) -> str:
 
 
 async def submit_task(
-    model_key: str,
+    api_node: str,
     payload: dict[str, Any],
     config: dict[str, Any],
     *,
     prompt_id: str | None = None,
 ) -> tuple[str, dict[str, Any]]:
     """Submit a task asynchronously, matching bizyengine's create_task flow."""
-    url = f"{config['base_url'].rstrip('/')}/trd_api/{model_key}"
+    url = f"{config['base_url'].rstrip('/')}/trd_api/{api_node}"
     headers = _build_headers(config, prompt_id=prompt_id)
     json_payload = json.dumps(payload).encode("utf-8")
 

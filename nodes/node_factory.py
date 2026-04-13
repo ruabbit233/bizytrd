@@ -162,14 +162,14 @@ def create_node_class(model_def: dict[str, Any]) -> type:
 
     return_types, return_names = _return_signature(model_def.get("output_type", "string"))
     class_name = model_def["class_name"]
-    model_key = model_def["model_key"]
+    api_node = model_def["api_node"]
     category = model_def["category"]
     params = list(model_def.get("params", []))
     output_type = model_def.get("output_type", "string")
     node_definition = dict(model_def)
 
     class GeneratedBizyTRDNode(BizyTRDBaseNode):
-        MODEL_KEY = model_key
+        API_NODE = api_node
         MODEL_DEF = node_definition
         PARAMS = params
         OUTPUT_TYPE = output_type

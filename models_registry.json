@@ -4,7 +4,7 @@
     "class_name": "BizyTRDWan27Image",
     "display_name": "BizyTRD Wan 2.7 Image",
     "category": "BizyTRD/Wan",
-    "model_key": "wan2.7-image",
+    "api_node": "wan2.7-image",
     "request_model_from": "model",
     "require_any_of": [
       "prompt",
@@ -178,7 +178,7 @@
     "class_name": "BizyTRDWan27VideoEdit",
     "display_name": "BizyTRD Wan 2.7 Video Edit",
     "category": "BizyTRD/Wan",
-    "model_key": "wan2.7-videoedit",
+    "api_node": "wan2.7-videoedit",
     "output_type": "video",
     "params": [
       {
@@ -329,7 +329,7 @@
     "class_name": "BizyTRDWan25TextToVideo",
     "display_name": "BizyTRD Wan 2.5 Text To Video",
     "category": "BizyTRD/Wan",
-    "model_key": "wan2.5-t2v-preview",
+    "api_node": "wan2.5-t2v-preview",
     "output_type": "video",
     "params": [
       {
@@ -402,7 +402,7 @@
     "class_name": "BizyTRDWan25ImageToVideo",
     "display_name": "BizyTRD Wan 2.5 Image To Video",
     "category": "BizyTRD/Wan",
-    "model_key": "wan2.5-i2v-preview",
+    "api_node": "wan2.5-i2v-preview",
     "output_type": "video",
     "params": [
       {
@@ -463,7 +463,7 @@
     "class_name": "BizyTRDViduQ1TextToVideo",
     "display_name": "BizyTRD Vidu Q1 Text To Video",
     "category": "BizyTRD/Vidu",
-    "model_key": "vidu-q1-text2video",
+    "api_node": "vidu-q1-text2video",
     "output_type": "video",
     "params": [
       {
@@ -518,7 +518,7 @@
     "class_name": "BizyTRDViduQ1ImageToVideo",
     "display_name": "BizyTRD Vidu Q1 Image To Video",
     "category": "BizyTRD/Vidu",
-    "model_key": "vidu-q1-img2video",
+    "api_node": "vidu-q1-img2video",
     "output_type": "video",
     "params": [
       {
@@ -564,7 +564,7 @@
     "class_name": "BizyTRDGPTImage1TextToImage",
     "display_name": "BizyTRD GPT Image 1 Text To Image",
     "category": "BizyTRD/OpenAI",
-    "model_key": "gpt-image-1",
+    "api_node": "gpt-image-1",
     "output_type": "image",
     "params": [
       {
@@ -612,7 +612,7 @@
     "class_name": "BizyTRDGPTImage1Edit",
     "display_name": "BizyTRD GPT Image Edit",
     "category": "BizyTRD/OpenAI",
-    "model_key": "gpt-image-1-edit",
+    "api_node": "gpt-image-1-edit",
     "output_type": "image",
     "params": [
       {
@@ -656,7 +656,7 @@
     "class_name": "BizyTRDSeedance20MultimodalVideo",
     "display_name": "BizyTRD Seedance 2.0 Multimodal To Video",
     "category": "BizyTRD/Doubao",
-    "model_key": "seedance-2-0-std",
+    "api_node": "seedance-2-0-std",
     "request_model": "multimodal-to-video",
     "require_any_of": [
       "prompt",

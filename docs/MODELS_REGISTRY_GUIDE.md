@@ -24,7 +24,7 @@
   "class_name": "BizyTRDExample",
   "display_name": "BizyTRD Example",
   "category": "BizyTRD/Example",
-  "model_key": "example-model",
+  "api_node": "example-model",
   "output_type": "image",
   "params": [
     {
@@ -86,14 +86,14 @@
 "category": "BizyTRD/Wan"
 ```
 
-#### `model_key`
+#### `api_node`
 
 - 类型：`STRING`
 - 用途：默认写入 payload 的 `model`
 - 说明：如果没有额外配置，payload 会自动带：
 
 ```json
-{"model": "<model_key>"}
+{"model": "<api_node>"}
 ```
 
 #### `output_type`
@@ -118,7 +118,7 @@
 示例：
 
 ```json
-"model_key": "seedance-2-0-std",
+"api_node": "seedance-2-0-std",
 "request_model": "multimodal-to-video"
 ```
 
@@ -641,7 +641,7 @@
 
 1. `request_model_from`
 2. `request_model`
-3. `model_key`
+3. `api_node`
 
 ### 10.2 普通参数如何写入 payload
 
@@ -683,7 +683,7 @@
   "class_name": "BizyTRDSimpleTextToImage",
   "display_name": "BizyTRD Simple Text To Image",
   "category": "BizyTRD/Test",
-  "model_key": "simple-text-to-image",
+  "api_node": "simple-text-to-image",
   "output_type": "image",
   "params": [
     {
@@ -801,7 +801,7 @@
    - `class_name`
    - `display_name`
    - `category`
-   - `model_key`
+   - `api_node`
    - `output_type`
    - `params`
 2. 先假设所有参数都按 `name -> api_field` 直接映射

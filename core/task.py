@@ -6,6 +6,10 @@ import random
 import time
 from typing import Any
 
+from .config import BizyTRDConfig
+from .exceptions import APIError
+from .http_utils import json_or_raise
+
 SUCCESS_CODE = 20000
 ACCEPTED_CODE = 20002
 RUNNING_STATUSES = {"running", "saving"}
@@ -16,15 +20,6 @@ MAX_TRANSIENT_RETRIES = 3
 JITTER_FACTOR = 0.25
 
 
-def _json_or_raise(response: Any) -> dict[str, Any]:
-    try:
-        return response.json() if response.text else {}
-    except ValueError as exc:
-        raise RuntimeError(
-            f"Invalid JSON response: HTTP {response.status_code}, body={response.text[:500]}"
-        ) from exc
-
-
 def _extract_request_id(data: dict[str, Any]) -> str:
     request_id = (
         (data.get("data") or {}).get("request_id")
@@ -33,7 +28,7 @@ def _extract_request_id(data: dict[str, Any]) -> str:
         or data.get("requestId")
     )
     if not request_id:
-        raise RuntimeError(f"No request_id in submit response: {data}")
+        raise APIError(f"No request_id in submit response: {data}")
     return str(request_id)
 
 
@@ -53,13 +48,13 @@ def _request_with_retry(method: str, url: str, **kwargs: Any) -> Any:
             last_exc = exc
             if attempt < MAX_TRANSIENT_RETRIES - 1:
                 _sleep_with_jitter(2**attempt)
-    raise RuntimeError(
+    raise APIError(
         f"Request failed after {MAX_TRANSIENT_RETRIES} retries: {url}"
     ) from last_exc
 
 
 def submit_task(
-    model_key: str, payload: dict[str, Any], config: dict[str, Any]
+    model_key: str, payload: dict[str, Any], config: BizyTRDConfig
 ) -> tuple[str, dict[str, Any]]:
     url = f"{config['base_url'].rstrip('/')}/trd_api/{model_key}"
     headers = {"Content-Type": "application/json"}
@@ -72,16 +67,16 @@ def submit_task(
     data = _json_or_raise(response)
 
     if response.status_code >= 400:
-        raise RuntimeError(f"Submit failed: HTTP {response.status_code}, body={data}")
+        raise APIError(f"Submit failed: HTTP {response.status_code}, body={data}")
     if data.get("status") is False:
-        raise RuntimeError(f"Submit failed: {data.get('message') or data}")
+        raise APIError(f"Submit failed: {data.get('message') or data}")
     if data.get("code") not in (SUCCESS_CODE, ACCEPTED_CODE, None):
-        raise RuntimeError(f"Submit failed: code={data.get('code')} body={data}")
+        raise APIError(f"Submit failed: code={data.get('code')} body={data}")
 
     return _extract_request_id(data), data
 
 
-def poll_task(request_id: str, config: dict[str, Any]) -> dict[str, Any]:
+def poll_task(request_id: str, config: BizyTRDConfig) -> dict[str, Any]:
     url = f"{config['base_url'].rstrip('/')}/trd_api/{request_id}"
     headers: dict[str, str] = {}
     if config.get("api_key"):
@@ -96,7 +91,7 @@ def poll_task(request_id: str, config: dict[str, Any]) -> dict[str, Any]:
 
     while True:
         if time.time() - started_at > timeout_seconds:
-            raise RuntimeError(
+            raise APIError(
                 f"Task polling timed out after {timeout_seconds}s for request_id={request_id}. "
                 f"Last payload={last_payload}"
             )
@@ -107,7 +102,7 @@ def poll_task(request_id: str, config: dict[str, Any]) -> dict[str, Any]:
             )
             payload = _json_or_raise(response)
             consecutive_errors = 0
-        except RuntimeError:
+        except APIError:
             consecutive_errors += 1
             if consecutive_errors >= MAX_TRANSIENT_RETRIES:
                 raise
@@ -117,11 +112,9 @@ def poll_task(request_id: str, config: dict[str, Any]) -> dict[str, Any]:
         last_payload = payload
 
         if response.status_code >= 400:
-            raise RuntimeError(
-                f"Poll failed: HTTP {response.status_code}, body={payload}"
-            )
+            raise APIError(f"Poll failed: HTTP {response.status_code}, body={payload}")
         if payload.get("status") is False:
-            raise RuntimeError(f"Poll failed: {payload.get('message') or payload}")
+            raise APIError(f"Poll failed: {payload.get('message') or payload}")
 
         data = payload.get("data") or {}
         status = str(data.get("status") or "").strip().lower()
@@ -129,7 +122,7 @@ def poll_task(request_id: str, config: dict[str, Any]) -> dict[str, Any]:
         if status in SUCCESS_STATUSES:
             return payload
         if status in FAILED_STATUSES:
-            raise RuntimeError(
+            raise APIError(
                 data.get("message")
                 or payload.get("message")
                 or f"Task failed: {payload}"
@@ -141,7 +134,7 @@ def poll_task(request_id: str, config: dict[str, Any]) -> dict[str, Any]:
 
         unknown_status_count += 1
         if unknown_status_count >= MAX_UNKNOWN_STATUS_COUNT:
-            raise RuntimeError(
+            raise APIError(
                 f"Task encountered unknown status '{status}' too many times "
                 f"({unknown_status_count}) for request_id={request_id}. "
                 f"Last payload={last_payload}"

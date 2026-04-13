@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from .config import BizyTRDConfig
+from .exceptions import AdapterError
 from .upload import (
     normalize_media_input,
     upload_audio_input,
@@ -23,19 +25,19 @@ def _is_blank(value: Any) -> bool:
     if hasattr(value, "numel"):
         try:
             return value.numel() == 0
-        except Exception:
+        except (AttributeError, TypeError):
             pass
     if hasattr(value, "shape"):
         try:
             return any(dim == 0 for dim in value.shape)
-        except Exception:
+        except (AttributeError, TypeError):
             pass
     return False
 
 
 def _default_adapter(
     model_def: dict[str, Any],
-    config: dict[str, Any],
+    config: BizyTRDConfig,
     kwargs: dict[str, Any],
 ) -> dict[str, Any]:
     payload: dict[str, Any] = {"model": model_def["model_key"]}
@@ -229,7 +231,7 @@ def _resolve_ref(
     recognised = {"const", "input", "context", "model", "model_key"}
     unrecognised = set(ref.keys()) - recognised
     if unrecognised:
-        raise ValueError(
+        raise AdapterError(
             f"Unrecognised ref keys {unrecognised!r} in adapter definition: {ref!r}"
         )
     return None
@@ -300,13 +302,13 @@ def _evaluate_condition(
         return bool(value) is True
     if op == "is_false":
         return bool(value) is False
-    raise ValueError(f"Unsupported adapter condition op '{op}'")
+    raise AdapterError(f"Unsupported adapter condition op '{op}'")
 
 
 def _upload_media_value(
     value: Any,
     media_type: str,
-    config: dict[str, Any],
+    config: BizyTRDConfig,
     input_name: str,
     options: dict[str, Any],
     *,
@@ -352,7 +354,7 @@ def _apply_transform(
     kwargs: dict[str, Any],
     context: dict[str, Any],
     model_def: dict[str, Any],
-    config: dict[str, Any],
+    config: BizyTRDConfig,
 ) -> Any:
     if isinstance(transform_spec, str):
         name = transform_spec
@@ -459,7 +461,7 @@ def _apply_transform(
         )
         return _parse_color_palette(str(value or ""), enable_sequential)
 
-    raise ValueError(f"Unsupported adapter transform '{name}'")
+    raise AdapterError(f"Unsupported adapter transform '{name}'")
 
 
 def _collect_transformed_items(
@@ -544,7 +546,7 @@ def _run_validator(
             raise ValueError(message or "At least one value is required")
         return
 
-    raise ValueError(f"Unsupported adapter validator '{name}'")
+    raise AdapterError(f"Unsupported adapter validator '{name}'")
 
 
 def _build_media_array(
@@ -552,7 +554,7 @@ def _build_media_array(
     kwargs: dict[str, Any],
     context: dict[str, Any],
     model_def: dict[str, Any],
-    config: dict[str, Any],
+    config: BizyTRDConfig,
 ) -> list[dict[str, Any]]:
     result: list[dict[str, Any]] = []
     for item in items:
@@ -597,7 +599,7 @@ def _build_context(
     context_specs: list[dict[str, Any]],
     kwargs: dict[str, Any],
     model_def: dict[str, Any],
-    config: dict[str, Any],
+    config: BizyTRDConfig,
 ) -> dict[str, Any]:
     context: dict[str, Any] = {}
     for spec in context_specs:
@@ -613,7 +615,7 @@ def _build_context(
 
 def _structured_adapter(
     model_def: dict[str, Any],
-    config: dict[str, Any],
+    config: BizyTRDConfig,
     kwargs: dict[str, Any],
 ) -> dict[str, Any]:
     adapter = model_def.get("adapter") or {}
@@ -651,7 +653,7 @@ def _structured_adapter(
 
 def build_payload_for_model(
     model_def: dict[str, Any],
-    config: dict[str, Any],
+    config: BizyTRDConfig,
     kwargs: dict[str, Any],
 ) -> dict[str, Any]:
     adapter = model_def.get("adapter")
@@ -661,5 +663,5 @@ def build_payload_for_model(
         kind = adapter.get("kind", "structured")
         if kind == "structured":
             return _structured_adapter(model_def, config, kwargs)
-        raise ValueError(f"Unsupported adapter kind '{kind}'")
-    raise ValueError(f"Unsupported adapter definition '{adapter}'")
+        raise AdapterError(f"Unsupported adapter kind '{kind}'")
+    raise AdapterError(f"Unsupported adapter definition '{adapter}'")

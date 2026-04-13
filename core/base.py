@@ -7,7 +7,7 @@ from abc import ABC
 from typing import Any
 
 from .adapters import build_payload_for_model
-from .config import get_config
+from .config import BizyTRDConfig, get_config
 from .result import normalize_result
 from .task import poll_task, submit_task
 

@@ -8,10 +8,17 @@ import hashlib
 import hmac
 import io
 import json
+import logging
 import uuid
 from pathlib import Path
 from typing import Any
 from urllib.parse import quote, urlparse
+
+from .config import BizyTRDConfig
+from .exceptions import AdapterError, ConfigError, UploadError
+from .http_utils import json_or_raise
+
+_logger = logging.getLogger(__name__)
 
 
 CLIENT_VERSION = "0.1.0"
@@ -31,16 +38,7 @@ def _normalize_local_path(text: str) -> Path | None:
     return None
 
 
-def _json_or_raise(response: Any) -> dict[str, Any]:
-    try:
-        return response.json() if response.text else {}
-    except ValueError as exc:
-        raise RuntimeError(
-            f"Invalid JSON response: HTTP {response.status_code}, body={response.text[:500]}"
-        ) from exc
-
-
-def _auth_headers(config: dict[str, Any]) -> dict[str, str]:
+def _auth_headers(config: BizyTRDConfig) -> dict[str, str]:
     headers = {
         "accept": "application/json",
         "content-type": "application/json",
@@ -59,7 +57,7 @@ def _process_response_payload(payload: dict[str, Any]) -> dict[str, Any]:
     try:
         message = json.loads(payload["result"])
     except json.JSONDecodeError as exc:
-        raise ValueError(
+        raise UploadError(
             f"Failed to decode JSON from response payload: {payload}"
         ) from exc
 
@@ -144,7 +142,7 @@ def _upload_file_without_sdk(
     url = f"https://{bucket}.{endpoint}/{object_key}"
     response = requests.put(url, headers=headers, data=file_content, timeout=300)
     if response.status_code >= 400:
-        raise RuntimeError(
+        raise UploadError(
             f"Bizy upload failed: HTTP {response.status_code}, body={response.text[:500]}"
         )
     return url
@@ -152,14 +150,14 @@ def _upload_file_without_sdk(
 
 def request_upload_token(
     file_name: str,
-    config: dict[str, Any],
+    config: BizyTRDConfig,
     *,
     file_type: str = "inputs",
 ) -> dict[str, Any]:
     import requests
 
     if not str(config.get("api_key") or "").strip():
-        raise RuntimeError(
+        raise ConfigError(
             "BizyTRD API key is empty. Set `BIZYAIR_API_KEY` (preferred), "
             "`BIZYTRD_API_KEY`, or place BizyAir's `api_key.ini` where BizyAir "
             "can load it so bizytrd can reuse the shared credential."
@@ -175,11 +173,11 @@ def request_upload_token(
     payload = _process_response_payload(_json_or_raise(response))
 
     if response.status_code >= 400:
-        raise RuntimeError(
+        raise UploadError(
             f"Upload token request failed: HTTP {response.status_code}, body={payload}"
         )
     if payload.get("status") is False:
-        raise RuntimeError(f"Upload token request failed: {payload}")
+        raise UploadError(f"Upload token request failed: {payload}")
 
     return parse_upload_token(payload)
 
@@ -187,7 +185,7 @@ def request_upload_token(
 def upload_bytes(
     file_content: io.BytesIO,
     file_name: str,
-    config: dict[str, Any],
+    config: BizyTRDConfig,
     *,
     file_type: str = "inputs",
 ) -> str:
@@ -204,7 +202,7 @@ def image_to_bytesio(
 ) -> io.BytesIO:
     try:
         from comfy_api_nodes.util.conversions import tensor_to_bytesio
-    except Exception as exc:
+    except ImportError as exc:
         raise RuntimeError(
             "Image upload requires ComfyUI's comfy_api_nodes conversion helpers."
         ) from exc
@@ -263,7 +261,7 @@ def audio_to_bytesio(
     try:
         import av
         import torchaudio
-    except Exception as exc:
+    except ImportError as exc:
         raise RuntimeError(
             "Audio upload requires av and torchaudio to be installed in ComfyUI."
         ) from exc
@@ -365,7 +363,7 @@ def audio_to_bytesio(
 
 def upload_local_file(
     path: Path,
-    config: dict[str, Any],
+    config: BizyTRDConfig,
     *,
     file_name: str | None = None,
 ) -> str:
@@ -376,7 +374,7 @@ def upload_local_file(
 
 def upload_image_input(
     value: Any,
-    config: dict[str, Any],
+    config: BizyTRDConfig,
     *,
     file_name_prefix: str,
     total_pixels: int = 10000 * 10000,
@@ -406,7 +404,7 @@ def upload_image_input(
 
 def upload_video_input(
     value: Any,
-    config: dict[str, Any],
+    config: BizyTRDConfig,
     *,
     file_name_prefix: str,
     max_size: int = 100 * 1024 * 1024,
@@ -438,7 +436,7 @@ def upload_video_input(
 
 def upload_audio_input(
     value: Any,
-    config: dict[str, Any],
+    config: BizyTRDConfig,
     *,
     file_name_prefix: str,
     format: str = "mp3",
@@ -468,7 +466,7 @@ def normalize_media_input(
     value: Any,
     media_type: str,
     input_name: str,
-    config: dict[str, Any],
+    config: BizyTRDConfig,
 ) -> str:
     if value is None:
         return ""
@@ -488,4 +486,6 @@ def normalize_media_input(
     if media_type == "AUDIO":
         return upload_audio_input(value, config, file_name_prefix=input_name)
 
-    raise TypeError(f"Unsupported media type '{media_type}' for input '{input_name}'")
+    raise AdapterError(
+        f"Unsupported media type '{media_type}' for input '{input_name}'"
+    )

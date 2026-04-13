@@ -7,6 +7,29 @@ from pathlib import Path
 from typing import Any
 
 from ..core.base import BizyTRDBaseNode
+from ..core.exceptions import RegistryError
+
+REQUIRED_MODEL_FIELDS = {
+    "internal_name",
+    "class_name",
+    "display_name",
+    "category",
+    "model_key",
+    "output_type",
+    "params",
+}
+REQUIRED_PARAM_FIELDS = {"name", "type"}
+VALID_PARAM_TYPES = {
+    "STRING",
+    "INT",
+    "FLOAT",
+    "BOOLEAN",
+    "LIST",
+    "IMAGE",
+    "VIDEO",
+    "AUDIO",
+}
+VALID_OUTPUT_TYPES = {"image", "video", "audio", "string"}
 
 
 def _registry_path() -> Path:
@@ -14,7 +37,74 @@ def _registry_path() -> Path:
 
 
 def _load_registry() -> list[dict[str, Any]]:
-    return json.loads(_registry_path().read_text(encoding="utf-8"))
+    path = _registry_path()
+    try:
+        raw = path.read_text(encoding="utf-8")
+    except FileNotFoundError as exc:
+        raise RegistryError(f"Models registry not found at {path}") from exc
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise RegistryError(f"Models registry contains invalid JSON: {exc}") from exc
+    if not isinstance(data, list):
+        raise RegistryError("Models registry root must be a JSON array")
+    return data
+
+
+def _validate_registry(data: list[dict[str, Any]]) -> None:
+    seen_names: set[str] = set()
+
+    for index, model_def in enumerate(data):
+        prefix = f"Registry entry [{index}]"
+
+        if not isinstance(model_def, dict):
+            raise RegistryError(
+                f"{prefix} must be a JSON object, got {type(model_def).__name__}"
+            )
+
+        missing = REQUIRED_MODEL_FIELDS - model_def.keys()
+        if missing:
+            raise RegistryError(f"{prefix} missing required fields: {sorted(missing)}")
+
+        name = model_def["internal_name"]
+        if name in seen_names:
+            raise RegistryError(
+                f"Duplicate internal_name '{name}' in models_registry.json"
+            )
+        seen_names.add(name)
+
+        output_type = model_def.get("output_type", "")
+        if output_type not in VALID_OUTPUT_TYPES:
+            raise RegistryError(
+                f"{prefix} ('{name}'): invalid output_type '{output_type}', "
+                f"must be one of {sorted(VALID_OUTPUT_TYPES)}"
+            )
+
+        params = model_def.get("params", [])
+        if not isinstance(params, list):
+            raise RegistryError(f"{prefix} ('{name}'): 'params' must be a list")
+
+        for param_index, param in enumerate(params):
+            param_prefix = f"{prefix} ('{name}'), param [{param_index}]"
+            if not isinstance(param, dict):
+                raise RegistryError(f"{param_prefix} must be a JSON object")
+            param_missing = REQUIRED_PARAM_FIELDS - param.keys()
+            if param_missing:
+                raise RegistryError(
+                    f"{param_prefix} missing required fields: {sorted(param_missing)}"
+                )
+            if param["type"] not in VALID_PARAM_TYPES:
+                raise RegistryError(
+                    f"{param_prefix}: invalid type '{param['type']}', "
+                    f"must be one of {sorted(VALID_PARAM_TYPES)}"
+                )
+
+        adapter = model_def.get("adapter")
+        if adapter and isinstance(adapter, dict):
+            if "kind" not in adapter:
+                raise RegistryError(
+                    f"{prefix} ('{name}'): adapter dict must contain 'kind'"
+                )
 
 
 def _return_signature(output_type: str) -> tuple[tuple[str, ...], tuple[str, ...]]:
@@ -182,12 +272,11 @@ def create_all_nodes():
     class_mappings: dict[str, type] = {}
     display_mappings: dict[str, str] = {}
 
-    for model_def in _load_registry():
+    registry = _load_registry()
+    _validate_registry(registry)
+
+    for model_def in registry:
         internal_name = model_def["internal_name"]
-        if internal_name in class_mappings:
-            raise ValueError(
-                f"Duplicate internal_name '{internal_name}' in models_registry.json"
-            )
         node_class = create_node_class(model_def)
         class_mappings[internal_name] = node_class
         display_mappings[internal_name] = model_def["display_name"]

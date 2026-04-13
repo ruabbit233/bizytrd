@@ -789,6 +789,61 @@
     "category": "BizyTRD/OpenAI",
     "model_key": "gpt-image-1-edit",
     "output_type": "image",
+    "adapter": {
+      "kind": "structured",
+      "context": [
+        {
+          "name": "image_items",
+          "input": "images",
+          "transform": {
+            "name": "collect_counted_inputs",
+            "count": {"input": "inputcount"},
+            "max_count": 4,
+            "extra_input_pattern": "image_{index}",
+            "item_transform": "image_batches"
+          }
+        },
+        {
+          "name": "uploaded_image_urls",
+          "context": "image_items",
+          "transform": {
+            "name": "upload_media_list",
+            "media_type": "IMAGE",
+            "input_name": "images",
+            "file_name_prefix": "gpt_image_edit_{index}",
+            "total_pixels": 100000000,
+            "max_size": 20971520
+          }
+        }
+      ],
+      "validators": [
+        {
+          "name": "max_count",
+          "value": {"context": "image_items"},
+          "max": 4,
+          "message": "GPT Image Edit supports at most 4 input images"
+        }
+      ],
+      "payload": [
+        {
+          "field": "model",
+          "const": "gpt-image-1-edit"
+        },
+        {
+          "field": "images",
+          "context": "uploaded_image_urls",
+          "when": {"source": "context", "key": "uploaded_image_urls", "op": "non_empty"}
+        },
+        {
+          "field": "prompt",
+          "input": "prompt"
+        },
+        {
+          "field": "size",
+          "input": "size"
+        }
+      ]
+    },
     "params": [
       {
         "name": "images",

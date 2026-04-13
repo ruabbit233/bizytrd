@@ -5,7 +5,7 @@ from __future__ import annotations
 import configparser
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, TypedDict
 from urllib.parse import urlparse
 
 DEFAULT_API_BASE_URL = "https://uat-api.bizyair.cn/x/v1"
@@ -119,7 +119,16 @@ def _safe_float(value: Any, default: float) -> float:
         return default
 
 
-def get_config() -> dict[str, Any]:
+class BizyTRDConfig(TypedDict):
+    base_url: str
+    api_key: str
+    upload_base_url: str
+    timeout: int
+    polling_interval: float
+    max_polling_time: int
+
+
+def get_config() -> BizyTRDConfig:
     env_values = _load_dotenv()
     bizyair_base_url = _shared_bizyair_base_url(env_values)
 

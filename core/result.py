@@ -3,11 +3,16 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 import tempfile
 import uuid
 from io import BytesIO
 from typing import Any
+
+from .config import BizyTRDConfig
+
+_logger = logging.getLogger(__name__)
 
 
 def _download_bytes(url: str, timeout: int = 180) -> bytes:
@@ -23,24 +28,30 @@ def _output_dir() -> str:
         import folder_paths
 
         return folder_paths.get_output_directory()
-    except Exception:
+    except ImportError:
+        _logger.warning("folder_paths not available; using temp directory for output")
         return tempfile.gettempdir()
 
 
 def _download_video(url: str) -> Any:
     suffix = os.path.splitext(url.split("?", 1)[0])[1] or ".mp4"
     path = os.path.join(_output_dir(), f"bizytrd_{uuid.uuid4().hex}{suffix}")
-    with open(path, "wb") as handle:
-        handle.write(_download_bytes(url))
+    try:
+        with open(path, "wb") as handle:
+            handle.write(_download_bytes(url))
+    except Exception:
+        try:
+            os.remove(path)
+        except OSError:
+            pass
+        raise
 
     try:
         from comfy_api.input_impl import VideoFromFile
 
         return VideoFromFile(path)
-    except Exception:
-        import logging
-
-        logging.getLogger(__name__).warning(
+    except ImportError:
+        _logger.warning(
             "VideoFromFile not available; returning path string for VIDEO output"
         )
         return path
@@ -51,7 +62,7 @@ def _download_image_tensor(urls: list[str]) -> Any:
         import numpy as np
         import torch
         from PIL import Image
-    except Exception as exc:
+    except ImportError as exc:
         raise RuntimeError(
             "Image result support requires numpy, torch, and PIL"
         ) from exc
@@ -68,7 +79,7 @@ def _download_audio(url: str) -> Any:
     try:
         import torch
         import torchaudio
-    except Exception as exc:
+    except ImportError as exc:
         raise RuntimeError(
             "Audio result support requires torch and torchaudio"
         ) from exc

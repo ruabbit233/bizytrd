@@ -7,7 +7,10 @@
     "category": "BizyTRD/Wan",
     "model_key": "wan2.7-image",
     "request_model_from": "model",
-    "require_any_of": ["prompt", "images"],
+    "require_any_of": [
+      "prompt",
+      "images"
+    ],
     "require_any_message": "At least a prompt or one input image is required",
     "output_type": "image",
     "params": [
@@ -17,7 +20,7 @@
         "type": "STRING",
         "required": true,
         "multiline": true,
-        "description_zh": "提示词。可为空，但至少需要与参考图二选一提供。"
+        "description": "提示词。可为空，但至少需要与参考图二选一提供。"
       },
       {
         "name": "model",
@@ -26,8 +29,11 @@
         "internal": true,
         "required": false,
         "default": "wan2.7-image-pro",
-        "options": ["wan2.7-image-pro", "wan2.7-image"],
-        "description_zh": "模型版本。`wan2.7-image-pro` 支持更高质量与 4K 纯文生图。"
+        "options": [
+          "wan2.7-image-pro",
+          "wan2.7-image"
+        ],
+        "description": "模型版本。`wan2.7-image-pro` 支持更高质量与 4K 纯文生图。"
       },
       {
         "name": "size",
@@ -41,8 +47,13 @@
         "transform_sequential_param": "enable_sequential",
         "required": false,
         "default": "2K",
-        "options": ["1K", "2K", "4K", "Custom"],
-        "description_zh": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。"
+        "options": [
+          "1K",
+          "2K",
+          "4K",
+          "Custom"
+        ],
+        "description": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。"
       },
       {
         "name": "custom_width",
@@ -53,7 +64,7 @@
         "default": 2048,
         "min": 768,
         "max": 4096,
-        "description_zh": "自定义输出宽度。仅在 `size=Custom` 时生效。"
+        "description": "自定义输出宽度。仅在 `size=Custom` 时生效。"
       },
       {
         "name": "custom_height",
@@ -64,7 +75,7 @@
         "default": 2048,
         "min": 768,
         "max": 4096,
-        "description_zh": "自定义输出高度。仅在 `size=Custom` 时生效。"
+        "description": "自定义输出高度。仅在 `size=Custom` 时生效。"
       },
       {
         "name": "n",
@@ -74,7 +85,7 @@
         "default": 4,
         "min": 1,
         "max": 12,
-        "description_zh": "生成张数。普通模式范围 1-4，组图模式范围 1-12。"
+        "description": "生成张数。普通模式范围 1-4，组图模式范围 1-12。"
       },
       {
         "name": "images",
@@ -89,7 +100,7 @@
         "upload_file_name_prefix": "wan27_image_{index}",
         "upload_total_pixels": 64000000,
         "upload_max_size": 20971520,
-        "description_zh": "参考图输入。可为空，最多 9 张，用于图像编辑、多图参考生成或组图生成。"
+        "description": "参考图输入。可为空，最多 9 张，用于图像编辑、多图参考生成或组图生成。"
       },
       {
         "name": "inputcount",
@@ -100,7 +111,7 @@
         "default": 1,
         "min": 1,
         "max": 9,
-        "description_zh": "参考图输入端口数量。`images` 为第 1 张，`image_2` 到 `image_9` 为附加端口；节点仅会读取前 `inputcount` 个端口。"
+        "description": "参考图输入端口数量。`images` 为第 1 张，`image_2` 到 `image_9` 为附加端口；节点仅会读取前 `inputcount` 个端口。"
       },
       {
         "name": "enable_sequential",
@@ -109,7 +120,7 @@
         "send_if": "true",
         "required": false,
         "default": false,
-        "description_zh": "是否启用组图模式。开启后可生成一组保持主体一致性的图片。"
+        "description": "是否启用组图模式。开启后可生成一组保持主体一致性的图片。"
       },
       {
         "name": "thinking_mode",
@@ -119,7 +130,7 @@
         "only_if_media_absent": "images",
         "required": false,
         "default": true,
-        "description_zh": "仅在纯文生图且未开启组图模式时生效。"
+        "description": "仅在纯文生图且未开启组图模式时生效。"
       },
       {
         "name": "bbox_list",
@@ -130,7 +141,7 @@
         "send_if": "non_empty",
         "required": false,
         "multiline": true,
-        "description_zh": "可选框选编辑区域 JSON 数组，长度需与输入图片数量一致。"
+        "description": "可选框选编辑区域 JSON 数组，长度需与输入图片数量一致。"
       },
       {
         "name": "color_palette",
@@ -141,7 +152,7 @@
         "send_if": "non_empty",
         "required": false,
         "multiline": true,
-        "description_zh": "可选配色 JSON 数组，仅在未开启组图模式时生效。"
+        "description": "可选配色 JSON 数组，仅在未开启组图模式时生效。"
       },
       {
         "name": "watermark",
@@ -149,7 +160,7 @@
         "type": "BOOLEAN",
         "required": false,
         "default": false,
-        "description_zh": "是否添加 AI 生成水印。"
+        "description": "是否添加 AI 生成水印。"
       },
       {
         "name": "seed",
@@ -160,7 +171,7 @@
         "default": -1,
         "min": -1,
         "max": 2147483647,
-        "description_zh": "随机种子。设为 -1 时不传此参数，由服务端随机。"
+        "description": "随机种子。设为 -1 时不传此参数，由服务端随机。"
       }
     ],
     "migration_source": {
@@ -184,10 +195,12 @@
         "media_item_type": "video",
         "upload_file_name_prefix": "wan27_videoedit_input",
         "upload_max_size": 104857600,
-        "upload_duration_range": [2.0, 10.0],
+        "upload_duration_range": [
+          2.0,
+          10.0
+        ],
         "required": true,
-        "description": "Input video",
-        "description_zh": "输入视频。时长需在 2-10 秒之间。"
+        "description": "输入视频。时长需在 2-10 秒之间。"
       },
       {
         "name": "prompt",
@@ -196,7 +209,7 @@
         "send_if": "non_empty",
         "required": false,
         "multiline": true,
-        "description_zh": "正向提示词。描述希望如何编辑视频。"
+        "description": "正向提示词。描述希望如何编辑视频。"
       },
       {
         "name": "negative_prompt",
@@ -205,7 +218,7 @@
         "send_if": "non_empty",
         "required": false,
         "multiline": true,
-        "description_zh": "反向提示词。描述不希望在结果中出现的内容。"
+        "description": "反向提示词。描述不希望在结果中出现的内容。"
       },
       {
         "name": "first_frame_image",
@@ -216,7 +229,7 @@
         "upload_total_pixels": 64000000,
         "upload_max_size": 20971520,
         "required": false,
-        "description_zh": "可选首帧参考图，用于更精细地约束首帧表现。"
+        "description": "可选首帧参考图，用于更精细地约束首帧表现。"
       },
       {
         "name": "ref_image_1",
@@ -227,7 +240,7 @@
         "upload_total_pixels": 64000000,
         "upload_max_size": 20971520,
         "required": false,
-        "description_zh": "可选参考图 1，用于约束角色、风格或主体。"
+        "description": "可选参考图 1，用于约束角色、风格或主体。"
       },
       {
         "name": "ref_image_2",
@@ -238,7 +251,7 @@
         "upload_total_pixels": 64000000,
         "upload_max_size": 20971520,
         "required": false,
-        "description_zh": "可选参考图 2，用于约束角色、风格或主体。"
+        "description": "可选参考图 2，用于约束角色、风格或主体。"
       },
       {
         "name": "ref_image_3",
@@ -249,7 +262,7 @@
         "upload_total_pixels": 64000000,
         "upload_max_size": 20971520,
         "required": false,
-        "description_zh": "可选参考图 3，用于约束角色、风格或主体。"
+        "description": "可选参考图 3，用于约束角色、风格或主体。"
       },
       {
         "name": "resolution",
@@ -257,8 +270,11 @@
         "type": "LIST",
         "required": false,
         "default": "1080P",
-        "options": ["720P", "1080P"],
-        "description_zh": "输出分辨率。"
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "description": "输出分辨率。"
       },
       {
         "name": "ratio",
@@ -267,8 +283,15 @@
         "send_if": "not_default",
         "required": false,
         "default": "default",
-        "options": ["default", "16:9", "9:16", "1:1", "4:3", "3:4"],
-        "description_zh": "输出画幅比例。`default` 表示跟随输入视频比例。"
+        "options": [
+          "default",
+          "16:9",
+          "9:16",
+          "1:1",
+          "4:3",
+          "3:4"
+        ],
+        "description": "输出画幅比例。`default` 表示跟随输入视频比例。"
       },
       {
         "name": "duration",
@@ -279,7 +302,7 @@
         "default": 0,
         "min": 0,
         "max": 10,
-        "description_zh": "输出时长。0 表示保持输入视频时长，2-10 表示截断到指定秒数。"
+        "description": "输出时长。0 表示保持输入视频时长，2-10 表示截断到指定秒数。"
       },
       {
         "name": "audio_setting",
@@ -287,8 +310,11 @@
         "type": "LIST",
         "required": false,
         "default": "auto",
-        "options": ["auto", "origin"],
-        "description_zh": "音频处理方式。`auto` 自动判断，`origin` 尽量保留输入原声。"
+        "options": [
+          "auto",
+          "origin"
+        ],
+        "description": "音频处理方式。`auto` 自动判断，`origin` 尽量保留输入原声。"
       },
       {
         "name": "prompt_extend",
@@ -296,7 +322,7 @@
         "type": "BOOLEAN",
         "required": false,
         "default": true,
-        "description_zh": "是否启用提示词智能改写。"
+        "description": "是否启用提示词智能改写。"
       },
       {
         "name": "watermark",
@@ -304,7 +330,7 @@
         "type": "BOOLEAN",
         "required": false,
         "default": false,
-        "description_zh": "是否添加 AI 生成水印。"
+        "description": "是否添加 AI 生成水印。"
       },
       {
         "name": "seed",
@@ -315,7 +341,7 @@
         "default": -1,
         "min": -1,
         "max": 2147483647,
-        "description_zh": "随机种子。设为 -1 时不传此参数，由服务端随机。"
+        "description": "随机种子。设为 -1 时不传此参数，由服务端随机。"
       }
     ],
     "migration_source": {
@@ -338,8 +364,7 @@
         "type": "STRING",
         "required": true,
         "multiline": true,
-        "description": "User prompt",
-        "description_zh": "提示词。描述希望生成的视频内容。"
+        "description": "提示词。描述希望生成的视频内容。"
       },
       {
         "name": "negative_prompt",
@@ -347,8 +372,7 @@
         "type": "STRING",
         "required": false,
         "multiline": true,
-        "description": "Negative prompt",
-        "description_zh": "反向提示词。描述不希望出现的内容。"
+        "description": "反向提示词。描述不希望出现的内容。"
       },
       {
         "name": "size",
@@ -356,8 +380,22 @@
         "type": "LIST",
         "required": false,
         "default": "1920*1080",
-        "options": ["832*480", "480*832", "624*624", "1280*720", "720*1280", "960*960", "1088*832", "832*1088", "1920*1080", "1080*1920", "1440*1440", "1632*1248", "1248*1632"],
-        "description_zh": "输出分辨率与画幅。"
+        "options": [
+          "832*480",
+          "480*832",
+          "624*624",
+          "1280*720",
+          "720*1280",
+          "960*960",
+          "1088*832",
+          "832*1088",
+          "1920*1080",
+          "1080*1920",
+          "1440*1440",
+          "1632*1248",
+          "1248*1632"
+        ],
+        "description": "输出分辨率与画幅。"
       },
       {
         "name": "duration",
@@ -365,8 +403,11 @@
         "type": "LIST",
         "required": false,
         "default": 5,
-        "options": [5, 10],
-        "description_zh": "输出时长，单位秒。"
+        "options": [
+          5,
+          10
+        ],
+        "description": "输出时长，单位秒。"
       },
       {
         "name": "prompt_extend",
@@ -374,7 +415,7 @@
         "type": "BOOLEAN",
         "required": false,
         "default": true,
-        "description_zh": "是否启用提示词智能改写。"
+        "description": "是否启用提示词智能改写。"
       }
     ],
     "migration_source": {
@@ -396,16 +437,14 @@
         "api_field": "image",
         "type": "IMAGE",
         "required": true,
-        "description": "Input image",
-        "description_zh": "输入首帧图片。"
+        "description": "输入首帧图片。"
       },
       {
         "name": "audio",
         "api_field": "audio",
         "type": "AUDIO",
         "required": false,
-        "description": "Optional guiding audio",
-        "description_zh": "可选引导音频。当前依赖服务端音频上传能力。"
+        "description": "可选引导音频。当前依赖服务端音频上传能力。"
       },
       {
         "name": "prompt",
@@ -413,7 +452,7 @@
         "type": "STRING",
         "required": false,
         "multiline": true,
-        "description_zh": "可选提示词，用于补充动作或场景描述。"
+        "description": "可选提示词，用于补充动作或场景描述。"
       },
       {
         "name": "resolution",
@@ -421,8 +460,12 @@
         "type": "LIST",
         "required": false,
         "default": "1080P",
-        "options": ["480P", "720P", "1080P"],
-        "description_zh": "输出分辨率。"
+        "options": [
+          "480P",
+          "720P",
+          "1080P"
+        ],
+        "description": "输出分辨率。"
       },
       {
         "name": "duration",
@@ -430,8 +473,11 @@
         "type": "LIST",
         "required": false,
         "default": 5,
-        "options": [5, 10],
-        "description_zh": "输出时长，单位秒。"
+        "options": [
+          5,
+          10
+        ],
+        "description": "输出时长，单位秒。"
       }
     ],
     "migration_source": {
@@ -454,7 +500,7 @@
         "type": "STRING",
         "required": true,
         "multiline": true,
-        "description_zh": "提示词。描述希望生成的视频内容。"
+        "description": "提示词。描述希望生成的视频内容。"
       },
       {
         "name": "seed",
@@ -464,7 +510,7 @@
         "default": 0,
         "min": 0,
         "max": 2147483647,
-        "description_zh": "随机种子。相同参数下可用于复现结果。"
+        "description": "随机种子。相同参数下可用于复现结果。"
       },
       {
         "name": "style",
@@ -472,8 +518,11 @@
         "type": "LIST",
         "required": false,
         "default": "general",
-        "options": ["general", "anime"],
-        "description_zh": "风格类型。"
+        "options": [
+          "general",
+          "anime"
+        ],
+        "description": "风格类型。"
       },
       {
         "name": "duration",
@@ -481,8 +530,10 @@
         "type": "LIST",
         "required": false,
         "default": 5,
-        "options": [5],
-        "description_zh": "输出时长。当前模型固定为 5 秒。"
+        "options": [
+          5
+        ],
+        "description": "输出时长。当前模型固定为 5 秒。"
       }
     ],
     "migration_source": {
@@ -505,21 +556,21 @@
         "type": "STRING",
         "required": true,
         "multiline": true,
-        "description_zh": "提示词。描述希望生成的视频内容。"
+        "description": "提示词。描述希望生成的视频内容。"
       },
       {
         "name": "first_frame_image",
         "api_field": "first_frame_image",
         "type": "IMAGE",
         "required": true,
-        "description_zh": "输入首帧图片。"
+        "description": "输入首帧图片。"
       },
       {
         "name": "last_frame_image",
         "api_field": "last_frame_image",
         "type": "IMAGE",
         "required": false,
-        "description_zh": "可选末帧图片，用于约束结束画面。"
+        "description": "可选末帧图片，用于约束结束画面。"
       },
       {
         "name": "seed",
@@ -529,7 +580,7 @@
         "default": 0,
         "min": 0,
         "max": 2147483647,
-        "description_zh": "随机种子。相同参数下可用于复现结果。"
+        "description": "随机种子。相同参数下可用于复现结果。"
       }
     ],
     "migration_source": {
@@ -552,7 +603,7 @@
         "type": "STRING",
         "required": true,
         "multiline": true,
-        "description_zh": "提示词。描述希望生成的图像内容。"
+        "description": "提示词。描述希望生成的图像内容。"
       },
       {
         "name": "size",
@@ -560,8 +611,12 @@
         "type": "LIST",
         "required": false,
         "default": "1:1",
-        "options": ["1:1", "2:3", "3:2"],
-        "description_zh": "输出画幅比例。"
+        "options": [
+          "1:1",
+          "2:3",
+          "3:2"
+        ],
+        "description": "输出画幅比例。"
       },
       {
         "name": "variants",
@@ -569,8 +624,12 @@
         "type": "LIST",
         "required": false,
         "default": 1,
-        "options": [1, 2, 4],
-        "description_zh": "生成张数。"
+        "options": [
+          1,
+          2,
+          4
+        ],
+        "description": "生成张数。"
       }
     ],
     "migration_source": {
@@ -594,7 +653,7 @@
         "required": true,
         "multiple": true,
         "max_inputs": 4,
-        "description_zh": "输入参考图。最多 4 张，用于图像编辑。"
+        "description": "输入参考图。最多 4 张，用于图像编辑。"
       },
       {
         "name": "prompt",
@@ -602,7 +661,7 @@
         "type": "STRING",
         "required": true,
         "multiline": true,
-        "description_zh": "编辑提示词。描述希望如何修改输入图片。"
+        "description": "编辑提示词。描述希望如何修改输入图片。"
       },
       {
         "name": "size",
@@ -610,8 +669,12 @@
         "type": "LIST",
         "required": false,
         "default": "1:1",
-        "options": ["1:1", "2:3", "3:2"],
-        "description_zh": "输出画幅比例。"
+        "options": [
+          "1:1",
+          "2:3",
+          "3:2"
+        ],
+        "description": "输出画幅比例。"
       }
     ],
     "migration_source": {
@@ -627,7 +690,12 @@
     "category": "BizyTRD/Doubao",
     "model_key": "seedance-2-0-std",
     "request_model": "multimodal-to-video",
-    "require_any_of": ["prompt", "images", "video", "audio"],
+    "require_any_of": [
+      "prompt",
+      "images",
+      "video",
+      "audio"
+    ],
     "require_any_message": "At least a prompt or one media input is required",
     "output_type": "video",
     "params": [
@@ -637,8 +705,11 @@
         "type": "LIST",
         "required": true,
         "default": "std",
-        "options": ["std", "fast"],
-        "description_zh": "生成模式。`std` 质量更稳，`fast` 响应更快。"
+        "options": [
+          "std",
+          "fast"
+        ],
+        "description": "生成模式。`std` 质量更稳，`fast` 响应更快。"
       },
       {
         "name": "prompt",
@@ -647,7 +718,7 @@
         "send_if": "non_empty",
         "required": true,
         "multiline": true,
-        "description_zh": "视频生成提示词。可为空，但建议与多模态素材一起描述目标效果。"
+        "description": "视频生成提示词。可为空，但建议与多模态素材一起描述目标效果。"
       },
       {
         "name": "resolution",
@@ -655,8 +726,14 @@
         "type": "LIST",
         "required": true,
         "default": "720p",
-        "options": ["480p", "720p", "1080p", "2k", "4k"],
-        "description_zh": "输出分辨率。"
+        "options": [
+          "480p",
+          "720p",
+          "1080p",
+          "2k",
+          "4k"
+        ],
+        "description": "输出分辨率。"
       },
       {
         "name": "duration",
@@ -666,7 +743,7 @@
         "default": 5,
         "min": 4,
         "max": 15,
-        "description_zh": "视频时长，单位秒。"
+        "description": "视频时长，单位秒。"
       },
       {
         "name": "images",
@@ -681,7 +758,7 @@
         "upload_file_name_prefix": "seedance_multimodal_image_{index}",
         "upload_total_pixels": 36000000,
         "upload_max_size": 31457280,
-        "description_zh": "参考图片输入。最多 9 张，会作为 `imageUrls` 传给后端。"
+        "description": "参考图片输入。最多 9 张，会作为 `imageUrls` 传给后端。"
       },
       {
         "name": "image_inputcount",
@@ -692,7 +769,7 @@
         "default": 1,
         "min": 1,
         "max": 9,
-        "description_zh": "图片输入端口数量。控制 `images` 到 `image_9` 的显示与读取范围。"
+        "description": "图片输入端口数量。控制 `images` 到 `image_9` 的显示与读取范围。"
       },
       {
         "name": "video",
@@ -705,7 +782,7 @@
         "extra_input_pattern": "video_{index}",
         "upload_file_name_prefix": "seedance_multimodal_video_{index}",
         "upload_max_size": 104857600,
-        "description_zh": "参考视频输入。最多 3 个，会作为 `videoUrls` 传给后端。"
+        "description": "参考视频输入。最多 3 个，会作为 `videoUrls` 传给后端。"
       },
       {
         "name": "video_inputcount",
@@ -716,7 +793,7 @@
         "default": 1,
         "min": 1,
         "max": 3,
-        "description_zh": "视频输入端口数量。控制 `video` 到 `video_3` 的显示与读取范围。"
+        "description": "视频输入端口数量。控制 `video` 到 `video_3` 的显示与读取范围。"
       },
       {
         "name": "audio",
@@ -730,7 +807,7 @@
         "upload_file_name_prefix": "seedance_multimodal_audio_{index}",
         "upload_format": "mp3",
         "upload_max_size": 52428800,
-        "description_zh": "参考音频输入。最多 3 个，会作为 `audioUrls` 传给后端。"
+        "description": "参考音频输入。最多 3 个，会作为 `audioUrls` 传给后端。"
       },
       {
         "name": "audio_inputcount",
@@ -741,7 +818,7 @@
         "default": 1,
         "min": 1,
         "max": 3,
-        "description_zh": "音频输入端口数量。控制 `audio` 到 `audio_3` 的显示与读取范围。"
+        "description": "音频输入端口数量。控制 `audio` 到 `audio_3` 的显示与读取范围。"
       },
       {
         "name": "generate_audio",
@@ -749,7 +826,7 @@
         "type": "BOOLEAN",
         "required": false,
         "default": true,
-        "description_zh": "是否为输出视频生成音频。"
+        "description": "是否为输出视频生成音频。"
       },
       {
         "name": "ratio",
@@ -757,8 +834,16 @@
         "type": "LIST",
         "required": false,
         "default": "adaptive",
-        "options": ["adaptive", "16:9", "4:3", "1:1", "3:4", "9:16", "21:9"],
-        "description_zh": "视频宽高比。`adaptive` 表示自动匹配。"
+        "options": [
+          "adaptive",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "21:9"
+        ],
+        "description": "视频宽高比。`adaptive` 表示自动匹配。"
       }
     ],
     "migration_source": {

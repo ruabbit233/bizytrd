@@ -68,9 +68,7 @@
 
 推荐字段如下：
 
-- `description_zh`：ComfyUI 中优先展示的中文说明
-- `description`：英文兜底说明
-- `tooltip_zh` / `tooltip`：当你希望 UI 提示文案和较长说明分开时使用
+- `description`：参数说明。当前项目只保留这一种说明字段
 - `multiple_inputs`：把一个媒体参数展开成 `images + image_2..image_N` 这种额外输入口
 - `max_inputs`：当 `multiple_inputs=true` 时允许展开的最大输入数量
 - `extra_input_pattern`：展开输入口的命名规则，例如 `image_{index}`

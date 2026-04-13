@@ -254,15 +254,9 @@
 - 类型：按参数类型变化
 - 用途：节点输入默认值
 
-#### `description_zh` / `description`
-
 - 类型：`STRING`
-- 用途：作为 tooltip/说明文案来源
-
-#### `tooltip_zh` / `tooltip`
-
-- 类型：`STRING`
-- 用途：如果想把 tooltip 和 description 分开，可以单独写
+- 用途：参数说明文案
+- 说明：当前项目只保留 `description` 这一种说明字段，不再区分中英文或 tooltip
 
 #### `multiline`
 

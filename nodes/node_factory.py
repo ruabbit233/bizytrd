@@ -27,18 +27,17 @@ def _return_signature(output_type: str) -> tuple[tuple[str, ...], tuple[str, ...
     return mapping.get(output_type, mapping["string"])
 
 
-def _param_tooltip(param: dict[str, Any]) -> str:
-    for key in ("tooltip_zh", "description_zh", "tooltip", "description", "help", "notes"):
-        value = param.get(key)
-        if isinstance(value, str) and value.strip():
-            return value.strip()
+def _param_description(param: dict[str, Any]) -> str:
+    value = param.get("description")
+    if isinstance(value, str):
+        return value.strip()
     return ""
 
 
 def _build_input_def(param: dict[str, Any]):
     param_type = param["type"]
     default = param.get("default")
-    tooltip = _param_tooltip(param)
+    description = _param_description(param)
 
     if param_type == "STRING":
         return (
@@ -46,7 +45,7 @@ def _build_input_def(param: dict[str, Any]):
             {
                 "default": default or "",
                 "multiline": bool(param.get("multiline", False)),
-                "tooltip": tooltip,
+                "description": description,
             },
         )
     if param_type == "INT":
@@ -55,8 +54,8 @@ def _build_input_def(param: dict[str, Any]):
             options["min"] = int(param["min"])
         if "max" in param:
             options["max"] = int(param["max"])
-        if tooltip:
-            options["tooltip"] = tooltip
+        if description:
+            options["description"] = description
         return ("INT", options)
     if param_type == "FLOAT":
         options = {"default": float(default or 0.0)}
@@ -64,31 +63,31 @@ def _build_input_def(param: dict[str, Any]):
             options["min"] = float(param["min"])
         if "max" in param:
             options["max"] = float(param["max"])
-        if tooltip:
-            options["tooltip"] = tooltip
+        if description:
+            options["description"] = description
         return ("FLOAT", options)
     if param_type == "BOOLEAN":
         options = {"default": bool(default)}
-        if tooltip:
-            options["tooltip"] = tooltip
+        if description:
+            options["description"] = description
         return ("BOOLEAN", options)
     if param_type == "LIST":
         options = param.get("options", [])
         if not options:
             fallback = {"default": str(default or "")}
-            if tooltip:
-                fallback["tooltip"] = tooltip
+            if description:
+                fallback["description"] = description
             return ("STRING", fallback)
         selected = default if default is not None else options[0]
         if selected not in options:
             selected = options[0]
         meta = {"default": selected}
-        if tooltip:
-            meta["tooltip"] = tooltip
+        if description:
+            meta["description"] = description
         return (options, meta)
     if param_type in {"IMAGE", "VIDEO", "AUDIO"}:
-        if tooltip:
-            return (param_type, {"tooltip": tooltip})
+        if description:
+            return (param_type, {"description": description})
         return (param_type,)
     return ("STRING", {"default": str(default or "")})
 

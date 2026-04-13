@@ -795,8 +795,9 @@
         "api_field": "images",
         "type": "IMAGE",
         "required": true,
-        "multiple": true,
+        "multiple_inputs": true,
         "max_inputs": 4,
+        "extra_input_pattern": "image_{index}",
         "description_zh": "输入参考图。最多 4 张，用于图像编辑。"
       },
       {
@@ -806,6 +807,16 @@
         "required": true,
         "multiline": true,
         "description_zh": "编辑提示词。描述希望如何修改输入图片。"
+      },
+      {
+        "name": "inputcount",
+        "api_field": "inputcount",
+        "type": "INT",
+        "required": false,
+        "default": 1,
+        "min": 1,
+        "max": 4,
+        "description_zh": "输入图片端口数量。`images` 为第 1 张，`image_2` 到 `image_4` 为附加端口。"
       },
       {
         "name": "size",

@@ -28,7 +28,14 @@ def _return_signature(output_type: str) -> tuple[tuple[str, ...], tuple[str, ...
 
 
 def _param_tooltip(param: dict[str, Any]) -> str:
-    for key in ("tooltip_zh", "description_zh", "tooltip", "description", "help", "notes"):
+    for key in (
+        "tooltip_zh",
+        "description_zh",
+        "tooltip",
+        "description",
+        "help",
+        "notes",
+    ):
         value = param.get(key)
         if isinstance(value, str) and value.strip():
             return value.strip()
@@ -109,7 +116,9 @@ def _extra_input_name(param: dict[str, Any], index: int) -> str:
     return f"{param['name']}_{index}"
 
 
-def _iter_param_inputs(param: dict[str, Any]) -> list[tuple[str, tuple[Any, ...], bool]]:
+def _iter_param_inputs(
+    param: dict[str, Any],
+) -> list[tuple[str, tuple[Any, ...], bool]]:
     input_name = param["name"]
     input_def = _build_input_def(param)
     entries = [(input_name, input_def, bool(param.get("required", False)))]
@@ -124,7 +133,9 @@ def _iter_param_inputs(param: dict[str, Any]) -> list[tuple[str, tuple[Any, ...]
         return entries
 
     for index in range(2, max_inputs + 1):
-        entries.append((_extra_input_name(param, index), _clone_input_def(input_def), False))
+        entries.append(
+            (_extra_input_name(param, index), _clone_input_def(input_def), False)
+        )
     return entries
 
 
@@ -139,7 +150,9 @@ def create_node_class(model_def: dict[str, Any]) -> type:
             else:
                 optional[input_name] = input_def
 
-    return_types, return_names = _return_signature(model_def.get("output_type", "string"))
+    return_types, return_names = _return_signature(
+        model_def.get("output_type", "string")
+    )
     class_name = model_def["class_name"]
     model_key = model_def["model_key"]
     category = model_def["category"]
@@ -170,8 +183,13 @@ def create_all_nodes():
     display_mappings: dict[str, str] = {}
 
     for model_def in _load_registry():
+        internal_name = model_def["internal_name"]
+        if internal_name in class_mappings:
+            raise ValueError(
+                f"Duplicate internal_name '{internal_name}' in models_registry.json"
+            )
         node_class = create_node_class(model_def)
-        class_mappings[model_def["internal_name"]] = node_class
-        display_mappings[model_def["internal_name"]] = model_def["display_name"]
+        class_mappings[internal_name] = node_class
+        display_mappings[internal_name] = model_def["display_name"]
 
     return class_mappings, display_mappings

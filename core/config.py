@@ -105,6 +105,20 @@ def _normalize_upload_base_url(upload_base_url: str, api_base_url: str) -> str:
     return text
 
 
+def _safe_int(value: Any, default: int) -> int:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _safe_float(value: Any, default: float) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
 def get_config() -> dict[str, Any]:
     env_values = _load_dotenv()
     bizyair_base_url = _shared_bizyair_base_url(env_values)
@@ -133,19 +147,22 @@ def get_config() -> dict[str, Any]:
         "base_url": str(api_base_url).rstrip("/"),
         "api_key": str(api_key).strip(),
         "upload_base_url": _normalize_upload_base_url(upload_base_url, api_base_url),
-        "timeout": int(
+        "timeout": _safe_int(
             os.getenv("BIZYTRD_TIMEOUT")
             or env_values.get("BIZYTRD_TIMEOUT")
-            or DEFAULT_TIMEOUT
+            or DEFAULT_TIMEOUT,
+            DEFAULT_TIMEOUT,
         ),
-        "polling_interval": float(
+        "polling_interval": _safe_float(
             os.getenv("BIZYTRD_POLLING_INTERVAL")
             or env_values.get("BIZYTRD_POLLING_INTERVAL")
-            or DEFAULT_POLLING_INTERVAL
+            or DEFAULT_POLLING_INTERVAL,
+            DEFAULT_POLLING_INTERVAL,
         ),
-        "max_polling_time": int(
+        "max_polling_time": _safe_int(
             os.getenv("BIZYTRD_MAX_POLLING_TIME")
             or env_values.get("BIZYTRD_MAX_POLLING_TIME")
-            or DEFAULT_MAX_POLLING_TIME
+            or DEFAULT_MAX_POLLING_TIME,
+            DEFAULT_MAX_POLLING_TIME,
         ),
     }

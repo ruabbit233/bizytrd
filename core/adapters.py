@@ -20,6 +20,16 @@ def _is_blank(value: Any) -> bool:
         return not value.strip()
     if isinstance(value, (list, tuple, dict, set)):
         return len(value) == 0
+    if hasattr(value, "numel"):
+        try:
+            return value.numel() == 0
+        except Exception:
+            pass
+    if hasattr(value, "shape"):
+        try:
+            return any(dim == 0 for dim in value.shape)
+        except Exception:
+            pass
     return False
 
 
@@ -99,7 +109,9 @@ def _parse_bbox_list(bbox_list_str: str, image_count: int):
     if not isinstance(bbox_list, list):
         raise ValueError("bbox_list must be a JSON array")
     if len(bbox_list) != image_count:
-        raise ValueError("bbox_list length must exactly match the number of input images")
+        raise ValueError(
+            "bbox_list length must exactly match the number of input images"
+        )
     for image_boxes in bbox_list:
         if not isinstance(image_boxes, list):
             raise ValueError("Each bbox_list item must be an array")
@@ -121,7 +133,9 @@ def _parse_color_palette(color_palette_str: str, enable_sequential: bool):
     if not color_palette_str or not color_palette_str.strip():
         return None
     if enable_sequential:
-        raise ValueError("color_palette is only supported when enable_sequential is false")
+        raise ValueError(
+            "color_palette is only supported when enable_sequential is false"
+        )
     try:
         color_palette = json.loads(color_palette_str)
     except json.JSONDecodeError as exc:
@@ -212,6 +226,12 @@ def _resolve_ref(
         return model_def.get(ref["model"])
     if "model_key" in ref:
         return model_def.get("model_key")
+    recognised = {"const", "input", "context", "model", "model_key"}
+    unrecognised = set(ref.keys()) - recognised
+    if unrecognised:
+        raise ValueError(
+            f"Unrecognised ref keys {unrecognised!r} in adapter definition: {ref!r}"
+        )
     return None
 
 
@@ -224,9 +244,15 @@ def _evaluate_condition(
     if not condition:
         return True
     if "all" in condition:
-        return all(_evaluate_condition(item, kwargs, context, model_def) for item in condition["all"])
+        return all(
+            _evaluate_condition(item, kwargs, context, model_def)
+            for item in condition["all"]
+        )
     if "any" in condition:
-        return any(_evaluate_condition(item, kwargs, context, model_def) for item in condition["any"])
+        return any(
+            _evaluate_condition(item, kwargs, context, model_def)
+            for item in condition["any"]
+        )
     if "not" in condition:
         return not _evaluate_condition(condition["not"], kwargs, context, model_def)
 
@@ -251,13 +277,25 @@ def _evaluate_condition(
     if op == "not_in":
         return value not in (target or [])
     if op == "gt":
-        return value is not None and value > target
+        try:
+            return value is not None and value > target
+        except TypeError:
+            return False
     if op == "gte":
-        return value is not None and value >= target
+        try:
+            return value is not None and value >= target
+        except TypeError:
+            return False
     if op == "lt":
-        return value is not None and value < target
+        try:
+            return value is not None and value < target
+        except TypeError:
+            return False
     if op == "lte":
-        return value is not None and value <= target
+        try:
+            return value is not None and value <= target
+        except TypeError:
+            return False
     if op == "is_true":
         return bool(value) is True
     if op == "is_false":
@@ -330,7 +368,9 @@ def _apply_transform(
         return len(value or [])
 
     if name == "collect_counted_inputs":
-        count_value = _resolve_ref(params.get("count", {"const": 1}), kwargs, context, model_def)
+        count_value = _resolve_ref(
+            params.get("count", {"const": 1}), kwargs, context, model_def
+        )
         max_count = int(params.get("max_count", 1))
         input_count = max(1, min(_coerce_int(count_value, 1), max_count))
         extra_input_pattern = str(params.get("extra_input_pattern", "{index}"))
@@ -386,10 +426,18 @@ def _apply_transform(
 
     if name == "resolve_custom_size":
         model = _resolve_ref(params["model"], kwargs, context, model_def)
-        custom_width = int(_resolve_ref(params["custom_width"], kwargs, context, model_def))
-        custom_height = int(_resolve_ref(params["custom_height"], kwargs, context, model_def))
-        has_input_images = bool(_resolve_ref(params["has_input_images"], kwargs, context, model_def))
-        enable_sequential = bool(_resolve_ref(params["enable_sequential"], kwargs, context, model_def))
+        custom_width = int(
+            _resolve_ref(params["custom_width"], kwargs, context, model_def)
+        )
+        custom_height = int(
+            _resolve_ref(params["custom_height"], kwargs, context, model_def)
+        )
+        has_input_images = bool(
+            _resolve_ref(params["has_input_images"], kwargs, context, model_def)
+        )
+        enable_sequential = bool(
+            _resolve_ref(params["enable_sequential"], kwargs, context, model_def)
+        )
         return _resolve_custom_size(
             str(value),
             str(model),
@@ -400,7 +448,9 @@ def _apply_transform(
         )
 
     if name == "parse_bbox_list":
-        image_count = int(_resolve_ref(params["image_count"], kwargs, context, model_def) or 0)
+        image_count = int(
+            _resolve_ref(params["image_count"], kwargs, context, model_def) or 0
+        )
         return _parse_bbox_list(str(value or ""), image_count)
 
     if name == "parse_color_palette":
@@ -424,7 +474,9 @@ def _collect_transformed_items(
         return []
     if item_transform is None:
         return _listify(value)
-    transformed = _apply_transform(value, item_transform, kwargs, context, model_def, config)
+    transformed = _apply_transform(
+        value, item_transform, kwargs, context, model_def, config
+    )
     return _listify(transformed)
 
 
@@ -441,7 +493,9 @@ def _apply_transforms(
         transforms.append(spec["transform"])
     transforms.extend(spec.get("transforms", []))
     for transform_spec in transforms:
-        value = _apply_transform(value, transform_spec, kwargs, context, model_def, config)
+        value = _apply_transform(
+            value, transform_spec, kwargs, context, model_def, config
+        )
     return value
 
 
@@ -477,12 +531,16 @@ def _run_validator(
         maximum = int(validator["max"])
         integer = int(value)
         if integer < minimum or integer > maximum:
-            raise ValueError(message or f"Value must be between {minimum} and {maximum}")
+            raise ValueError(
+                message or f"Value must be between {minimum} and {maximum}"
+            )
         return
 
     if name == "require_any_non_empty":
         refs = validator.get("refs", [])
-        if not any(not _is_blank(_resolve_ref(ref, kwargs, context, model_def)) for ref in refs):
+        if not any(
+            not _is_blank(_resolve_ref(ref, kwargs, context, model_def)) for ref in refs
+        ):
             raise ValueError(message or "At least one value is required")
         return
 
@@ -500,15 +558,21 @@ def _build_media_array(
     for item in items:
         if not _evaluate_condition(item.get("when"), kwargs, context, model_def):
             continue
-        value = _resolve_ref(item.get("value") or {"input": item["input"]}, kwargs, context, model_def)
+        value = _resolve_ref(
+            item.get("value") or {"input": item["input"]}, kwargs, context, model_def
+        )
         if _is_blank(value):
             if item.get("required"):
-                raise ValueError(item.get("message") or f"'{item.get('input', 'value')}' is required")
+                raise ValueError(
+                    item.get("message") or f"'{item.get('input', 'value')}' is required"
+                )
             continue
 
         media_type = item["media_type"]
         upload_options = {
-            "file_name_prefix": item.get("file_name_prefix", item.get("input", "media")),
+            "file_name_prefix": item.get(
+                "file_name_prefix", item.get("input", "media")
+            ),
             "total_pixels": item.get("total_pixels", 10000 * 10000),
             "max_size": item.get("max_size", 20 * 1024 * 1024),
             "enforce_duration_range": item.get("enforce_duration_range"),
@@ -564,7 +628,9 @@ def _structured_adapter(
             continue
 
         if item.get("build") == "media_array":
-            value = _build_media_array(item.get("items", []), kwargs, context, model_def, config)
+            value = _build_media_array(
+                item.get("items", []), kwargs, context, model_def, config
+            )
         else:
             value = _resolve_ref(item, kwargs, context, model_def)
             value = _apply_transforms(value, item, kwargs, context, model_def, config)

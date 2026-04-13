@@ -22,19 +22,22 @@ class BizyTRDBaseNode(ABC):
     FUNCTION = "execute"
     OUTPUT_NODE = True
 
-    def build_payload(self, config: dict[str, Any], **kwargs: Any) -> dict[str, Any]:
+    def build_payload(self, **kwargs: Any) -> dict[str, Any]:
         model_def = self.MODEL_DEF or {
             "model_key": self.MODEL_KEY,
             "params": self.PARAMS,
         }
+        config = get_config()
         return build_payload_for_model(model_def, config, kwargs)
 
     def execute(self, **kwargs: Any):
         config = get_config()
-        payload = self.build_payload(config, **kwargs)
+        payload = self.build_payload(**kwargs)
         request_id, _ = submit_task(self.MODEL_KEY, payload, config)
         poll_payload = poll_task(request_id, config)
-        primary, urls_str, response_str = normalize_result(self.OUTPUT_TYPE, poll_payload)
+        primary, urls_str, response_str = normalize_result(
+            self.OUTPUT_TYPE, poll_payload
+        )
         return {
             "ui": {"text": [urls_str, response_str]},
             "result": (primary, urls_str, response_str),

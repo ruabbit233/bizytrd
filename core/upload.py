@@ -59,7 +59,9 @@ def _process_response_payload(payload: dict[str, Any]) -> dict[str, Any]:
     try:
         message = json.loads(payload["result"])
     except json.JSONDecodeError as exc:
-        raise ValueError(f"Failed to decode JSON from response payload: {payload}") from exc
+        raise ValueError(
+            f"Failed to decode JSON from response payload: {payload}"
+        ) from exc
 
     if "request_id" in payload and "request_id" not in message:
         message["request_id"] = payload["request_id"]
@@ -164,9 +166,7 @@ def request_upload_token(
         )
 
     base_url = str(config["upload_base_url"]).rstrip("/")
-    url = (
-        f"{base_url}/upload/token?file_name={quote(file_name)}&file_type={quote(file_type)}"
-    )
+    url = f"{base_url}/upload/token?file_name={quote(file_name)}&file_type={quote(file_type)}"
     response = requests.get(
         url,
         headers=_auth_headers(config),
@@ -229,7 +229,9 @@ def video_to_bytesio(
     enforce_duration_range: tuple[float, float] | None = None,
 ) -> tuple[io.BytesIO, str]:
     if not hasattr(video, "save_to"):
-        raise TypeError("Video upload expects a ComfyUI VIDEO input or a pre-uploaded URL.")
+        raise TypeError(
+            "Video upload expects a ComfyUI VIDEO input or a pre-uploaded URL."
+        )
 
     if enforce_duration_range is not None and hasattr(video, "get_duration"):
         duration = float(video.get_duration())
@@ -266,8 +268,14 @@ def audio_to_bytesio(
             "Audio upload requires av and torchaudio to be installed in ComfyUI."
         ) from exc
 
-    if not isinstance(audio, dict) or "waveform" not in audio or "sample_rate" not in audio:
-        raise TypeError("Audio upload expects a ComfyUI AUDIO input or a pre-uploaded URL.")
+    if (
+        not isinstance(audio, dict)
+        or "waveform" not in audio
+        or "sample_rate" not in audio
+    ):
+        raise TypeError(
+            "Audio upload expects a ComfyUI AUDIO input or a pre-uploaded URL."
+        )
 
     waveform = audio["waveform"]
     sample_rate = int(audio["sample_rate"])
@@ -278,7 +286,9 @@ def audio_to_bytesio(
     if getattr(waveform, "dim", lambda: 0)() == 3:
         waveform = waveform[0]
     if getattr(waveform, "dim", lambda: 0)() != 2:
-        raise TypeError("Audio waveform must have shape [channels, samples] or [batch, channels, samples].")
+        raise TypeError(
+            "Audio waveform must have shape [channels, samples] or [batch, channels, samples]."
+        )
 
     opus_rates = [8000, 12000, 16000, 24000, 48000]
     output_rate = sample_rate
@@ -293,10 +303,18 @@ def audio_to_bytesio(
             if output_rate not in opus_rates:
                 output_rate = 48000
         if output_rate != sample_rate:
-            waveform = torchaudio.functional.resample(waveform, sample_rate, output_rate)
+            waveform = torchaudio.functional.resample(
+                waveform, sample_rate, output_rate
+            )
 
     output = io.BytesIO()
-    container = av.open(output, mode="w", format=format)
+
+    class _NoCloseBytesIO(io.BytesIO):
+        def close(self):
+            self.flush()
+
+    safe_output = _NoCloseBytesIO()
+    container = av.open(safe_output, mode="w", format=format)
 
     if format == "opus":
         stream = container.add_stream("libopus", rate=output_rate)
@@ -319,10 +337,17 @@ def audio_to_bytesio(
     else:
         stream = container.add_stream("flac", rate=output_rate)
 
+    num_channels = int(waveform.shape[0])
+    layout = "mono" if num_channels == 1 else "stereo"
+    if num_channels > 2:
+        raise ValueError(
+            f"Audio upload only supports mono or stereo input, got {num_channels} channels"
+        )
+
     frame = av.AudioFrame.from_ndarray(
         waveform.movedim(0, 1).reshape(1, -1).float().numpy(),
         format="flt",
-        layout="mono" if waveform.shape[0] == 1 else "stereo",
+        layout=layout,
     )
     frame.sample_rate = output_rate
     frame.pts = 0
@@ -330,12 +355,12 @@ def audio_to_bytesio(
     container.mux(stream.encode(None))
     container.close()
 
-    output.seek(0)
-    if output.getbuffer().nbytes > max_size:
+    safe_output.seek(0)
+    if safe_output.getbuffer().nbytes > max_size:
         raise ValueError(
             f"Audio size is too large, must be less than {max_size / 1024 / 1024:.1f}MB"
         )
-    return output, format
+    return safe_output, format
 
 
 def upload_local_file(

@@ -2,15 +2,18 @@
 
 from __future__ import annotations
 
+import random
 import time
 from typing import Any
-
 
 SUCCESS_CODE = 20000
 ACCEPTED_CODE = 20002
 RUNNING_STATUSES = {"running", "saving"}
 SUCCESS_STATUSES = {"success"}
 FAILED_STATUSES = {"failed"}
+MAX_UNKNOWN_STATUS_COUNT = 10
+MAX_TRANSIENT_RETRIES = 3
+JITTER_FACTOR = 0.25
 
 
 def _json_or_raise(response: Any) -> dict[str, Any]:
@@ -34,15 +37,38 @@ def _extract_request_id(data: dict[str, Any]) -> str:
     return str(request_id)
 
 
-def submit_task(model_key: str, payload: dict[str, Any], config: dict[str, Any]) -> tuple[str, dict[str, Any]]:
+def _sleep_with_jitter(interval: float) -> None:
+    jitter = interval * JITTER_FACTOR * (2 * random.random() - 1)
+    time.sleep(max(0.5, interval + jitter))
+
+
+def _request_with_retry(method: str, url: str, **kwargs: Any) -> Any:
     import requests
 
+    last_exc: Exception | None = None
+    for attempt in range(MAX_TRANSIENT_RETRIES):
+        try:
+            return requests.request(method, url, **kwargs)
+        except requests.ConnectionError as exc:
+            last_exc = exc
+            if attempt < MAX_TRANSIENT_RETRIES - 1:
+                _sleep_with_jitter(2**attempt)
+    raise RuntimeError(
+        f"Request failed after {MAX_TRANSIENT_RETRIES} retries: {url}"
+    ) from last_exc
+
+
+def submit_task(
+    model_key: str, payload: dict[str, Any], config: dict[str, Any]
+) -> tuple[str, dict[str, Any]]:
     url = f"{config['base_url'].rstrip('/')}/trd_api/{model_key}"
     headers = {"Content-Type": "application/json"}
     if config.get("api_key"):
         headers["Authorization"] = f"Bearer {config['api_key']}"
 
-    response = requests.post(url, json=payload, headers=headers, timeout=config["timeout"])
+    response = _request_with_retry(
+        "POST", url, json=payload, headers=headers, timeout=config["timeout"]
+    )
     data = _json_or_raise(response)
 
     if response.status_code >= 400:
@@ -56,8 +82,6 @@ def submit_task(model_key: str, payload: dict[str, Any], config: dict[str, Any])
 
 
 def poll_task(request_id: str, config: dict[str, Any]) -> dict[str, Any]:
-    import requests
-
     url = f"{config['base_url'].rstrip('/')}/trd_api/{request_id}"
     headers: dict[str, str] = {}
     if config.get("api_key"):
@@ -67,6 +91,8 @@ def poll_task(request_id: str, config: dict[str, Any]) -> dict[str, Any]:
     interval = float(config["polling_interval"])
     timeout_seconds = int(config["max_polling_time"])
     last_payload: dict[str, Any] | None = None
+    unknown_status_count = 0
+    consecutive_errors = 0
 
     while True:
         if time.time() - started_at > timeout_seconds:
@@ -75,12 +101,25 @@ def poll_task(request_id: str, config: dict[str, Any]) -> dict[str, Any]:
                 f"Last payload={last_payload}"
             )
 
-        response = requests.get(url, headers=headers, timeout=min(config["timeout"], 30))
-        payload = _json_or_raise(response)
+        try:
+            response = _request_with_retry(
+                "GET", url, headers=headers, timeout=min(config["timeout"], 30)
+            )
+            payload = _json_or_raise(response)
+            consecutive_errors = 0
+        except RuntimeError:
+            consecutive_errors += 1
+            if consecutive_errors >= MAX_TRANSIENT_RETRIES:
+                raise
+            _sleep_with_jitter(interval)
+            continue
+
         last_payload = payload
 
         if response.status_code >= 400:
-            raise RuntimeError(f"Poll failed: HTTP {response.status_code}, body={payload}")
+            raise RuntimeError(
+                f"Poll failed: HTTP {response.status_code}, body={payload}"
+            )
         if payload.get("status") is False:
             raise RuntimeError(f"Poll failed: {payload.get('message') or payload}")
 
@@ -90,9 +129,21 @@ def poll_task(request_id: str, config: dict[str, Any]) -> dict[str, Any]:
         if status in SUCCESS_STATUSES:
             return payload
         if status in FAILED_STATUSES:
-            raise RuntimeError(data.get("message") or payload.get("message") or f"Task failed: {payload}")
+            raise RuntimeError(
+                data.get("message")
+                or payload.get("message")
+                or f"Task failed: {payload}"
+            )
         if not status or status in RUNNING_STATUSES:
-            time.sleep(interval)
+            unknown_status_count = 0
+            _sleep_with_jitter(interval)
             continue
 
-        time.sleep(interval)
+        unknown_status_count += 1
+        if unknown_status_count >= MAX_UNKNOWN_STATUS_COUNT:
+            raise RuntimeError(
+                f"Task encountered unknown status '{status}' too many times "
+                f"({unknown_status_count}) for request_id={request_id}. "
+                f"Last payload={last_payload}"
+            )
+        _sleep_with_jitter(interval)

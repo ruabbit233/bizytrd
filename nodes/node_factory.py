@@ -116,7 +116,7 @@ def _iter_param_inputs(param: dict[str, Any]) -> list[tuple[str, tuple[Any, ...]
 
     if param.get("type") not in {"IMAGE", "VIDEO", "AUDIO"}:
         return entries
-    if not param.get("multiple_inputs"):
+    if not (param.get("multiple_inputs") or param.get("multiple")):
         return entries
 
     max_inputs = int(param.get("max_inputs", 1))

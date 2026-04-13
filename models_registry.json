@@ -6,158 +6,10 @@
     "display_name_zh": "BizyTRD 万相 2.7 生图",
     "category": "BizyTRD/Wan",
     "model_key": "wan2.7-image",
+    "request_model_from": "model",
+    "require_any_of": ["prompt", "images"],
+    "require_any_message": "At least a prompt or one input image is required",
     "output_type": "image",
-    "adapter": {
-      "kind": "structured",
-      "context": [
-        {
-          "name": "image_items",
-          "input": "images",
-          "transform": {
-            "name": "collect_counted_inputs",
-            "count": {"input": "inputcount"},
-            "max_count": 9,
-            "extra_input_pattern": "image_{index}",
-            "item_transform": "image_batches"
-          }
-        },
-        {
-          "name": "input_image_count",
-          "context": "image_items",
-          "transform": "count"
-        },
-        {
-          "name": "resolved_size",
-          "input": "size",
-          "transform": {
-            "name": "resolve_custom_size",
-            "model": {"input": "model"},
-            "custom_width": {"input": "custom_width"},
-            "custom_height": {"input": "custom_height"},
-            "has_input_images": {"context": "input_image_count"},
-            "enable_sequential": {"input": "enable_sequential"}
-          }
-        },
-        {
-          "name": "uploaded_urls",
-          "context": "image_items",
-          "transform": {
-            "name": "upload_media_list",
-            "media_type": "IMAGE",
-            "input_name": "images",
-            "file_name_prefix": "wan27_image_{index}",
-            "total_pixels": 64000000,
-            "max_size": 20971520
-          }
-        },
-        {
-          "name": "parsed_bbox_list",
-          "input": "bbox_list",
-          "transform": {
-            "name": "parse_bbox_list",
-            "image_count": {"context": "input_image_count"}
-          }
-        },
-        {
-          "name": "parsed_color_palette",
-          "input": "color_palette",
-          "transform": {
-            "name": "parse_color_palette",
-            "enable_sequential": {"input": "enable_sequential"}
-          }
-        }
-      ],
-      "validators": [
-        {
-          "name": "max_count",
-          "value": {"context": "image_items"},
-          "max": 9,
-          "message": "Wan2.7 Image supports at most 9 input images"
-        },
-        {
-          "name": "int_range",
-          "value": {"input": "n"},
-          "min": 1,
-          "max": 12,
-          "when": {"source": "input", "key": "enable_sequential", "op": "is_true"},
-          "message": "n must be between 1 and 12 when enable_sequential=true"
-        },
-        {
-          "name": "int_range",
-          "value": {"input": "n"},
-          "min": 1,
-          "max": 4,
-          "when": {"source": "input", "key": "enable_sequential", "op": "is_false"},
-          "message": "n must be between 1 and 4 when enable_sequential=false"
-        },
-        {
-          "name": "require_any_non_empty",
-          "refs": [
-            {"input": "prompt"},
-            {"context": "uploaded_urls"}
-          ],
-          "message": "At least a prompt or one input image is required"
-        }
-      ],
-      "payload": [
-        {
-          "field": "model",
-          "input": "model"
-        },
-        {
-          "field": "size",
-          "context": "resolved_size"
-        },
-        {
-          "field": "n",
-          "input": "n"
-        },
-        {
-          "field": "watermark",
-          "input": "watermark"
-        },
-        {
-          "field": "prompt",
-          "input": "prompt",
-          "when": {"source": "input", "key": "prompt", "op": "non_empty"}
-        },
-        {
-          "field": "urls",
-          "context": "uploaded_urls",
-          "when": {"source": "context", "key": "uploaded_urls", "op": "non_empty"}
-        },
-        {
-          "field": "enable_sequential",
-          "const": true,
-          "when": {"source": "input", "key": "enable_sequential", "op": "is_true"}
-        },
-        {
-          "field": "thinking_mode",
-          "input": "thinking_mode",
-          "when": {
-            "all": [
-              {"source": "input", "key": "enable_sequential", "op": "is_false"},
-              {"source": "context", "key": "uploaded_urls", "op": "empty"}
-            ]
-          }
-        },
-        {
-          "field": "bbox_list",
-          "context": "parsed_bbox_list",
-          "when": {"source": "context", "key": "parsed_bbox_list", "op": "exists"}
-        },
-        {
-          "field": "color_palette",
-          "context": "parsed_color_palette",
-          "when": {"source": "context", "key": "parsed_color_palette", "op": "exists"}
-        },
-        {
-          "field": "seed",
-          "input": "seed",
-          "when": {"source": "input", "key": "seed", "op": "gte", "value": 0}
-        }
-      ]
-    },
     "params": [
       {
         "name": "prompt",
@@ -171,6 +23,7 @@
         "name": "model",
         "api_field": "model",
         "type": "LIST",
+        "internal": true,
         "required": false,
         "default": "wan2.7-image-pro",
         "options": ["wan2.7-image-pro", "wan2.7-image"],
@@ -180,6 +33,12 @@
         "name": "size",
         "api_field": "size",
         "type": "LIST",
+        "transform": "custom_size",
+        "transform_model_param": "model",
+        "transform_width_param": "custom_width",
+        "transform_height_param": "custom_height",
+        "transform_media_param": "images",
+        "transform_sequential_param": "enable_sequential",
         "required": false,
         "default": "2K",
         "options": ["1K", "2K", "4K", "Custom"],
@@ -189,6 +48,7 @@
         "name": "custom_width",
         "api_field": "custom_width",
         "type": "INT",
+        "internal": true,
         "required": false,
         "default": 2048,
         "min": 768,
@@ -199,6 +59,7 @@
         "name": "custom_height",
         "api_field": "custom_height",
         "type": "INT",
+        "internal": true,
         "required": false,
         "default": 2048,
         "min": 768,
@@ -222,13 +83,19 @@
         "required": false,
         "multiple_inputs": true,
         "max_inputs": 9,
+        "inputcount_param": "inputcount",
+        "flatten_batches": true,
         "extra_input_pattern": "image_{index}",
+        "upload_file_name_prefix": "wan27_image_{index}",
+        "upload_total_pixels": 64000000,
+        "upload_max_size": 20971520,
         "description_zh": "参考图输入。可为空，最多 9 张，用于图像编辑、多图参考生成或组图生成。"
       },
       {
         "name": "inputcount",
         "api_field": "inputcount",
         "type": "INT",
+        "internal": true,
         "required": false,
         "default": 1,
         "min": 1,
@@ -239,6 +106,7 @@
         "name": "enable_sequential",
         "api_field": "enable_sequential",
         "type": "BOOLEAN",
+        "send_if": "true",
         "required": false,
         "default": false,
         "description_zh": "是否启用组图模式。开启后可生成一组保持主体一致性的图片。"
@@ -247,6 +115,8 @@
         "name": "thinking_mode",
         "api_field": "thinking_mode",
         "type": "BOOLEAN",
+        "only_if_false_param": "enable_sequential",
+        "only_if_media_absent": "images",
         "required": false,
         "default": true,
         "description_zh": "仅在纯文生图且未开启组图模式时生效。"
@@ -255,6 +125,9 @@
         "name": "bbox_list",
         "api_field": "bbox_list",
         "type": "STRING",
+        "transform": "bbox_list",
+        "transform_media_param": "images",
+        "send_if": "non_empty",
         "required": false,
         "multiline": true,
         "description_zh": "可选框选编辑区域 JSON 数组，长度需与输入图片数量一致。"
@@ -263,6 +136,9 @@
         "name": "color_palette",
         "api_field": "color_palette",
         "type": "STRING",
+        "transform": "color_palette",
+        "transform_sequential_param": "enable_sequential",
+        "send_if": "non_empty",
         "required": false,
         "multiline": true,
         "description_zh": "可选配色 JSON 数组，仅在未开启组图模式时生效。"
@@ -279,6 +155,7 @@
         "name": "seed",
         "api_field": "seed",
         "type": "INT",
+        "send_if": "gte_zero",
         "required": false,
         "default": -1,
         "min": -1,
@@ -299,116 +176,15 @@
     "category": "BizyTRD/Wan",
     "model_key": "wan2.7-videoedit",
     "output_type": "video",
-    "adapter": {
-      "kind": "structured",
-      "payload": [
-        {
-          "field": "model",
-          "const": "wan2.7-videoedit"
-        },
-        {
-          "field": "media",
-          "build": "media_array",
-          "items": [
-            {
-              "input": "video",
-              "media_type": "VIDEO",
-              "item_type": "video",
-              "required": true,
-              "file_name_prefix": "wan27_videoedit_input",
-              "max_size": 104857600,
-              "enforce_duration_range": [2.0, 10.0]
-            },
-            {
-              "input": "first_frame_image",
-              "media_type": "IMAGE",
-              "item_type": "first_frame",
-              "file_name_prefix": "wan27_videoedit_first_frame",
-              "total_pixels": 64000000,
-              "max_size": 20971520
-            },
-            {
-              "input": "ref_image_1",
-              "media_type": "IMAGE",
-              "item_type": "reference_image",
-              "file_name_prefix": "wan27_videoedit_ref_image_1",
-              "total_pixels": 64000000,
-              "max_size": 20971520
-            },
-            {
-              "input": "ref_image_2",
-              "media_type": "IMAGE",
-              "item_type": "reference_image",
-              "file_name_prefix": "wan27_videoedit_ref_image_2",
-              "total_pixels": 64000000,
-              "max_size": 20971520
-            },
-            {
-              "input": "ref_image_3",
-              "media_type": "IMAGE",
-              "item_type": "reference_image",
-              "file_name_prefix": "wan27_videoedit_ref_image_3",
-              "total_pixels": 64000000,
-              "max_size": 20971520
-            }
-          ]
-        },
-        {
-          "field": "resolution",
-          "input": "resolution"
-        },
-        {
-          "field": "audio_setting",
-          "input": "audio_setting"
-        },
-        {
-          "field": "prompt_extend",
-          "input": "prompt_extend"
-        },
-        {
-          "field": "watermark",
-          "input": "watermark"
-        },
-        {
-          "field": "prompt",
-          "input": "prompt",
-          "when": {"source": "input", "key": "prompt", "op": "non_empty"}
-        },
-        {
-          "field": "negative_prompt",
-          "input": "negative_prompt",
-          "when": {"source": "input", "key": "negative_prompt", "op": "non_empty"}
-        },
-        {
-          "field": "ratio",
-          "input": "ratio",
-          "when": {"source": "input", "key": "ratio", "op": "ne", "value": "default"}
-        },
-        {
-          "field": "duration",
-          "input": "duration",
-          "when": {"source": "input", "key": "duration", "op": "not_in", "value": [null, 0]},
-          "validators": [
-            {
-              "name": "int_range",
-              "min": 2,
-              "max": 10,
-              "message": "Duration must be 0 or an integer between 2 and 10"
-            }
-          ]
-        },
-        {
-          "field": "seed",
-          "input": "seed",
-          "when": {"source": "input", "key": "seed", "op": "gte", "value": 0}
-        }
-      ]
-    },
     "params": [
       {
         "name": "video",
         "api_field": "media",
         "type": "VIDEO",
+        "media_item_type": "video",
+        "upload_file_name_prefix": "wan27_videoedit_input",
+        "upload_max_size": 104857600,
+        "upload_duration_range": [2.0, 10.0],
         "required": true,
         "description": "Input video",
         "description_zh": "输入视频。时长需在 2-10 秒之间。"
@@ -417,6 +193,7 @@
         "name": "prompt",
         "api_field": "prompt",
         "type": "STRING",
+        "send_if": "non_empty",
         "required": false,
         "multiline": true,
         "description_zh": "正向提示词。描述希望如何编辑视频。"
@@ -425,6 +202,7 @@
         "name": "negative_prompt",
         "api_field": "negative_prompt",
         "type": "STRING",
+        "send_if": "non_empty",
         "required": false,
         "multiline": true,
         "description_zh": "反向提示词。描述不希望在结果中出现的内容。"
@@ -433,6 +211,10 @@
         "name": "first_frame_image",
         "api_field": "media",
         "type": "IMAGE",
+        "media_item_type": "first_frame",
+        "upload_file_name_prefix": "wan27_videoedit_first_frame",
+        "upload_total_pixels": 64000000,
+        "upload_max_size": 20971520,
         "required": false,
         "description_zh": "可选首帧参考图，用于更精细地约束首帧表现。"
       },
@@ -440,6 +222,10 @@
         "name": "ref_image_1",
         "api_field": "media",
         "type": "IMAGE",
+        "media_item_type": "reference_image",
+        "upload_file_name_prefix": "wan27_videoedit_ref_image_1",
+        "upload_total_pixels": 64000000,
+        "upload_max_size": 20971520,
         "required": false,
         "description_zh": "可选参考图 1，用于约束角色、风格或主体。"
       },
@@ -447,6 +233,10 @@
         "name": "ref_image_2",
         "api_field": "media",
         "type": "IMAGE",
+        "media_item_type": "reference_image",
+        "upload_file_name_prefix": "wan27_videoedit_ref_image_2",
+        "upload_total_pixels": 64000000,
+        "upload_max_size": 20971520,
         "required": false,
         "description_zh": "可选参考图 2，用于约束角色、风格或主体。"
       },
@@ -454,6 +244,10 @@
         "name": "ref_image_3",
         "api_field": "media",
         "type": "IMAGE",
+        "media_item_type": "reference_image",
+        "upload_file_name_prefix": "wan27_videoedit_ref_image_3",
+        "upload_total_pixels": 64000000,
+        "upload_max_size": 20971520,
         "required": false,
         "description_zh": "可选参考图 3，用于约束角色、风格或主体。"
       },
@@ -470,6 +264,7 @@
         "name": "ratio",
         "api_field": "ratio",
         "type": "LIST",
+        "send_if": "not_default",
         "required": false,
         "default": "default",
         "options": ["default", "16:9", "9:16", "1:1", "4:3", "3:4"],
@@ -479,6 +274,7 @@
         "name": "duration",
         "api_field": "duration",
         "type": "INT",
+        "send_if": "nonzero",
         "required": false,
         "default": 0,
         "min": 0,
@@ -514,6 +310,7 @@
         "name": "seed",
         "api_field": "seed",
         "type": "INT",
+        "send_if": "gte_zero",
         "required": false,
         "default": -1,
         "min": -1,
@@ -828,154 +625,11 @@
     "display_name": "BizyTRD Seedance 2.0 Multimodal To Video",
     "display_name_zh": "BizyTRD 超能视频 2.0 多模态生成视频",
     "category": "BizyTRD/Doubao",
-    "model_key": "seedance-2-0-fast",
+    "model_key": "seedance-2-0-std",
+    "request_model": "multimodal-to-video",
+    "require_any_of": ["prompt", "images", "video", "audio"],
+    "require_any_message": "At least a prompt or one media input is required",
     "output_type": "video",
-    "adapter": {
-      "kind": "structured",
-      "context": [
-        {
-          "name": "image_items",
-          "input": "images",
-          "transform": {
-            "name": "collect_counted_inputs",
-            "count": {"input": "image_inputcount"},
-            "max_count": 9,
-            "extra_input_pattern": "image_{index}",
-            "item_transform": "image_batches"
-          }
-        },
-        {
-          "name": "video_items",
-          "input": "video",
-          "transform": {
-            "name": "collect_counted_inputs",
-            "count": {"input": "video_inputcount"},
-            "max_count": 3,
-            "extra_input_pattern": "video_{index}"
-          }
-        },
-        {
-          "name": "audio_items",
-          "input": "audio",
-          "transform": {
-            "name": "collect_counted_inputs",
-            "count": {"input": "audio_inputcount"},
-            "max_count": 3,
-            "extra_input_pattern": "audio_{index}"
-          }
-        },
-        {
-          "name": "uploaded_image_urls",
-          "context": "image_items",
-          "transform": {
-            "name": "upload_media_list",
-            "media_type": "IMAGE",
-            "input_name": "images",
-            "file_name_prefix": "seedance_multimodal_image_{index}",
-            "total_pixels": 36000000,
-            "max_size": 31457280
-          }
-        },
-        {
-          "name": "uploaded_video_urls",
-          "context": "video_items",
-          "transform": {
-            "name": "upload_media_list",
-            "media_type": "VIDEO",
-            "input_name": "video",
-            "file_name_prefix": "seedance_multimodal_video_{index}",
-            "max_size": 104857600
-          }
-        },
-        {
-          "name": "uploaded_audio_urls",
-          "context": "audio_items",
-          "transform": {
-            "name": "upload_media_list",
-            "media_type": "AUDIO",
-            "input_name": "audio",
-            "file_name_prefix": "seedance_multimodal_audio_{index}",
-            "format": "mp3",
-            "max_size": 52428800
-          }
-        }
-      ],
-      "validators": [
-        {
-          "name": "max_count",
-          "value": {"context": "image_items"},
-          "max": 9,
-          "message": "Seedance 2.0 Multimodal supports at most 9 input images"
-        },
-        {
-          "name": "max_count",
-          "value": {"context": "video_items"},
-          "max": 3,
-          "message": "Seedance 2.0 Multimodal supports at most 3 input videos"
-        },
-        {
-          "name": "max_count",
-          "value": {"context": "audio_items"},
-          "max": 3,
-          "message": "Seedance 2.0 Multimodal supports at most 3 input audios"
-        },
-        {
-          "name": "require_any_non_empty",
-          "refs": [
-            {"input": "prompt"},
-            {"context": "uploaded_image_urls"},
-            {"context": "uploaded_video_urls"},
-            {"context": "uploaded_audio_urls"}
-          ],
-          "message": "At least a prompt or one media input is required"
-        }
-      ],
-      "payload": [
-        {
-          "field": "model",
-          "const": "multimodal-to-video"
-        },
-        {
-          "field": "mode",
-          "input": "mode"
-        },
-        {
-          "field": "prompt",
-          "input": "prompt"
-        },
-        {
-          "field": "resolution",
-          "input": "resolution"
-        },
-        {
-          "field": "duration",
-          "input": "duration"
-        },
-        {
-          "field": "generateAudio",
-          "input": "generate_audio"
-        },
-        {
-          "field": "ratio",
-          "input": "ratio"
-        },
-        {
-          "field": "imageUrls",
-          "context": "uploaded_image_urls",
-          "when": {"source": "context", "key": "uploaded_image_urls", "op": "non_empty"}
-        },
-        {
-          "field": "videoUrls",
-          "context": "uploaded_video_urls",
-          "when": {"source": "context", "key": "uploaded_video_urls", "op": "non_empty"}
-        },
-        {
-          "field": "audioUrls",
-          "context": "uploaded_audio_urls",
-          "when": {"source": "context", "key": "uploaded_audio_urls", "op": "non_empty"}
-        }
-      ]
-    },
     "params": [
       {
         "name": "mode",
@@ -990,6 +644,7 @@
         "name": "prompt",
         "api_field": "prompt",
         "type": "STRING",
+        "send_if": "non_empty",
         "required": true,
         "multiline": true,
         "description_zh": "视频生成提示词。可为空，但建议与多模态素材一起描述目标效果。"
@@ -1020,13 +675,19 @@
         "required": false,
         "multiple_inputs": true,
         "max_inputs": 9,
+        "inputcount_param": "image_inputcount",
+        "flatten_batches": true,
         "extra_input_pattern": "image_{index}",
+        "upload_file_name_prefix": "seedance_multimodal_image_{index}",
+        "upload_total_pixels": 36000000,
+        "upload_max_size": 31457280,
         "description_zh": "参考图片输入。最多 9 张，会作为 `imageUrls` 传给后端。"
       },
       {
         "name": "image_inputcount",
         "api_field": "image_inputcount",
         "type": "INT",
+        "internal": true,
         "required": false,
         "default": 1,
         "min": 1,
@@ -1040,13 +701,17 @@
         "required": false,
         "multiple_inputs": true,
         "max_inputs": 3,
+        "inputcount_param": "video_inputcount",
         "extra_input_pattern": "video_{index}",
+        "upload_file_name_prefix": "seedance_multimodal_video_{index}",
+        "upload_max_size": 104857600,
         "description_zh": "参考视频输入。最多 3 个，会作为 `videoUrls` 传给后端。"
       },
       {
         "name": "video_inputcount",
         "api_field": "video_inputcount",
         "type": "INT",
+        "internal": true,
         "required": false,
         "default": 1,
         "min": 1,
@@ -1060,13 +725,18 @@
         "required": false,
         "multiple_inputs": true,
         "max_inputs": 3,
+        "inputcount_param": "audio_inputcount",
         "extra_input_pattern": "audio_{index}",
+        "upload_file_name_prefix": "seedance_multimodal_audio_{index}",
+        "upload_format": "mp3",
+        "upload_max_size": 52428800,
         "description_zh": "参考音频输入。最多 3 个，会作为 `audioUrls` 传给后端。"
       },
       {
         "name": "audio_inputcount",
         "api_field": "audio_inputcount",
         "type": "INT",
+        "internal": true,
         "required": false,
         "default": 1,
         "min": 1,

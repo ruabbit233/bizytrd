@@ -23,7 +23,7 @@
 
 - 以模型 registry 作为节点定义的主要来源
 - 对通用场景使用动态节点生成
-- 为复杂模型族提供可复用的 payload adapter
+- 对复杂模型使用少量参数级元数据，而不是为每个节点单独写 payload 逻辑
 - 明确划分 ComfyUI 插件、BizyAir API 网关、provider 代理逻辑之间的边界
 
 ## 当前已包含的内容
@@ -36,7 +36,7 @@
 - 一个初始版本的 `models_registry.json`
 - 一个最小可用的 ComfyUI 节点工厂入口
 - 一套可工作的 BizyAir 媒体上传客户端
-- 基于 adapter 的 `wan2.7-videoedit` 和 `wan2.7-image` 支持
+- 基于通用 payload builder 的 `wan2.7-videoedit` 和 `wan2.7-image` 支持
 - 以 Python 包方式导出，便于 `BizyAirAir` 像使用 `bizyengine` 一样引入 `bizytrd`
 - 一个用于把前端资源同步到 `BizyAirAir/js` 的 web 资源同步工具
 
@@ -77,7 +77,7 @@
 
 在实际使用中，建议每个 `param` 至少带一个说明字段，这样 registry 本身可读性更强，生成出来的节点也能保持自解释。
 
-如果某些模型需要兼容老 BizyAir 风格的 `inputcount` 行为，可以把 `inputcount` 作为普通 `INT` 参数保留在 registry 中，再让 adapter 通过 `collect_counted_inputs` 这类 transform 去读取它。这样既能保持节点定义的声明式风格，也能支持多图聚合这类能力。
+如果某些模型需要兼容老 BizyAir 风格的 `inputcount` 行为，可以把 `inputcount` 作为普通 `INT` 参数保留在 registry 中，再让通用 payload builder 通过参数元数据去读取它。这样既能保持节点定义的声明式风格，也能支持多图聚合这类能力。
 
 ## 推荐的后端边界
 

@@ -1,18 +1,27 @@
-"""Configuration helpers for bizytrd."""
+"""ComfyUI-specific configuration loading for bizytrd.
+
+This module contains the ComfyUI-specific logic for discovering API keys
+and building a BizyTRDConfig / BizyTRDClient.  The generic config
+defaults and helpers live in bizytrd_sdk.config.
+"""
 
 from __future__ import annotations
 
 import configparser
 import os
 from pathlib import Path
-from typing import Any, TypedDict
-from urllib.parse import urlparse
 
-DEFAULT_API_BASE_URL = "https://uat-api.bizyair.cn/x/v1"
-DEFAULT_UPLOAD_BASE_URL = "https://uat-api.bizyair.cn/x/v1"
-DEFAULT_TIMEOUT = 60
-DEFAULT_POLLING_INTERVAL = 5.0
-DEFAULT_MAX_POLLING_TIME = 1800
+from bizytrd_sdk import BizyTRDClient
+from bizytrd_sdk.config import (
+    DEFAULT_API_BASE_URL,
+    DEFAULT_MAX_POLLING_TIME,
+    DEFAULT_POLLING_INTERVAL,
+    DEFAULT_TIMEOUT,
+    BizyTRDConfig,
+    _normalize_upload_base_url,
+    _safe_float,
+    _safe_int,
+)
 
 
 def _plugin_root() -> Path:
@@ -94,41 +103,8 @@ def _shared_bizyair_base_url(env_values: dict[str, str]) -> str:
     return ""
 
 
-def _normalize_upload_base_url(upload_base_url: str, api_base_url: str) -> str:
-    text = str(upload_base_url or api_base_url).rstrip("/")
-    if text.endswith("/x/v1"):
-        return text
-
-    parsed = urlparse(text)
-    if parsed.scheme and parsed.netloc and parsed.path in {"", "/"}:
-        return f"{text}/x/v1"
-    return text
-
-
-def _safe_int(value: Any, default: int) -> int:
-    try:
-        return int(value)
-    except (TypeError, ValueError):
-        return default
-
-
-def _safe_float(value: Any, default: float) -> float:
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return default
-
-
-class BizyTRDConfig(TypedDict):
-    base_url: str
-    api_key: str
-    upload_base_url: str
-    timeout: int
-    polling_interval: float
-    max_polling_time: int
-
-
 def get_config() -> BizyTRDConfig:
+    """Build a BizyTRDConfig using ComfyUI-specific discovery logic."""
     env_values = _load_dotenv()
     bizyair_base_url = _shared_bizyair_base_url(env_values)
 
@@ -175,3 +151,16 @@ def get_config() -> BizyTRDConfig:
             DEFAULT_MAX_POLLING_TIME,
         ),
     }
+
+
+def create_client() -> BizyTRDClient:
+    """Create a BizyTRDClient from ComfyUI-specific config."""
+    config = get_config()
+    return BizyTRDClient(
+        api_key=config["api_key"],
+        base_url=config["base_url"],
+        upload_base_url=config["upload_base_url"],
+        timeout=config["timeout"],
+        polling_interval=config["polling_interval"],
+        max_polling_time=config["max_polling_time"],
+    )

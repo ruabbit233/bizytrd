@@ -10,8 +10,6 @@ import uuid
 from io import BytesIO
 from typing import Any
 
-from .config import BizyTRDConfig
-
 _logger = logging.getLogger(__name__)
 
 

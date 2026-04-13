@@ -6,8 +6,9 @@ import json
 from pathlib import Path
 from typing import Any
 
+from bizytrd_sdk import RegistryError
+
 from ..core.base import BizyTRDBaseNode
-from ..core.exceptions import RegistryError
 
 REQUIRED_MODEL_FIELDS = {
     "internal_name",

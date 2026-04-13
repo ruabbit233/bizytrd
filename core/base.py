@@ -6,10 +6,21 @@ import json
 from abc import ABC
 from typing import Any
 
-from .adapters import build_payload_for_model
-from .config import BizyTRDConfig, get_config
+from bizytrd_sdk import BizyTRDClient
+
+from .config_compat import create_client
 from .result import normalize_result
-from .task import poll_task, submit_task
+from .upload_compat import register_comfyui_media_handlers
+
+_client: BizyTRDClient | None = None
+
+
+def _get_comfyui_client() -> BizyTRDClient:
+    global _client
+    if _client is None:
+        _client = create_client()
+        register_comfyui_media_handlers(_client)
+    return _client
 
 
 class BizyTRDBaseNode(ABC):
@@ -23,18 +34,22 @@ class BizyTRDBaseNode(ABC):
     OUTPUT_NODE = True
 
     def build_payload(self, **kwargs: Any) -> dict[str, Any]:
+        client = _get_comfyui_client()
         model_def = self.MODEL_DEF or {
             "model_key": self.MODEL_KEY,
             "params": self.PARAMS,
         }
-        config = get_config()
-        return build_payload_for_model(model_def, config, kwargs)
+        return client.build_payload(model_def, kwargs)
 
     def execute(self, **kwargs: Any):
-        config = get_config()
-        payload = self.build_payload(**kwargs)
-        request_id, _ = submit_task(self.MODEL_KEY, payload, config)
-        poll_payload = poll_task(request_id, config)
+        client = _get_comfyui_client()
+        model_def = self.MODEL_DEF or {
+            "model_key": self.MODEL_KEY,
+            "params": self.PARAMS,
+        }
+        payload = client.build_payload(model_def, kwargs)
+        request_id, _ = client.submit_task(self.MODEL_KEY, payload)
+        poll_payload = client.poll_task(request_id)
         primary, urls_str, response_str = normalize_result(
             self.OUTPUT_TYPE, poll_payload
         )

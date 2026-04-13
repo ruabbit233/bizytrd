@@ -109,12 +109,6 @@
 
 ### 可选字段
 
-#### `display_name_zh`
-
-- 类型：`STRING`
-- 用途：中文展示名
-- 说明：当前主要是文档/元数据用途，不直接参与 node factory 逻辑
-
 #### `request_model`
 
 - 类型：`STRING`

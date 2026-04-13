@@ -8,6 +8,7 @@ from typing import Any
 
 from bizytrd_sdk import BizyTRDClient
 
+from .adapters import build_payload_for_model
 from .config_compat import create_client
 from .result import normalize_result
 from .upload_compat import register_comfyui_media_handlers
@@ -39,7 +40,7 @@ class BizyTRDBaseNode(ABC):
             "model_key": self.MODEL_KEY,
             "params": self.PARAMS,
         }
-        return client.build_payload(model_def, kwargs)
+        return build_payload_for_model(model_def, client.config, kwargs, client=client)
 
     def execute(self, **kwargs: Any):
         client = _get_comfyui_client()
@@ -47,7 +48,9 @@ class BizyTRDBaseNode(ABC):
             "model_key": self.MODEL_KEY,
             "params": self.PARAMS,
         }
-        payload = client.build_payload(model_def, kwargs)
+        payload = build_payload_for_model(
+            model_def, client.config, kwargs, client=client
+        )
         request_id, _ = client.submit_task(self.MODEL_KEY, payload)
         poll_payload = client.poll_task(request_id)
         primary, urls_str, response_str = normalize_result(

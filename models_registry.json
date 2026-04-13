@@ -620,7 +620,7 @@
         "api_field": "images",
         "type": "IMAGE",
         "required": true,
-        "multiple": true,
+        "multiple_inputs": true,
         "max_inputs": 4,
         "description": "输入参考图。最多 4 张，用于图像编辑。"
       },

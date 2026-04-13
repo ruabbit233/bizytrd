@@ -136,7 +136,7 @@ def _iter_param_inputs(
 
     if param.get("type") not in {"IMAGE", "VIDEO", "AUDIO"}:
         return entries
-    if not (param.get("multiple_inputs") or param.get("multiple")):
+    if not param.get("multiple_inputs"):
         return entries
 
     max_inputs = _resolved_max_inputs(param, params_by_name)

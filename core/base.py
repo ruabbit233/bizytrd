@@ -200,31 +200,29 @@ class BizyTRDBaseNode(ABC):
 
         if self.OUTPUT_TYPE == "video":
             primary = videos[0] if videos else ""
-            ui_text = [urls_str, json.dumps(texts, ensure_ascii=False)]
             return {
-                "ui": {"text": ui_text},
-                "result": (primary, urls_str, json.dumps(texts, ensure_ascii=False)),
+                "ui": {"text": [urls_str]},
+                "result": (primary, urls_str),
             }
         elif self.OUTPUT_TYPE == "image":
             primary = images[0] if images else ""
-            ui_text = [urls_str, json.dumps(texts, ensure_ascii=False)]
             return {
-                "ui": {"text": ui_text},
-                "result": (primary, urls_str, json.dumps(texts, ensure_ascii=False)),
+                "ui": {"text": [urls_str]},
+                "result": (primary, urls_str),
             }
         elif self.OUTPUT_TYPE == "audio":
             # audio output as URL or bytes
             primary = texts[0] if texts else urls_str
             return {
                 "ui": {"text": [urls_str]},
-                "result": (primary, urls_str, json.dumps(texts, ensure_ascii=False)),
+                "result": (primary, urls_str),
             }
         else:
             # string / text
             primary = "\n".join(texts) if texts else ""
             return {
                 "ui": {"text": [primary, urls_str]},
-                "result": (primary, urls_str, json.dumps(texts, ensure_ascii=False)),
+                "result": (primary, urls_str),
             }
 
     def upload_file(self, file_content: io.BytesIO, file_name: str, config: dict[str, Any]) -> str:

@@ -64,8 +64,8 @@ async def download_outputs(
 def normalize_result(
     output_type: str,
     poll_payload: dict[str, Any],
-) -> tuple[Any, str, str]:
-    """Normalize poll result into (primary_output, urls_str, response_str).
+) -> tuple[Any, str]:
+    """Normalize poll result into (primary_output, urls_str).
 
     This wraps the async download_outputs for use in the base node's execute method.
     For output types that don't need downloading (e.g. string), falls back to
@@ -83,10 +83,8 @@ def normalize_result(
         if "images" in outputs:
             urls.extend(outputs["images"])
         urls_str = json.dumps(urls)
-        texts = outputs.get("texts", [])
-        response_str = json.dumps(poll_payload, ensure_ascii=False)
         primary = urls[0] if urls else ""
-        return primary, urls_str, response_str
+        return primary, urls_str
 
     # string / text output
     texts = outputs.get("texts", [])
@@ -97,5 +95,4 @@ def normalize_result(
         urls.extend(outputs["images"])
     urls_str = json.dumps(urls)
     primary = "\n".join(texts) if texts else ""
-    response_str = json.dumps(poll_payload, ensure_ascii=False)
-    return primary, urls_str, response_str
+    return primary, urls_str

@@ -19,10 +19,10 @@ def _load_registry() -> list[dict[str, Any]]:
 
 def _return_signature(output_type: str) -> tuple[tuple[str, ...], tuple[str, ...]]:
     mapping = {
-        "image": (("IMAGE", "STRING", "STRING"), ("image", "urls", "response")),
-        "video": (("VIDEO", "STRING", "STRING"), ("video", "urls", "response")),
-        "audio": (("AUDIO", "STRING", "STRING"), ("audio", "urls", "response")),
-        "string": (("STRING", "STRING", "STRING"), ("result", "urls", "response")),
+        "image": (("IMAGE", "STRING"), ("image", "urls")),
+        "video": (("VIDEO", "STRING"), ("video", "urls")),
+        "audio": (("AUDIO", "STRING"), ("audio", "urls")),
+        "string": (("STRING", "STRING"), ("result", "urls")),
     }
     return mapping.get(output_type, mapping["string"])
 

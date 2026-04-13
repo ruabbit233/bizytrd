@@ -305,8 +305,6 @@
 - `image_3`
 - `image_4`
 
-具体名字还会受 `extra_input_pattern` 影响。
-
 #### `multiple`
 
 - 类型：`BOOLEAN`
@@ -321,32 +319,25 @@
 #### `max_inputs`
 
 - 类型：`INT`
-- 用途：媒体输入展开的最大数量
+- 用途：只在“多输入媒体但没有 `inputcount_param`”时使用
+- 说明：如果已经配置了 `inputcount_param`，就不需要再写 `max_inputs`
 
-#### `extra_input_pattern`
+当前约定是：
 
-- 类型：`STRING`
-- 用途：额外输入口命名规则
+- 有 `inputcount_param` 时：
+  - 最大输入数量直接取该 `inputcount` 参数的 `max`
+- 没有 `inputcount_param` 时：
+  - 才需要保留 `max_inputs`
 
-示例：
+#### 多输入命名规则
 
-```json
-"extra_input_pattern": "image_{index}"
-```
+当前不再通过 registry 配置命名规则，而是固定约定：
 
-则展开输入口为：
-
-- `image_2`
-- `image_3`
-- ...
-
-如果不写，默认是：
-
-```text
-<name>_2
-<name>_3
-...
-```
+- 如果参数名以 `s` 结尾，则附加输入口使用去掉尾部 `s` 的形式
+  - `images -> image_2`
+- 否则使用 `<name>_2`
+  - `video -> video_2`
+  - `audio -> audio_2`
 
 ## 6. 只影响 payload 构建的字段
 
@@ -554,51 +545,14 @@
 
 这正是 `Wan27VideoEdit` 当前的写法。
 
-### 7.6 上传控制字段
+### 7.6 上传策略
 
-#### `upload_file_name_prefix`
+当前上传策略不再通过 registry 配置，而是由代码内统一固定：
 
-- 类型：`STRING`
-- 用途：控制上传文件名前缀
-- 支持模板变量：
-  - `{index}`
-  - `{name}`
-
-示例：
-
-```json
-"upload_file_name_prefix": "wan27_image_{index}"
-```
-
-#### `upload_total_pixels`
-
-- 类型：`INT`
-- 仅适用于图片
-- 用途：上传前图片转换的像素上限
-
-#### `upload_max_size`
-
-- 类型：`INT`
-- 适用于图片、视频、音频
-- 用途：上传文件大小上限，单位字节
-
-#### `upload_format`
-
-- 类型：`STRING`
-- 仅适用于音频
-- 用途：上传时采用的音频格式
-
-#### `upload_duration_range`
-
-- 类型：`ARRAY[number, number]`
-- 仅适用于视频
-- 用途：上传前限制视频时长范围
-
-示例：
-
-```json
-"upload_duration_range": [2.0, 10.0]
-```
+- 上传文件名前缀自动使用 `<param_name>_<index>`
+- 图片上传使用统一图片默认限制
+- 视频上传使用统一视频默认限制
+- 音频上传使用统一音频默认限制
 
 ## 8. transform 字段
 
@@ -757,8 +711,7 @@
   "api_field": "imageUrls",
   "type": "IMAGE",
   "multiple_inputs": true,
-  "max_inputs": 4,
-  "extra_input_pattern": "image_{index}"
+  "max_inputs": 4
 }
 ```
 
@@ -770,9 +723,8 @@
   "api_field": "imageUrls",
   "type": "IMAGE",
   "multiple_inputs": true,
-  "max_inputs": 9,
   "inputcount_param": "inputcount",
-  "extra_input_pattern": "image_{index}"
+  "flatten_batches": true
 },
 {
   "name": "inputcount",
@@ -861,9 +813,8 @@
 2. 先假设所有参数都按 `name -> api_field` 直接映射
 3. 如果有多媒体输入，再补：
    - `multiple_inputs`
-   - `max_inputs`
-   - `extra_input_pattern`
    - `inputcount_param`
+   - 如果没有 `inputcount_param`，再补 `max_inputs`
 4. 如果有条件发送，再补：
    - `send_if`
    - `only_if_*`

@@ -11,7 +11,6 @@ import json
 from typing import Any
 
 from .upload import (
-    normalize_media_input,
     upload_audio_input,
     upload_image_input,
     upload_video_input,
@@ -59,6 +58,31 @@ def _image_batches(images: Any) -> list[Any]:
                 batches.append(item)
         return batches
     return [images]
+
+
+def _multi_input_base_name(param_name: str) -> str:
+    if param_name.endswith("s") and len(param_name) > 1:
+        return param_name[:-1]
+    return param_name
+
+
+def _extra_input_name(param_name: str, index: int) -> str:
+    return f"{_multi_input_base_name(param_name)}_{index}"
+
+
+def _resolved_max_inputs(
+    param: dict[str, Any],
+    params_by_name: dict[str, dict[str, Any]],
+) -> int:
+    count_param_name = param.get("inputcount_param")
+    if count_param_name:
+        count_param = params_by_name.get(count_param_name, {})
+        count_param_max = count_param.get("max")
+        if count_param_max is not None:
+            return int(count_param_max)
+    if "max_inputs" in param:
+        return int(param["max_inputs"])
+    return 1
 
 
 def _resolve_custom_size(
@@ -178,16 +202,16 @@ def _collect_media_values(param: dict[str, Any], kwargs: dict[str, Any]) -> list
     if not (param.get("multiple_inputs") or param.get("multiple")):
         return values
 
-    max_inputs = int(param.get("max_inputs", 1))
+    params_by_name = kwargs.get("__params_by_name__", {})
+    max_inputs = _resolved_max_inputs(param, params_by_name)
     count_param = param.get("inputcount_param")
     if count_param:
         input_count = max(1, min(_coerce_int(kwargs.get(count_param), 1), max_inputs))
     else:
         input_count = max_inputs
 
-    pattern = str(param.get("extra_input_pattern", f"{input_name}_{{index}}"))
     for index in range(2, input_count + 1):
-        _append(kwargs.get(pattern.format(index=index, name=input_name)))
+        _append(kwargs.get(_extra_input_name(input_name, index)))
     return values
 
 
@@ -202,8 +226,7 @@ def _upload_media_values(
 
     urls: list[str] = []
     for index, value in enumerate(values, start=1):
-        prefix_template = str(param.get("upload_file_name_prefix", param["name"]))
-        file_name_prefix = prefix_template.format(index=index, name=param["name"])
+        file_name_prefix = f"{param['name']}_{index}"
 
         if media_type == "IMAGE":
             urls.append(
@@ -211,21 +234,14 @@ def _upload_media_values(
                     value,
                     config,
                     file_name_prefix=file_name_prefix,
-                    total_pixels=int(param.get("upload_total_pixels", 10000 * 10000)),
-                    max_size=int(param.get("upload_max_size", 20 * 1024 * 1024)),
                 )
             )
         elif media_type == "VIDEO":
-            duration_range = None
-            if "upload_duration_range" in param:
-                duration_range = tuple(param["upload_duration_range"])
             urls.append(
                 upload_video_input(
                     value,
                     config,
                     file_name_prefix=file_name_prefix,
-                    max_size=int(param.get("upload_max_size", 100 * 1024 * 1024)),
-                    enforce_duration_range=duration_range,
                 )
             )
         else:
@@ -234,8 +250,6 @@ def _upload_media_values(
                     value,
                     config,
                     file_name_prefix=file_name_prefix,
-                    format=str(param.get("upload_format", "mp3")),
-                    max_size=int(param.get("upload_max_size", 50 * 1024 * 1024)),
                 )
             )
     return urls
@@ -247,6 +261,10 @@ def _build_media_context(
     kwargs: dict[str, Any],
 ) -> dict[str, dict[str, Any]]:
     context: dict[str, dict[str, Any]] = {}
+    kwargs = dict(kwargs)
+    kwargs["__params_by_name__"] = {
+        param["name"]: param for param in model_def.get("params", [])
+    }
     for param in model_def.get("params", []):
         if param.get("type") not in {"IMAGE", "VIDEO", "AUDIO"}:
             continue

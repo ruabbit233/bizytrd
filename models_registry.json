@@ -93,13 +93,8 @@
         "type": "IMAGE",
         "required": false,
         "multiple_inputs": true,
-        "max_inputs": 9,
         "inputcount_param": "inputcount",
         "flatten_batches": true,
-        "extra_input_pattern": "image_{index}",
-        "upload_file_name_prefix": "wan27_image_{index}",
-        "upload_total_pixels": 64000000,
-        "upload_max_size": 20971520,
         "description": "参考图输入。可为空，最多 9 张，用于图像编辑、多图参考生成或组图生成。"
       },
       {
@@ -193,12 +188,6 @@
         "api_field": "media",
         "type": "VIDEO",
         "media_item_type": "video",
-        "upload_file_name_prefix": "wan27_videoedit_input",
-        "upload_max_size": 104857600,
-        "upload_duration_range": [
-          2.0,
-          10.0
-        ],
         "required": true,
         "description": "输入视频。时长需在 2-10 秒之间。"
       },
@@ -225,9 +214,6 @@
         "api_field": "media",
         "type": "IMAGE",
         "media_item_type": "first_frame",
-        "upload_file_name_prefix": "wan27_videoedit_first_frame",
-        "upload_total_pixels": 64000000,
-        "upload_max_size": 20971520,
         "required": false,
         "description": "可选首帧参考图，用于更精细地约束首帧表现。"
       },
@@ -236,9 +222,6 @@
         "api_field": "media",
         "type": "IMAGE",
         "media_item_type": "reference_image",
-        "upload_file_name_prefix": "wan27_videoedit_ref_image_1",
-        "upload_total_pixels": 64000000,
-        "upload_max_size": 20971520,
         "required": false,
         "description": "可选参考图 1，用于约束角色、风格或主体。"
       },
@@ -247,9 +230,6 @@
         "api_field": "media",
         "type": "IMAGE",
         "media_item_type": "reference_image",
-        "upload_file_name_prefix": "wan27_videoedit_ref_image_2",
-        "upload_total_pixels": 64000000,
-        "upload_max_size": 20971520,
         "required": false,
         "description": "可选参考图 2，用于约束角色、风格或主体。"
       },
@@ -258,9 +238,6 @@
         "api_field": "media",
         "type": "IMAGE",
         "media_item_type": "reference_image",
-        "upload_file_name_prefix": "wan27_videoedit_ref_image_3",
-        "upload_total_pixels": 64000000,
-        "upload_max_size": 20971520,
         "required": false,
         "description": "可选参考图 3，用于约束角色、风格或主体。"
       },
@@ -751,13 +728,8 @@
         "type": "IMAGE",
         "required": false,
         "multiple_inputs": true,
-        "max_inputs": 9,
         "inputcount_param": "image_inputcount",
         "flatten_batches": true,
-        "extra_input_pattern": "image_{index}",
-        "upload_file_name_prefix": "seedance_multimodal_image_{index}",
-        "upload_total_pixels": 36000000,
-        "upload_max_size": 31457280,
         "description": "参考图片输入。最多 9 张，会作为 `imageUrls` 传给后端。"
       },
       {
@@ -777,11 +749,7 @@
         "type": "VIDEO",
         "required": false,
         "multiple_inputs": true,
-        "max_inputs": 3,
         "inputcount_param": "video_inputcount",
-        "extra_input_pattern": "video_{index}",
-        "upload_file_name_prefix": "seedance_multimodal_video_{index}",
-        "upload_max_size": 104857600,
         "description": "参考视频输入。最多 3 个，会作为 `videoUrls` 传给后端。"
       },
       {
@@ -801,12 +769,7 @@
         "type": "AUDIO",
         "required": false,
         "multiple_inputs": true,
-        "max_inputs": 3,
         "inputcount_param": "audio_inputcount",
-        "extra_input_pattern": "audio_{index}",
-        "upload_file_name_prefix": "seedance_multimodal_audio_{index}",
-        "upload_format": "mp3",
-        "upload_max_size": 52428800,
         "description": "参考音频输入。最多 3 个，会作为 `audioUrls` 传给后端。"
       },
       {

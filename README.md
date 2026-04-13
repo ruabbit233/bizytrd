@@ -70,8 +70,15 @@
 
 - `description`：参数说明。当前项目只保留这一种说明字段
 - `multiple_inputs`：把一个媒体参数展开成 `images + image_2..image_N` 这种额外输入口
-- `max_inputs`：当 `multiple_inputs=true` 时允许展开的最大输入数量
-- `extra_input_pattern`：展开输入口的命名规则，例如 `image_{index}`
+- `inputcount_param`：当媒体参数支持动态多输入时，读取哪个 `INT` 参数来控制实际使用的输入数量
+
+当前约定是：
+
+- 如果媒体参数配置了 `inputcount_param`，则最大输入数量由对应 `inputcount` 参数的 `max` 决定，不再单独写 `max_inputs`
+- 多输入命名规则固定为：
+  - 参数名是复数时，附加输入口使用去掉尾部 `s` 后的形式，例如 `images -> image_2`
+  - 否则使用 `<name>_2`、`<name>_3`
+- 媒体上传文件命名、大小限制等策略由代码内统一处理，不再放在 registry 中配置
 
 在实际使用中，建议每个 `param` 至少带一个说明字段，这样 registry 本身可读性更强，生成出来的节点也能保持自解释。
 

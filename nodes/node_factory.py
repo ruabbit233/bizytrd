@@ -101,14 +101,35 @@ def _clone_input_def(input_def: tuple[Any, ...]) -> tuple[Any, ...]:
     return input_def
 
 
+def _multi_input_base_name(param_name: str) -> str:
+    if param_name.endswith("s") and len(param_name) > 1:
+        return param_name[:-1]
+    return param_name
+
+
 def _extra_input_name(param: dict[str, Any], index: int) -> str:
-    pattern = str(param.get("extra_input_pattern", "")).strip()
-    if pattern:
-        return pattern.format(index=index, name=param["name"])
-    return f"{param['name']}_{index}"
+    return f"{_multi_input_base_name(param['name'])}_{index}"
 
 
-def _iter_param_inputs(param: dict[str, Any]) -> list[tuple[str, tuple[Any, ...], bool]]:
+def _resolved_max_inputs(
+    param: dict[str, Any],
+    params_by_name: dict[str, dict[str, Any]],
+) -> int:
+    count_param_name = param.get("inputcount_param")
+    if count_param_name:
+        count_param = params_by_name.get(count_param_name, {})
+        count_param_max = count_param.get("max")
+        if count_param_max is not None:
+            return int(count_param_max)
+    if "max_inputs" in param:
+        return int(param["max_inputs"])
+    return 1
+
+
+def _iter_param_inputs(
+    param: dict[str, Any],
+    params_by_name: dict[str, dict[str, Any]],
+) -> list[tuple[str, tuple[Any, ...], bool]]:
     input_name = param["name"]
     input_def = _build_input_def(param)
     entries = [(input_name, input_def, bool(param.get("required", False)))]
@@ -118,7 +139,7 @@ def _iter_param_inputs(param: dict[str, Any]) -> list[tuple[str, tuple[Any, ...]
     if not (param.get("multiple_inputs") or param.get("multiple")):
         return entries
 
-    max_inputs = int(param.get("max_inputs", 1))
+    max_inputs = _resolved_max_inputs(param, params_by_name)
     if max_inputs <= 1:
         return entries
 
@@ -130,9 +151,10 @@ def _iter_param_inputs(param: dict[str, Any]) -> list[tuple[str, tuple[Any, ...]
 def create_node_class(model_def: dict[str, Any]) -> type:
     required: dict[str, Any] = {}
     optional: dict[str, Any] = {}
+    params_by_name = {param["name"]: param for param in model_def.get("params", [])}
 
     for param in model_def.get("params", []):
-        for input_name, input_def, is_required in _iter_param_inputs(param):
+        for input_name, input_def, is_required in _iter_param_inputs(param, params_by_name):
             if is_required:
                 required[input_name] = input_def
             else:

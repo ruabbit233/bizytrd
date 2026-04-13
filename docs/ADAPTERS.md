@@ -23,7 +23,7 @@
 
 - 普通参数直接按 `api_field` 写入 payload
 - 媒体参数自动上传
-- `multiple_inputs + max_inputs + extra_input_pattern`
+- `multiple_inputs`
 - `inputcount_param`
 - 图片批量输入展开 `flatten_batches`
 - 多媒体直接聚合成 URL 数组
@@ -64,15 +64,12 @@
   - 节点输入存在，但不直接发给后端
 - `inputcount_param`
   - 多输入媒体读取多少个端口
+- `max_inputs`
+  - 仅在没有 `inputcount_param` 的多输入媒体场景下使用
 - `flatten_batches`
   - 图片输入按 batch 展开
 - `media_item_type`
   - 把媒体拼成对象数组项
-- `upload_file_name_prefix`
-- `upload_total_pixels`
-- `upload_max_size`
-- `upload_format`
-- `upload_duration_range`
 - `send_if`
 - `only_if_true_param`
 - `only_if_false_param`

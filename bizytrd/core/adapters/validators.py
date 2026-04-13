@@ -39,10 +39,25 @@ def _validate_require_any_non_empty(
         raise ValueError(message or "At least one value is required")
 
 
+def _validate_string_length(validator, kwargs, context, model_def, current_value):
+    if current_value is None:
+        return
+    text = str(current_value)
+    length = len(text.strip())
+    minimum = int(validator["min"])
+    maximum = int(validator["max"])
+    message = validator.get("message")
+    if length < minimum or length > maximum:
+        raise ValueError(
+            message or f"String length must be between {minimum} and {maximum}"
+        )
+
+
 VALIDATORS: dict[str, Callable[..., Any]] = {
     "max_count": _validate_max_count,
     "int_range": _validate_int_range,
     "require_any_non_empty": _validate_require_any_non_empty,
+    "string_length": _validate_string_length,
 }
 
 

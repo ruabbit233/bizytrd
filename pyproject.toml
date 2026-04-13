@@ -21,5 +21,8 @@ include-package-data = true
 [tool.setuptools.exclude-package-data]
 "*" = ["__pycache__/*", "*/__pycache__/*"]
 
+[tool.uv.sources]
+bizytrd-sdk = { workspace = true }
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]

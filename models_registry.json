@@ -30,12 +30,37 @@
           "name": "resolved_size",
           "input": "size",
           "transform": {
-            "name": "resolve_custom_size",
-            "model": {"input": "model"},
+            "name": "resolve_size",
             "custom_width": {"input": "custom_width"},
             "custom_height": {"input": "custom_height"},
-            "has_input_images": {"context": "input_image_count"},
-            "enable_sequential": {"input": "enable_sequential"}
+            "rules": {
+              "presets": {
+                "4K": {
+                  "allowed_models": ["wan2.7-image-pro"],
+                  "when": {"all": [
+                    {"source": "context", "key": "input_image_count", "op": "eq", "value": 0},
+                    {"source": "input", "key": "enable_sequential", "op": "is_false"}
+                  ]},
+                  "error": "4K is only supported for text-to-image when there are no input images and enable_sequential is false"
+                }
+              },
+              "custom": {
+                "min_aspect_ratio": 0.125,
+                "max_aspect_ratio": 8.0,
+                "min_pixels": 589824,
+                "default_max_pixels": 4194304,
+                "max_pixels_overrides": [
+                  {
+                    "when": {"all": [
+                      {"source": "input", "key": "model", "op": "eq", "value": "wan2.7-image-pro"},
+                      {"source": "context", "key": "input_image_count", "op": "eq", "value": 0},
+                      {"source": "input", "key": "enable_sequential", "op": "is_false"}
+                    ]},
+                    "max_pixels": 16777216
+                  }
+                ]
+              }
+            }
           }
         },
         {

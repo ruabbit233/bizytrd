@@ -668,526 +668,6 @@
     }
   },
   {
-    "internal_name": "BizyTRD_ViduQ1TextToVideo",
-    "class_name": "BizyTRDViduQ1TextToVideo",
-    "display_name": "BizyTRD Vidu Q1 Text To Video",
-    "display_name_zh": "BizyTRD Vidu Q1 文生视频",
-    "category": "BizyTRD/Vidu",
-    "model_key": "vidu-q1-text2video",
-    "output_type": "video",
-    "params": [
-      {
-        "name": "prompt",
-        "api_field": "prompt",
-        "type": "STRING",
-        "required": true,
-        "multiline": true,
-        "description_zh": "提示词。描述希望生成的视频内容。"
-      },
-      {
-        "name": "seed",
-        "api_field": "seed",
-        "type": "INT",
-        "required": false,
-        "default": 0,
-        "min": 0,
-        "max": 2147483647,
-        "description_zh": "随机种子。相同参数下可用于复现结果。"
-      },
-      {
-        "name": "style",
-        "api_field": "style",
-        "type": "LIST",
-        "required": false,
-        "default": "general",
-        "options": ["general", "anime"],
-        "description_zh": "风格类型。"
-      },
-      {
-        "name": "duration",
-        "api_field": "duration",
-        "type": "LIST",
-        "required": false,
-        "default": 5,
-        "options": [5],
-        "description_zh": "输出时长。当前模型固定为 5 秒。"
-      }
-    ],
-    "migration_source": {
-      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_vidu.py",
-      "class": "VIDU_Q1_T2V_API"
-    }
-  },
-  {
-    "internal_name": "BizyTRD_ViduQ1ImageToVideo",
-    "class_name": "BizyTRDViduQ1ImageToVideo",
-    "display_name": "BizyTRD Vidu Q1 Image To Video",
-    "display_name_zh": "BizyTRD Vidu Q1 图生视频",
-    "category": "BizyTRD/Vidu",
-    "model_key": "vidu-q1-img2video",
-    "output_type": "video",
-    "params": [
-      {
-        "name": "prompt",
-        "api_field": "prompt",
-        "type": "STRING",
-        "required": true,
-        "multiline": true,
-        "description_zh": "提示词。描述希望生成的视频内容。"
-      },
-      {
-        "name": "first_frame_image",
-        "api_field": "first_frame_image",
-        "type": "IMAGE",
-        "required": true,
-        "description_zh": "输入首帧图片。"
-      },
-      {
-        "name": "last_frame_image",
-        "api_field": "last_frame_image",
-        "type": "IMAGE",
-        "required": false,
-        "description_zh": "可选末帧图片，用于约束结束画面。"
-      },
-      {
-        "name": "seed",
-        "api_field": "seed",
-        "type": "INT",
-        "required": false,
-        "default": 0,
-        "min": 0,
-        "max": 2147483647,
-        "description_zh": "随机种子。相同参数下可用于复现结果。"
-      }
-    ],
-    "migration_source": {
-      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_vidu.py",
-      "class": "VIDU_Q1_I2V_API"
-    }
-  },
-  {
-    "internal_name": "BizyTRD_GPTImage1TextToImage",
-    "class_name": "BizyTRDGPTImage1TextToImage",
-    "display_name": "BizyTRD GPT Image 1 Text To Image",
-    "display_name_zh": "BizyTRD GPT Image 1 文生图",
-    "category": "BizyTRD/OpenAI",
-    "model_key": "gpt-image-1",
-    "output_type": "image",
-    "params": [
-      {
-        "name": "prompt",
-        "api_field": "prompt",
-        "type": "STRING",
-        "required": true,
-        "multiline": true,
-        "description_zh": "提示词。描述希望生成的图像内容。"
-      },
-      {
-        "name": "size",
-        "api_field": "size",
-        "type": "LIST",
-        "required": false,
-        "default": "1:1",
-        "options": ["1:1", "2:3", "3:2"],
-        "description_zh": "输出画幅比例。"
-      },
-      {
-        "name": "variants",
-        "api_field": "variants",
-        "type": "LIST",
-        "required": false,
-        "default": 1,
-        "options": [1, 2, 4],
-        "description_zh": "生成张数。"
-      }
-    ],
-    "migration_source": {
-      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_gpt.py",
-      "class": "GPT_IMAGE_1_T2I_API"
-    }
-  },
-  {
-    "internal_name": "BizyTRD_GPTImage1Edit",
-    "class_name": "BizyTRDGPTImage1Edit",
-    "display_name": "BizyTRD GPT Image Edit",
-    "display_name_zh": "BizyTRD GPT Image 编辑",
-    "category": "BizyTRD/OpenAI",
-    "model_key": "gpt-image-1-edit",
-    "output_type": "image",
-    "adapter": {
-      "kind": "structured",
-      "context": [
-        {
-          "name": "image_items",
-          "input": "images",
-          "transform": {
-            "name": "collect_counted_inputs",
-            "count": {"input": "inputcount"},
-            "max_count": 4,
-            "extra_input_pattern": "image_{index}",
-            "item_transform": "image_batches"
-          }
-        },
-        {
-          "name": "uploaded_image_urls",
-          "context": "image_items",
-          "transform": {
-            "name": "upload_media_list",
-            "media_type": "IMAGE",
-            "input_name": "images",
-            "file_name_prefix": "gpt_image_edit_{index}",
-            "total_pixels": 100000000,
-            "max_size": 20971520
-          }
-        }
-      ],
-      "validators": [
-        {
-          "name": "max_count",
-          "value": {"context": "image_items"},
-          "max": 4,
-          "message": "GPT Image Edit supports at most 4 input images"
-        }
-      ],
-      "payload": [
-        {
-          "field": "model",
-          "const": "gpt-image-1-edit"
-        },
-        {
-          "field": "images",
-          "context": "uploaded_image_urls",
-          "when": {"source": "context", "key": "uploaded_image_urls", "op": "non_empty"}
-        },
-        {
-          "field": "prompt",
-          "input": "prompt"
-        },
-        {
-          "field": "size",
-          "input": "size"
-        }
-      ]
-    },
-    "params": [
-      {
-        "name": "images",
-        "api_field": "images",
-        "type": "IMAGE",
-        "required": true,
-        "multiple_inputs": true,
-        "max_inputs": 4,
-        "extra_input_pattern": "image_{index}",
-        "description_zh": "输入参考图。最多 4 张，用于图像编辑。"
-      },
-      {
-        "name": "prompt",
-        "api_field": "prompt",
-        "type": "STRING",
-        "required": true,
-        "multiline": true,
-        "description_zh": "编辑提示词。描述希望如何修改输入图片。"
-      },
-      {
-        "name": "inputcount",
-        "api_field": "inputcount",
-        "type": "INT",
-        "required": false,
-        "default": 1,
-        "min": 1,
-        "max": 4,
-        "description_zh": "输入图片端口数量。`images` 为第 1 张，`image_2` 到 `image_4` 为附加端口。"
-      },
-      {
-        "name": "size",
-        "api_field": "size",
-        "type": "LIST",
-        "required": false,
-        "default": "1:1",
-        "options": ["1:1", "2:3", "3:2"],
-        "description_zh": "输出画幅比例。"
-      }
-    ],
-    "migration_source": {
-      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_gpt.py",
-      "class": "GPT_IMAGE_EDIT_API"
-    }
-  },
-  {
-    "internal_name": "BizyTRD_Seedance20MultimodalVideo",
-    "class_name": "BizyTRDSeedance20MultimodalVideo",
-    "display_name": "BizyTRD Seedance 2.0 Multimodal To Video",
-    "display_name_zh": "BizyTRD 超能视频 2.0 多模态生成视频",
-    "category": "BizyTRD/Doubao",
-    "model_key": "seedance-2-0-v2",
-    "output_type": "video",
-    "adapter": {
-      "kind": "structured",
-      "context": [
-        {
-          "name": "image_items",
-          "input": "images",
-          "transform": {
-            "name": "collect_counted_inputs",
-            "count": {"input": "image_inputcount"},
-            "max_count": 9,
-            "extra_input_pattern": "image_{index}",
-            "item_transform": "image_batches"
-          }
-        },
-        {
-          "name": "video_items",
-          "input": "video",
-          "transform": {
-            "name": "collect_counted_inputs",
-            "count": {"input": "video_inputcount"},
-            "max_count": 3,
-            "extra_input_pattern": "video_{index}"
-          }
-        },
-        {
-          "name": "audio_items",
-          "input": "audio",
-          "transform": {
-            "name": "collect_counted_inputs",
-            "count": {"input": "audio_inputcount"},
-            "max_count": 3,
-            "extra_input_pattern": "audio_{index}"
-          }
-        },
-        {
-          "name": "uploaded_image_urls",
-          "context": "image_items",
-          "transform": {
-            "name": "upload_media_list",
-            "media_type": "IMAGE",
-            "input_name": "images",
-            "file_name_prefix": "seedance_multimodal_image_{index}",
-            "total_pixels": 36000000,
-            "max_size": 31457280
-          }
-        },
-        {
-          "name": "uploaded_video_urls",
-          "context": "video_items",
-          "transform": {
-            "name": "upload_media_list",
-            "media_type": "VIDEO",
-            "input_name": "video",
-            "file_name_prefix": "seedance_multimodal_video_{index}",
-            "max_size": 104857600
-          }
-        },
-        {
-          "name": "uploaded_audio_urls",
-          "context": "audio_items",
-          "transform": {
-            "name": "upload_media_list",
-            "media_type": "AUDIO",
-            "input_name": "audio",
-            "file_name_prefix": "seedance_multimodal_audio_{index}",
-            "format": "mp3",
-            "max_size": 52428800
-          }
-        }
-      ],
-      "validators": [
-        {
-          "name": "max_count",
-          "value": {"context": "image_items"},
-          "max": 9,
-          "message": "Seedance 2.0 Multimodal supports at most 9 input images"
-        },
-        {
-          "name": "max_count",
-          "value": {"context": "video_items"},
-          "max": 3,
-          "message": "Seedance 2.0 Multimodal supports at most 3 input videos"
-        },
-        {
-          "name": "max_count",
-          "value": {"context": "audio_items"},
-          "max": 3,
-          "message": "Seedance 2.0 Multimodal supports at most 3 input audios"
-        },
-        {
-          "name": "require_any_non_empty",
-          "refs": [
-            {"input": "prompt"},
-            {"context": "uploaded_image_urls"},
-            {"context": "uploaded_video_urls"},
-            {"context": "uploaded_audio_urls"}
-          ],
-          "message": "At least a prompt or one media input is required"
-        }
-      ],
-      "payload": [
-        {
-          "field": "model",
-          "const": "multimodal-to-video"
-        },
-        {
-          "field": "mode",
-          "input": "mode"
-        },
-        {
-          "field": "prompt",
-          "input": "prompt"
-        },
-        {
-          "field": "resolution",
-          "input": "resolution"
-        },
-        {
-          "field": "duration",
-          "input": "duration"
-        },
-        {
-          "field": "generateAudio",
-          "input": "generate_audio"
-        },
-        {
-          "field": "ratio",
-          "input": "ratio"
-        },
-        {
-          "field": "imageUrls",
-          "context": "uploaded_image_urls",
-          "when": {"source": "context", "key": "uploaded_image_urls", "op": "non_empty"}
-        },
-        {
-          "field": "videoUrls",
-          "context": "uploaded_video_urls",
-          "when": {"source": "context", "key": "uploaded_video_urls", "op": "non_empty"}
-        },
-        {
-          "field": "audioUrls",
-          "context": "uploaded_audio_urls",
-          "when": {"source": "context", "key": "uploaded_audio_urls", "op": "non_empty"}
-        }
-      ]
-    },
-    "params": [
-      {
-        "name": "mode",
-        "api_field": "mode",
-        "type": "LIST",
-        "required": true,
-        "default": "std",
-        "options": ["std", "fast"],
-        "description_zh": "生成模式。`std` 质量更稳，`fast` 响应更快。"
-      },
-      {
-        "name": "prompt",
-        "api_field": "prompt",
-        "type": "STRING",
-        "required": true,
-        "multiline": true,
-        "description_zh": "视频生成提示词。可为空，但建议与多模态素材一起描述目标效果。"
-      },
-      {
-        "name": "resolution",
-        "api_field": "resolution",
-        "type": "LIST",
-        "required": true,
-        "default": "720p",
-        "options": ["480p", "720p", "1080p", "2k", "4k"],
-        "description_zh": "输出分辨率。"
-      },
-      {
-        "name": "duration",
-        "api_field": "duration",
-        "type": "INT",
-        "required": true,
-        "default": 5,
-        "min": 4,
-        "max": 15,
-        "description_zh": "视频时长，单位秒。"
-      },
-      {
-        "name": "images",
-        "api_field": "imageUrls",
-        "type": "IMAGE",
-        "required": false,
-        "multiple_inputs": true,
-        "max_inputs": 9,
-        "extra_input_pattern": "image_{index}",
-        "description_zh": "参考图片输入。最多 9 张，会作为 `imageUrls` 传给后端。"
-      },
-      {
-        "name": "image_inputcount",
-        "api_field": "image_inputcount",
-        "type": "INT",
-        "required": false,
-        "default": 1,
-        "min": 1,
-        "max": 9,
-        "description_zh": "图片输入端口数量。控制 `images` 到 `image_9` 的显示与读取范围。"
-      },
-      {
-        "name": "video",
-        "api_field": "videoUrls",
-        "type": "VIDEO",
-        "required": false,
-        "multiple_inputs": true,
-        "max_inputs": 3,
-        "extra_input_pattern": "video_{index}",
-        "description_zh": "参考视频输入。最多 3 个，会作为 `videoUrls` 传给后端。"
-      },
-      {
-        "name": "video_inputcount",
-        "api_field": "video_inputcount",
-        "type": "INT",
-        "required": false,
-        "default": 1,
-        "min": 1,
-        "max": 3,
-        "description_zh": "视频输入端口数量。控制 `video` 到 `video_3` 的显示与读取范围。"
-      },
-      {
-        "name": "audio",
-        "api_field": "audioUrls",
-        "type": "AUDIO",
-        "required": false,
-        "multiple_inputs": true,
-        "max_inputs": 3,
-        "extra_input_pattern": "audio_{index}",
-        "description_zh": "参考音频输入。最多 3 个，会作为 `audioUrls` 传给后端。"
-      },
-      {
-        "name": "audio_inputcount",
-        "api_field": "audio_inputcount",
-        "type": "INT",
-        "required": false,
-        "default": 1,
-        "min": 1,
-        "max": 3,
-        "description_zh": "音频输入端口数量。控制 `audio` 到 `audio_3` 的显示与读取范围。"
-      },
-      {
-        "name": "generate_audio",
-        "api_field": "generateAudio",
-        "type": "BOOLEAN",
-        "required": false,
-        "default": true,
-        "description_zh": "是否为输出视频生成音频。"
-      },
-      {
-        "name": "ratio",
-        "api_field": "ratio",
-        "type": "LIST",
-        "required": false,
-        "default": "adaptive",
-        "options": ["adaptive", "16:9", "4:3", "1:1", "3:4", "9:16", "21:9"],
-        "description_zh": "视频宽高比。`adaptive` 表示自动匹配。"
-      }
-    ],
-    "migration_source": {
-      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
-      "class": "Seedance_2_0_Multimodal_API"
-    }
-  },
-  {
     "internal_name": "BizyTRD_GrokImagineVideoThirdParty",
     "class_name": "BizyTRDGrokImagineVideoThirdParty",
     "display_name": "BizyTRD Grok Imagine Video Third-Party",
@@ -1483,6 +963,1512 @@
     "migration_source": {
       "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_grok.py",
       "class": "Grok_Imagine_Video_Edit_Official_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Seedream4",
+    "class_name": "BizyTRDSeedream4",
+    "display_name": "BizyTRD Seedream4",
+    "display_name_zh": "BizyTRD 豆包 Seedream 4.0 生图",
+    "category": "BizyTRD/Doubao",
+    "model_key": "doubao-seedream-4-0-250828",
+    "output_type": "image",
+    "adapter": {
+      "kind": "structured",
+      "context": [
+        {
+          "name": "image_items",
+          "input": "image",
+          "transform": {
+            "name": "collect_counted_inputs",
+            "count": {"const": 10},
+            "max_count": 10,
+            "extra_input_pattern": "image_{index}",
+            "item_transform": "image_batches"
+          }
+        },
+        {
+          "name": "uploaded_image_urls",
+          "context": "image_items",
+          "transform": {
+            "name": "upload_media_list",
+            "media_type": "IMAGE",
+            "input_name": "image",
+            "file_name_prefix": "seedream4_{index}",
+            "total_pixels": 36000000,
+            "max_size": 10485760
+          }
+        },
+        {
+          "name": "resolved_size",
+          "input": "size",
+          "transform": {
+            "name": "resolve_size",
+            "custom_width": {"input": "custom_width"},
+            "custom_height": {"input": "custom_height"},
+            "rules": {
+              "mapping": {
+                "1K Square (1024x1024)": "1024x1024",
+                "2K Square (2048x2048)": "2048x2048",
+                "4K Square (4096x4096)": "4096x4096",
+                "HD 16:9 (1920x1080)": "1920x1080",
+                "2K 16:9 (2560x1440)": "2560x1440",
+                "4K 16:9 (3840x2160)": "3840x2160",
+                "Portrait 9:16 (1080x1920)": "1080x1920",
+                "Portrait 3:4 (1536x2048)": "1536x2048",
+                "Landscape 4:3 (2048x1536)": "2048x1536",
+                "Ultra-wide 21:9 (3440x1440)": "3440x1440"
+              },
+              "custom": {
+                "separator": "x",
+                "min_aspect_ratio": 0.25,
+                "max_aspect_ratio": 4.0,
+                "min_pixels": 1048576,
+                "default_max_pixels": 16777216
+              }
+            }
+          }
+        }
+      ],
+      "payload": [
+        {"field": "prompt", "input": "prompt"},
+        {"field": "size", "context": "resolved_size"},
+        {
+          "field": "image",
+          "context": "uploaded_image_urls",
+          "when": {"source": "context", "key": "uploaded_image_urls", "op": "non_empty"}
+        },
+        {"field": "model", "input": "model"},
+        {"field": "watermark", "const": false},
+        {"field": "response_format", "const": "url"}
+      ]
+    },
+    "params": [
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "提示词。描述希望生成的图像内容。"
+      },
+      {
+        "name": "size",
+        "api_field": "size",
+        "type": "LIST",
+        "required": true,
+        "default": "HD 16:9 (1920x1080)",
+        "options": [
+          "1K Square (1024x1024)",
+          "2K Square (2048x2048)",
+          "4K Square (4096x4096)",
+          "HD 16:9 (1920x1080)",
+          "2K 16:9 (2560x1440)",
+          "4K 16:9 (3840x2160)",
+          "Portrait 9:16 (1080x1920)",
+          "Portrait 3:4 (1536x2048)",
+          "Landscape 4:3 (2048x1536)",
+          "Ultra-wide 21:9 (3440x1440)",
+          "Custom"
+        ],
+        "description_zh": "输出尺寸。选择 Custom 时使用下方自定义宽高。"
+      },
+      {
+        "name": "custom_width",
+        "api_field": "custom_width",
+        "type": "INT",
+        "required": false,
+        "default": 1920,
+        "min": 1024,
+        "max": 4096,
+        "description_zh": "自定义输出宽度。仅在 size=Custom 时生效。"
+      },
+      {
+        "name": "custom_height",
+        "api_field": "custom_height",
+        "type": "INT",
+        "required": false,
+        "default": 1080,
+        "min": 1024,
+        "max": 4096,
+        "description_zh": "自定义输出高度。仅在 size=Custom 时生效。"
+      },
+      {
+        "name": "model",
+        "api_field": "model",
+        "type": "LIST",
+        "required": true,
+        "default": "doubao-seedream-4-0-250828",
+        "options": ["doubao-seedream-4-0-250828"],
+        "description_zh": "模型版本。"
+      },
+      {
+        "name": "image",
+        "api_field": "image",
+        "type": "IMAGE",
+        "required": false,
+        "multiple_inputs": true,
+        "max_inputs": 10,
+        "extra_input_pattern": "image_{index}",
+        "description_zh": "可选参考图，最多 10 张。单张不超过 10MB，总计不超过 50MB。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
+      "class": "Seedream4"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Seedream45",
+    "class_name": "BizyTRDSeedream45",
+    "display_name": "BizyTRD Seedream 4.5",
+    "display_name_zh": "BizyTRD 豆包 Seedream 4.5 生图",
+    "category": "BizyTRD/Doubao",
+    "model_key": "doubao-seedream-4-5-251128",
+    "output_type": "image",
+    "adapter": {
+      "kind": "structured",
+      "context": [
+        {
+          "name": "image_items",
+          "input": "images",
+          "transform": {
+            "name": "collect_counted_inputs",
+            "count": {"input": "inputcount"},
+            "max_count": 14,
+            "extra_input_pattern": "image_{index}",
+            "item_transform": "image_batches"
+          }
+        },
+        {
+          "name": "input_image_count",
+          "context": "image_items",
+          "transform": "count"
+        },
+        {
+          "name": "uploaded_image_urls",
+          "context": "image_items",
+          "transform": {
+            "name": "upload_media_list",
+            "media_type": "IMAGE",
+            "input_name": "images",
+            "file_name_prefix": "seedream45_{index}",
+            "total_pixels": 36000000,
+            "max_size": 10485760
+          }
+        },
+        {
+          "name": "resolved_size",
+          "input": "size",
+          "transform": {
+            "name": "resolve_size",
+            "custom_width": {"input": "custom_width"},
+            "custom_height": {"input": "custom_height"},
+            "rules": {
+              "custom": {
+                "separator": "x",
+                "min_aspect_ratio": 0.0625,
+                "max_aspect_ratio": 16.0,
+                "min_pixels": 3686400,
+                "default_max_pixels": 16777216
+              }
+            }
+          }
+        }
+      ],
+      "validators": [
+        {
+          "name": "max_count",
+          "value": {"context": "image_items"},
+          "max": 14,
+          "message": "Seedream 4.5 supports at most 14 input images"
+        }
+      ],
+      "payload": [
+        {"field": "prompt", "input": "prompt"},
+        {"field": "size", "context": "resolved_size"},
+        {"field": "model", "input": "model"},
+        {"field": "max_images", "input": "max_images"},
+        {
+          "field": "image",
+          "context": "uploaded_image_urls",
+          "when": {"source": "context", "key": "uploaded_image_urls", "op": "non_empty"}
+        },
+        {
+          "field": "optimize_prompt",
+          "input": "optimize_prompt",
+          "when": {"source": "input", "key": "optimize_prompt", "op": "ne", "value": "disabled"}
+        }
+      ]
+    },
+    "params": [
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "提示词。描述希望生成的图像内容。"
+      },
+      {
+        "name": "model",
+        "api_field": "model",
+        "type": "LIST",
+        "required": true,
+        "default": "doubao-seedream-4-5-251128",
+        "options": ["doubao-seedream-4-5-251128"],
+        "description_zh": "模型版本。"
+      },
+      {
+        "name": "size",
+        "api_field": "size",
+        "type": "LIST",
+        "required": true,
+        "default": "2K",
+        "options": ["2K", "4K", "Custom"],
+        "description_zh": "输出尺寸。选择 Custom 时使用下方自定义宽高。"
+      },
+      {
+        "name": "custom_width",
+        "api_field": "custom_width",
+        "type": "INT",
+        "required": false,
+        "default": 2048,
+        "min": 480,
+        "max": 4096,
+        "description_zh": "自定义输出宽度。仅在 size=Custom 时生效。"
+      },
+      {
+        "name": "custom_height",
+        "api_field": "custom_height",
+        "type": "INT",
+        "required": false,
+        "default": 2048,
+        "min": 480,
+        "max": 4096,
+        "description_zh": "自定义输出高度。仅在 size=Custom 时生效。"
+      },
+      {
+        "name": "max_images",
+        "api_field": "max_images",
+        "type": "INT",
+        "required": false,
+        "default": 1,
+        "min": 1,
+        "max": 15,
+        "description_zh": "实际可生成的图片数量。输入参考图+生成图片数≤15。"
+      },
+      {
+        "name": "optimize_prompt",
+        "api_field": "optimize_prompt",
+        "type": "LIST",
+        "required": false,
+        "default": "disabled",
+        "options": ["disabled", "standard"],
+        "description_zh": "提示词优化。standard 为标准模式，质量更高但耗时较长。"
+      },
+      {
+        "name": "images",
+        "api_field": "image",
+        "type": "IMAGE",
+        "required": false,
+        "multiple_inputs": true,
+        "max_inputs": 14,
+        "extra_input_pattern": "image_{index}",
+        "description_zh": "可选参考图，最多 14 张。单张不超过 10MB。"
+      },
+      {
+        "name": "inputcount",
+        "api_field": "inputcount",
+        "type": "INT",
+        "required": false,
+        "default": 1,
+        "min": 1,
+        "max": 14,
+        "description_zh": "参考图输入端口数量。images 为第 1 张，image_2 到 image_14 为附加端口。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
+      "class": "Seedream4_5"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Seedream5",
+    "class_name": "BizyTRDSeedream5",
+    "display_name": "BizyTRD Seedream 5.0",
+    "display_name_zh": "BizyTRD 豆包 Seedream 5.0 生图",
+    "category": "BizyTRD/Doubao",
+    "model_key": "doubao-seedream-5-0-260128",
+    "output_type": "image",
+    "adapter": {
+      "kind": "structured",
+      "context": [
+        {
+          "name": "image_items",
+          "input": "images",
+          "transform": {
+            "name": "collect_counted_inputs",
+            "count": {"input": "inputcount"},
+            "max_count": 14,
+            "extra_input_pattern": "image_{index}",
+            "item_transform": "image_batches"
+          }
+        },
+        {
+          "name": "input_image_count",
+          "context": "image_items",
+          "transform": "count"
+        },
+        {
+          "name": "uploaded_image_urls",
+          "context": "image_items",
+          "transform": {
+            "name": "upload_media_list",
+            "media_type": "IMAGE",
+            "input_name": "images",
+            "file_name_prefix": "seedream5_{index}",
+            "total_pixels": 36000000,
+            "max_size": 10485760
+          }
+        },
+        {
+          "name": "resolved_size",
+          "input": "size",
+          "transform": {
+            "name": "resolve_size",
+            "custom_width": {"input": "custom_width"},
+            "custom_height": {"input": "custom_height"},
+            "rules": {
+              "custom": {
+                "separator": "x",
+                "min_aspect_ratio": 0.0625,
+                "max_aspect_ratio": 16.0,
+                "min_pixels": 3686400,
+                "default_max_pixels": 10404496
+              }
+            }
+          }
+        }
+      ],
+      "validators": [
+        {
+          "name": "max_count",
+          "value": {"context": "image_items"},
+          "max": 14,
+          "message": "Seedream 5.0 supports at most 14 input images"
+        }
+      ],
+      "payload": [
+        {"field": "prompt", "input": "prompt"},
+        {"field": "size", "context": "resolved_size"},
+        {"field": "model", "input": "model"},
+        {"field": "max_images", "input": "max_images"},
+        {
+          "field": "image",
+          "context": "uploaded_image_urls",
+          "when": {"source": "context", "key": "uploaded_image_urls", "op": "non_empty"}
+        },
+        {
+          "field": "optimize_prompt",
+          "input": "optimize_prompt",
+          "when": {"source": "input", "key": "optimize_prompt", "op": "ne", "value": "disabled"}
+        },
+        {
+          "field": "tools",
+          "input": "tools",
+          "when": {"source": "input", "key": "tools", "op": "non_empty"}
+        }
+      ]
+    },
+    "params": [
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "提示词。描述希望生成的图像内容。"
+      },
+      {
+        "name": "model",
+        "api_field": "model",
+        "type": "LIST",
+        "required": true,
+        "default": "doubao-seedream-5-0-260128",
+        "options": ["doubao-seedream-5-0-260128"],
+        "description_zh": "模型版本。"
+      },
+      {
+        "name": "size",
+        "api_field": "size",
+        "type": "LIST",
+        "required": true,
+        "default": "2K",
+        "options": ["2K", "3K", "Custom"],
+        "description_zh": "输出尺寸。选择 Custom 时使用下方自定义宽高。"
+      },
+      {
+        "name": "custom_width",
+        "api_field": "custom_width",
+        "type": "INT",
+        "required": false,
+        "default": 2048,
+        "min": 480,
+        "max": 4096,
+        "description_zh": "自定义输出宽度。仅在 size=Custom 时生效。"
+      },
+      {
+        "name": "custom_height",
+        "api_field": "custom_height",
+        "type": "INT",
+        "required": false,
+        "default": 2048,
+        "min": 480,
+        "max": 4096,
+        "description_zh": "自定义输出高度。仅在 size=Custom 时生效。"
+      },
+      {
+        "name": "tools",
+        "api_field": "tools",
+        "type": "STRING",
+        "required": false,
+        "description_zh": "豆包模型支持的工具选项，如联网搜索等。"
+      },
+      {
+        "name": "max_images",
+        "api_field": "max_images",
+        "type": "INT",
+        "required": false,
+        "default": 1,
+        "min": 1,
+        "max": 15,
+        "description_zh": "实际可生成的图片数量。输入参考图+生成图片数≤15。"
+      },
+      {
+        "name": "optimize_prompt",
+        "api_field": "optimize_prompt",
+        "type": "LIST",
+        "required": false,
+        "default": "disabled",
+        "options": ["disabled", "standard"],
+        "description_zh": "提示词优化。standard 为标准模式，质量更高但耗时较长。"
+      },
+      {
+        "name": "images",
+        "api_field": "image",
+        "type": "IMAGE",
+        "required": false,
+        "multiple_inputs": true,
+        "max_inputs": 14,
+        "extra_input_pattern": "image_{index}",
+        "description_zh": "可选参考图，最多 14 张。单张不超过 10MB。"
+      },
+      {
+        "name": "inputcount",
+        "api_field": "inputcount",
+        "type": "INT",
+        "required": false,
+        "default": 1,
+        "min": 1,
+        "max": 14,
+        "description_zh": "参考图输入端口数量。images 为第 1 张，image_2 到 image_14 为附加端口。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
+      "class": "Seedream5"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Seededit3",
+    "class_name": "BizyTRDSeededit3",
+    "display_name": "BizyTRD Seededit3",
+    "display_name_zh": "BizyTRD 豆包 Seededit 3.0 图生图",
+    "category": "BizyTRD/Doubao",
+    "model_key": "doubao-seededit-3-0-i2i-250628",
+    "output_type": "image",
+    "adapter": {
+      "kind": "structured",
+      "context": [
+        {
+          "name": "uploaded_image_url",
+          "input": "image",
+          "transform": {
+            "name": "upload_single_media",
+            "media_type": "IMAGE",
+            "input_name": "image",
+            "file_name_prefix": "seededit3",
+            "total_pixels": 36000000,
+            "max_size": 10485760
+          }
+        }
+      ],
+      "payload": [
+        {"field": "prompt", "input": "prompt"},
+        {"field": "model", "input": "model"},
+        {"field": "image", "context": "uploaded_image_url"},
+        {
+          "field": "seed",
+          "input": "seed",
+          "when": {"source": "input", "key": "seed", "op": "gte", "value": 0}
+        },
+        {"field": "guidance_scale", "input": "guidance_scale"},
+        {"field": "size", "const": "adaptive"},
+        {"field": "response_format", "const": "url"},
+        {"field": "watermark", "const": false}
+      ]
+    },
+    "params": [
+      {
+        "name": "image",
+        "api_field": "image",
+        "type": "IMAGE",
+        "required": true,
+        "description_zh": "输入原图。"
+      },
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "编辑提示词。描述希望如何修改图片。"
+      },
+      {
+        "name": "model",
+        "api_field": "model",
+        "type": "LIST",
+        "required": true,
+        "default": "doubao-seededit-3-0-i2i-250628",
+        "options": ["doubao-seededit-3-0-i2i-250628"],
+        "description_zh": "模型版本。"
+      },
+      {
+        "name": "seed",
+        "api_field": "seed",
+        "type": "INT",
+        "required": false,
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description_zh": "随机种子。设为 -1 时不传此参数，由服务端随机。"
+      },
+      {
+        "name": "guidance_scale",
+        "api_field": "guidance_scale",
+        "type": "FLOAT",
+        "required": false,
+        "default": 5.5,
+        "min": 1.0,
+        "max": 10.0,
+        "description_zh": "引导强度。值越大约束越强。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
+      "class": "Seededit3"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Seedance10T2V",
+    "class_name": "BizyTRDSeedance10T2V",
+    "display_name": "BizyTRD Seedance 1.0 Pro Text To Video",
+    "display_name_zh": "BizyTRD 豆包 Seedance 1.0 Pro 文生视频",
+    "category": "BizyTRD/Doubao",
+    "model_key": "doubao-seedance-1-0",
+    "output_type": "video",
+    "adapter": {
+      "kind": "structured",
+      "payload": [
+        {"field": "prompt", "input": "prompt"},
+        {"field": "model", "input": "model"},
+        {"field": "resolution", "input": "resolution"},
+        {"field": "ratio", "input": "ratio"},
+        {"field": "duration", "input": "duration"},
+        {"field": "camerafixed", "input": "camerafixed"},
+        {
+          "field": "seed",
+          "input": "seed",
+          "when": {"source": "input", "key": "seed", "op": "gte", "value": 0}
+        },
+        {"field": "watermark", "const": false},
+        {"field": "fps", "const": 24}
+      ]
+    },
+    "params": [
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "提示词。描述希望生成的视频内容。"
+      },
+      {
+        "name": "model",
+        "api_field": "model",
+        "type": "LIST",
+        "required": true,
+        "default": "doubao-seedance-1-0-pro-250528",
+        "options": ["doubao-seedance-1-0-pro-250528", "doubao-seedance-1-0-pro-fast-251015"],
+        "description_zh": "模型版本。pro 质量更高，fast 响应更快。"
+      },
+      {
+        "name": "resolution",
+        "api_field": "resolution",
+        "type": "LIST",
+        "required": true,
+        "default": "1080p",
+        "options": ["480p", "720p", "1080p"],
+        "description_zh": "输出分辨率。与比例共同决定视频尺寸。"
+      },
+      {
+        "name": "ratio",
+        "api_field": "ratio",
+        "type": "LIST",
+        "required": false,
+        "default": "adaptive",
+        "options": ["16:9", "4:3", "1:1", "3:4", "9:16", "21:9", "adaptive"],
+        "description_zh": "视频宽高比。与分辨率共同决定视频尺寸。"
+      },
+      {
+        "name": "duration",
+        "api_field": "duration",
+        "type": "INT",
+        "required": true,
+        "default": 12,
+        "min": 2,
+        "max": 12,
+        "description_zh": "视频时长，单位秒。"
+      },
+      {
+        "name": "camerafixed",
+        "api_field": "camerafixed",
+        "type": "BOOLEAN",
+        "required": false,
+        "default": false,
+        "description_zh": "是否固定摄像机。"
+      },
+      {
+        "name": "seed",
+        "api_field": "seed",
+        "type": "INT",
+        "required": false,
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description_zh": "随机种子。设为 -1 时不传此参数，由服务端随机。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
+      "class": "Seedance_1_0_T2V_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Seedance10I2V",
+    "class_name": "BizyTRDSeedance10I2V",
+    "display_name": "BizyTRD Seedance 1.0 Pro Image To Video",
+    "display_name_zh": "BizyTRD 豆包 Seedance 1.0 Pro 图生视频",
+    "category": "BizyTRD/Doubao",
+    "model_key": "doubao-seedance-1-0",
+    "output_type": "video",
+    "adapter": {
+      "kind": "structured",
+      "context": [
+        {
+          "name": "uploaded_first_frame",
+          "input": "first_frame_image",
+          "transform": {
+            "name": "upload_single_media",
+            "media_type": "IMAGE",
+            "input_name": "first_frame_image",
+            "file_name_prefix": "seedance10_first",
+            "total_pixels": 36000000,
+            "max_size": 31457280
+          }
+        },
+        {
+          "name": "uploaded_last_frame",
+          "input": "last_frame_image",
+          "transform": {
+            "name": "upload_single_media",
+            "media_type": "IMAGE",
+            "input_name": "last_frame_image",
+            "file_name_prefix": "seedance10_last",
+            "total_pixels": 36000000,
+            "max_size": 31457280
+          }
+        }
+      ],
+      "payload": [
+        {"field": "prompt", "input": "prompt"},
+        {"field": "model", "input": "model"},
+        {"field": "resolution", "input": "resolution"},
+        {"field": "ratio", "input": "ratio"},
+        {"field": "duration", "input": "duration"},
+        {"field": "camerafixed", "input": "camerafixed"},
+        {
+          "field": "seed",
+          "input": "seed",
+          "when": {"source": "input", "key": "seed", "op": "gte", "value": 0}
+        },
+        {"field": "watermark", "const": false},
+        {"field": "fps", "const": 24},
+        {"field": "first_frame_image", "context": "uploaded_first_frame"},
+        {
+          "field": "last_frame_image",
+          "context": "uploaded_last_frame",
+          "when": {"source": "context", "key": "uploaded_last_frame", "op": "exists"}
+        }
+      ]
+    },
+    "params": [
+      {
+        "name": "first_frame_image",
+        "api_field": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "description_zh": "首帧图片。宽高比需在 0.4~2.5 之间。"
+      },
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "提示词。描述希望生成的视频内容。"
+      },
+      {
+        "name": "model",
+        "api_field": "model",
+        "type": "LIST",
+        "required": true,
+        "default": "doubao-seedance-1-0-pro-250528",
+        "options": ["doubao-seedance-1-0-pro-250528", "doubao-seedance-1-0-pro-fast-251015"],
+        "description_zh": "模型版本。pro 质量更高，fast 响应更快。fast 模式不支持尾帧。"
+      },
+      {
+        "name": "resolution",
+        "api_field": "resolution",
+        "type": "LIST",
+        "required": true,
+        "default": "1080p",
+        "options": ["480p", "720p", "1080p"],
+        "description_zh": "输出分辨率。"
+      },
+      {
+        "name": "ratio",
+        "api_field": "ratio",
+        "type": "LIST",
+        "required": false,
+        "default": "adaptive",
+        "options": ["16:9", "4:3", "1:1", "3:4", "9:16", "21:9", "adaptive"],
+        "description_zh": "视频宽高比。"
+      },
+      {
+        "name": "duration",
+        "api_field": "duration",
+        "type": "INT",
+        "required": true,
+        "default": 12,
+        "min": 2,
+        "max": 12,
+        "description_zh": "视频时长，单位秒。"
+      },
+      {
+        "name": "camerafixed",
+        "api_field": "camerafixed",
+        "type": "BOOLEAN",
+        "required": false,
+        "default": false,
+        "description_zh": "是否固定摄像机。"
+      },
+      {
+        "name": "seed",
+        "api_field": "seed",
+        "type": "INT",
+        "required": false,
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description_zh": "随机种子。设为 -1 时不传此参数，由服务端随机。"
+      },
+      {
+        "name": "last_frame_image",
+        "api_field": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "description_zh": "可选尾帧图片。宽高比需在 0.4~2.5 之间。fast 模式不支持。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
+      "class": "Seedance_1_0_I2V_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Seedance15T2V",
+    "class_name": "BizyTRDSeedance15T2V",
+    "display_name": "BizyTRD Seedance 1.5 Pro Text To Video",
+    "display_name_zh": "BizyTRD 豆包 Seedance 1.5 Pro 文生视频",
+    "category": "BizyTRD/Doubao",
+    "model_key": "doubao-seedance-1-5-pro",
+    "output_type": "video",
+    "adapter": {
+      "kind": "structured",
+      "payload": [
+        {"field": "prompt", "input": "prompt"},
+        {"field": "model", "input": "model"},
+        {"field": "resolution", "input": "resolution"},
+        {"field": "ratio", "input": "ratio"},
+        {"field": "duration", "input": "duration"},
+        {"field": "camerafixed", "input": "camerafixed"},
+        {"field": "generate_audio", "input": "generate_audio"},
+        {
+          "field": "seed",
+          "input": "seed",
+          "when": {"source": "input", "key": "seed", "op": "gte", "value": 0}
+        },
+        {"field": "watermark", "const": false},
+        {"field": "fps", "const": 24}
+      ]
+    },
+    "params": [
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "提示词。描述希望生成的视频内容。建议将对话部分置于双引号内以优化音频生成效果。"
+      },
+      {
+        "name": "model",
+        "api_field": "model",
+        "type": "LIST",
+        "required": true,
+        "default": "doubao-seedance-1-5-pro-251215",
+        "options": ["doubao-seedance-1-5-pro-251215"],
+        "description_zh": "模型版本。"
+      },
+      {
+        "name": "resolution",
+        "api_field": "resolution",
+        "type": "LIST",
+        "required": true,
+        "default": "1080p",
+        "options": ["480p", "720p", "1080p"],
+        "description_zh": "输出分辨率。"
+      },
+      {
+        "name": "ratio",
+        "api_field": "ratio",
+        "type": "LIST",
+        "required": false,
+        "default": "adaptive",
+        "options": ["16:9", "4:3", "1:1", "3:4", "9:16", "21:9", "adaptive"],
+        "description_zh": "视频宽高比。"
+      },
+      {
+        "name": "duration",
+        "api_field": "duration",
+        "type": "INT",
+        "required": true,
+        "default": 12,
+        "min": 4,
+        "max": 12,
+        "description_zh": "视频时长，单位秒。"
+      },
+      {
+        "name": "camerafixed",
+        "api_field": "camerafixed",
+        "type": "BOOLEAN",
+        "required": false,
+        "default": false,
+        "description_zh": "是否固定摄像机。"
+      },
+      {
+        "name": "generate_audio",
+        "api_field": "generate_audio",
+        "type": "BOOLEAN",
+        "required": false,
+        "default": false,
+        "description_zh": "是否生成音频。影响计费。"
+      },
+      {
+        "name": "seed",
+        "api_field": "seed",
+        "type": "INT",
+        "required": false,
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description_zh": "随机种子。设为 -1 时不传此参数，由服务端随机。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
+      "class": "Seedance_1_5_T2V_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Seedance15I2V",
+    "class_name": "BizyTRDSeedance15I2V",
+    "display_name": "BizyTRD Seedance 1.5 Pro Image To Video",
+    "display_name_zh": "BizyTRD 豆包 Seedance 1.5 Pro 图生视频",
+    "category": "BizyTRD/Doubao",
+    "model_key": "doubao-seedance-1-5-pro",
+    "output_type": "video",
+    "adapter": {
+      "kind": "structured",
+      "context": [
+        {
+          "name": "uploaded_first_frame",
+          "input": "first_frame_image",
+          "transform": {
+            "name": "upload_single_media",
+            "media_type": "IMAGE",
+            "input_name": "first_frame_image",
+            "file_name_prefix": "seedance15_first",
+            "total_pixels": 36000000,
+            "max_size": 31457280
+          }
+        },
+        {
+          "name": "uploaded_last_frame",
+          "input": "last_frame_image",
+          "transform": {
+            "name": "upload_single_media",
+            "media_type": "IMAGE",
+            "input_name": "last_frame_image",
+            "file_name_prefix": "seedance15_last",
+            "total_pixels": 36000000,
+            "max_size": 31457280
+          }
+        }
+      ],
+      "payload": [
+        {"field": "prompt", "input": "prompt"},
+        {"field": "model", "input": "model"},
+        {"field": "resolution", "input": "resolution"},
+        {"field": "ratio", "input": "ratio"},
+        {"field": "duration", "input": "duration"},
+        {"field": "camerafixed", "input": "camerafixed"},
+        {"field": "generate_audio", "input": "generate_audio"},
+        {
+          "field": "seed",
+          "input": "seed",
+          "when": {"source": "input", "key": "seed", "op": "gte", "value": 0}
+        },
+        {"field": "watermark", "const": false},
+        {"field": "fps", "const": 24},
+        {"field": "first_frame_image", "context": "uploaded_first_frame"},
+        {
+          "field": "last_frame_image",
+          "context": "uploaded_last_frame",
+          "when": {"source": "context", "key": "uploaded_last_frame", "op": "exists"}
+        }
+      ]
+    },
+    "params": [
+      {
+        "name": "first_frame_image",
+        "api_field": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "description_zh": "首帧图片。宽高比需在 0.4~2.5 之间。"
+      },
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "提示词。描述希望生成的视频内容。"
+      },
+      {
+        "name": "model",
+        "api_field": "model",
+        "type": "LIST",
+        "required": true,
+        "default": "doubao-seedance-1-5-pro-251215",
+        "options": ["doubao-seedance-1-5-pro-251215"],
+        "description_zh": "模型版本。"
+      },
+      {
+        "name": "resolution",
+        "api_field": "resolution",
+        "type": "LIST",
+        "required": true,
+        "default": "1080p",
+        "options": ["480p", "720p", "1080p"],
+        "description_zh": "输出分辨率。"
+      },
+      {
+        "name": "ratio",
+        "api_field": "ratio",
+        "type": "LIST",
+        "required": false,
+        "default": "adaptive",
+        "options": ["16:9", "4:3", "1:1", "3:4", "9:16", "21:9", "adaptive"],
+        "description_zh": "视频宽高比。"
+      },
+      {
+        "name": "duration",
+        "api_field": "duration",
+        "type": "INT",
+        "required": true,
+        "default": 12,
+        "min": 4,
+        "max": 12,
+        "description_zh": "视频时长，单位秒。"
+      },
+      {
+        "name": "camerafixed",
+        "api_field": "camerafixed",
+        "type": "BOOLEAN",
+        "required": false,
+        "default": false,
+        "description_zh": "是否固定摄像机。"
+      },
+      {
+        "name": "generate_audio",
+        "api_field": "generate_audio",
+        "type": "BOOLEAN",
+        "required": false,
+        "default": false,
+        "description_zh": "是否生成音频。影响计费。"
+      },
+      {
+        "name": "seed",
+        "api_field": "seed",
+        "type": "INT",
+        "required": false,
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description_zh": "随机种子。设为 -1 时不传此参数，由服务端随机。"
+      },
+      {
+        "name": "last_frame_image",
+        "api_field": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "description_zh": "可选尾帧图片。宽高比需在 0.4~2.5 之间。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
+      "class": "Seedance_1_5_I2V_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Seedance20Ref",
+    "class_name": "BizyTRDSeedance20Ref",
+    "display_name": "BizyTRD Seedance 2.0 References To Video",
+    "display_name_zh": "BizyTRD 豆包 超能视频 2.0 参考生成",
+    "category": "BizyTRD/Doubao",
+    "model_key": "seedance-2-0",
+    "output_type": "video",
+    "adapter": {
+      "kind": "structured",
+      "context": [
+        {
+          "name": "image_items",
+          "input": "images",
+          "transform": {
+            "name": "collect_counted_inputs",
+            "count": {"input": "inputcount"},
+            "max_count": 4,
+            "extra_input_pattern": "image_{index}",
+            "item_transform": "image_batches"
+          }
+        },
+        {
+          "name": "uploaded_image_urls",
+          "context": "image_items",
+          "transform": {
+            "name": "upload_media_list",
+            "media_type": "IMAGE",
+            "input_name": "images",
+            "file_name_prefix": "seedance20_ref_{index}",
+            "total_pixels": 36000000,
+            "max_size": 10485760
+          }
+        }
+      ],
+      "validators": [
+        {
+          "name": "max_count",
+          "value": {"context": "image_items"},
+          "max": 4,
+          "message": "Seedance 2.0 References supports at most 4 input images"
+        }
+      ],
+      "payload": [
+        {"field": "prompt", "input": "prompt"},
+        {"field": "model", "input": "model"},
+        {"field": "ratio", "input": "ratio"},
+        {"field": "duration", "input": "duration"},
+        {"field": "images", "context": "uploaded_image_urls"}
+      ]
+    },
+    "params": [
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "提示词。描述希望生成的视频内容。"
+      },
+      {
+        "name": "model",
+        "api_field": "model",
+        "type": "LIST",
+        "required": true,
+        "default": "doubao-seedance-2-0-260128",
+        "options": ["doubao-seedance-2-0-260128"],
+        "description_zh": "模型版本。"
+      },
+      {
+        "name": "ratio",
+        "api_field": "ratio",
+        "type": "LIST",
+        "required": true,
+        "default": "16:9",
+        "options": ["16:9", "4:3", "3:4", "9:16"],
+        "description_zh": "视频宽高比。"
+      },
+      {
+        "name": "duration",
+        "api_field": "duration",
+        "type": "LIST",
+        "required": true,
+        "default": 5,
+        "options": [5, 10, 15],
+        "description_zh": "视频时长，单位秒。"
+      },
+      {
+        "name": "images",
+        "api_field": "images",
+        "type": "IMAGE",
+        "required": false,
+        "multiple_inputs": true,
+        "max_inputs": 4,
+        "extra_input_pattern": "image_{index}",
+        "description_zh": "参考图，最多 4 张。"
+      },
+      {
+        "name": "inputcount",
+        "api_field": "inputcount",
+        "type": "INT",
+        "required": false,
+        "default": 1,
+        "min": 1,
+        "max": 4,
+        "description_zh": "参考图输入端口数量。images 为第 1 张，image_2 到 image_4 为附加端口。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
+      "class": "Seedance_2_0_REF_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Dreamactor20",
+    "class_name": "BizyTRDDreamactor20",
+    "display_name": "BizyTRD Jimeng Dreamactor M20",
+    "display_name_zh": "BizyTRD 即梦动作模仿 2.0",
+    "category": "BizyTRD/Doubao",
+    "model_key": "dreamactor-2-0",
+    "output_type": "video",
+    "adapter": {
+      "kind": "structured",
+      "context": [
+        {
+          "name": "uploaded_image_url",
+          "input": "image",
+          "transform": {
+            "name": "upload_single_media",
+            "media_type": "IMAGE",
+            "input_name": "image",
+            "file_name_prefix": "dreamactor_image",
+            "total_pixels": 16777216,
+            "max_size": 4928307
+          }
+        },
+        {
+          "name": "uploaded_video_url",
+          "input": "video",
+          "transform": {
+            "name": "upload_single_media",
+            "media_type": "VIDEO",
+            "input_name": "video",
+            "file_name_prefix": "dreamactor_video",
+            "max_size": 52428800,
+            "enforce_duration_range": [1.0, 30.0]
+          }
+        }
+      ],
+      "payload": [
+        {"field": "image", "context": "uploaded_image_url"},
+        {"field": "video", "context": "uploaded_video_url"},
+        {"field": "duration", "input": "duration"}
+      ]
+    },
+    "params": [
+      {
+        "name": "model",
+        "api_field": "model",
+        "type": "LIST",
+        "required": true,
+        "default": "dreamactor-2-0",
+        "options": ["dreamactor-2-0"],
+        "description_zh": "模型版本。"
+      },
+      {
+        "name": "image",
+        "api_field": "image",
+        "type": "IMAGE",
+        "required": true,
+        "description_zh": "人物图片。大小需小于 4.7MB。"
+      },
+      {
+        "name": "video",
+        "api_field": "video",
+        "type": "VIDEO",
+        "required": true,
+        "description_zh": "动作参考视频。时长不超过 30 秒，分辨率 [200x200, 2048x1440]。"
+      },
+      {
+        "name": "duration",
+        "api_field": "duration",
+        "type": "INT",
+        "required": true,
+        "default": 5,
+        "min": 1,
+        "max": 30,
+        "description_zh": "视频时长，单位秒。需与参考视频时长一致。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
+      "class": "Seedance_2_0_JIMENG_DREAMACTOR_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Seedance20T2V",
+    "class_name": "BizyTRDSeedance20T2V",
+    "display_name": "BizyTRD Seedance 2.0 Text To Video",
+    "display_name_zh": "BizyTRD 豆包 超能视频 2.0 文生视频",
+    "category": "BizyTRD/Doubao",
+    "model_key": "seedance-2-0-v2",
+    "output_type": "video",
+    "adapter": {
+      "kind": "structured",
+      "payload": [
+        {"field": "prompt", "input": "prompt"},
+        {"field": "mode", "input": "mode"},
+        {"field": "resolution", "input": "resolution"},
+        {"field": "duration", "input": "duration"},
+        {"field": "generateAudio", "input": "generate_audio"},
+        {"field": "ratio", "input": "ratio"},
+        {"field": "model", "const": "text-to-video"}
+      ]
+    },
+    "params": [
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description_zh": "提示词。描述希望生成的视频内容。"
+      },
+      {
+        "name": "mode",
+        "api_field": "mode",
+        "type": "LIST",
+        "required": true,
+        "default": "std",
+        "options": ["std", "fast"],
+        "description_zh": "生成模式。std 质量更稳，fast 响应更快。"
+      },
+      {
+        "name": "resolution",
+        "api_field": "resolution",
+        "type": "LIST",
+        "required": true,
+        "default": "720p",
+        "options": ["480p", "720p", "1080p", "2k", "4k"],
+        "description_zh": "输出分辨率。"
+      },
+      {
+        "name": "duration",
+        "api_field": "duration",
+        "type": "INT",
+        "required": true,
+        "default": 5,
+        "min": 4,
+        "max": 15,
+        "description_zh": "视频时长，单位秒。"
+      },
+      {
+        "name": "generate_audio",
+        "api_field": "generateAudio",
+        "type": "BOOLEAN",
+        "required": false,
+        "default": false,
+        "description_zh": "是否生成视频音频。"
+      },
+      {
+        "name": "ratio",
+        "api_field": "ratio",
+        "type": "LIST",
+        "required": false,
+        "default": "adaptive",
+        "options": ["adaptive", "16:9", "9:16", "1:1", "4:3", "3:4", "21:9"],
+        "description_zh": "视频宽高比。adaptive 表示自动匹配。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
+      "class": "Seedance_2_0_T2V_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Seedance20I2V",
+    "class_name": "BizyTRDSeedance20I2V",
+    "display_name": "BizyTRD Seedance 2.0 Image To Video",
+    "display_name_zh": "BizyTRD 豆包 超能视频 2.0 图生视频",
+    "category": "BizyTRD/Doubao",
+    "model_key": "seedance-2-0-v2",
+    "output_type": "video",
+    "adapter": {
+      "kind": "structured",
+      "context": [
+        {
+          "name": "uploaded_first_frame",
+          "input": "first_frame_image",
+          "transform": {
+            "name": "upload_single_media",
+            "media_type": "IMAGE",
+            "input_name": "first_frame_image",
+            "file_name_prefix": "seedance20_first",
+            "total_pixels": 16777216
+          }
+        },
+        {
+          "name": "uploaded_last_frame",
+          "input": "last_frame_image",
+          "transform": {
+            "name": "upload_single_media",
+            "media_type": "IMAGE",
+            "input_name": "last_frame_image",
+            "file_name_prefix": "seedance20_last",
+            "total_pixels": 16777216
+          }
+        }
+      ],
+      "payload": [
+        {
+          "field": "prompt",
+          "input": "prompt",
+          "when": {"source": "input", "key": "prompt", "op": "non_empty"}
+        },
+        {"field": "mode", "input": "mode"},
+        {"field": "resolution", "input": "resolution"},
+        {
+          "field": "duration",
+          "input": "duration",
+          "transform": "stringify"
+        },
+        {"field": "firstFrameUrl", "context": "uploaded_first_frame"},
+        {"field": "generateAudio", "input": "generate_audio"},
+        {"field": "ratio", "input": "ratio"},
+        {"field": "model", "const": "image-to-video"},
+        {
+          "field": "lastFrameUrl",
+          "context": "uploaded_last_frame",
+          "when": {"source": "context", "key": "uploaded_last_frame", "op": "exists"}
+        }
+      ]
+    },
+    "params": [
+      {
+        "name": "mode",
+        "api_field": "mode",
+        "type": "LIST",
+        "required": true,
+        "default": "std",
+        "options": ["std", "fast"],
+        "description_zh": "生成模式。std 质量更稳，fast 响应更快。"
+      },
+      {
+        "name": "first_frame_image",
+        "api_field": "firstFrameUrl",
+        "type": "IMAGE",
+        "required": true,
+        "description_zh": "首帧图片。"
+      },
+      {
+        "name": "resolution",
+        "api_field": "resolution",
+        "type": "LIST",
+        "required": true,
+        "default": "720p",
+        "options": ["480p", "720p", "1080p", "2k", "4k"],
+        "description_zh": "输出分辨率。"
+      },
+      {
+        "name": "duration",
+        "api_field": "duration",
+        "type": "INT",
+        "required": true,
+        "default": 5,
+        "min": 4,
+        "max": 15,
+        "description_zh": "视频时长，单位秒。"
+      },
+      {
+        "name": "prompt",
+        "api_field": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description_zh": "可选提示词，用于补充动作或场景描述。"
+      },
+      {
+        "name": "last_frame_image",
+        "api_field": "lastFrameUrl",
+        "type": "IMAGE",
+        "required": false,
+        "description_zh": "可选尾帧图片。"
+      },
+      {
+        "name": "generate_audio",
+        "api_field": "generateAudio",
+        "type": "BOOLEAN",
+        "required": false,
+        "default": true,
+        "description_zh": "是否生成视频音频。"
+      },
+      {
+        "name": "ratio",
+        "api_field": "ratio",
+        "type": "LIST",
+        "required": false,
+        "default": "adaptive",
+        "options": ["adaptive", "16:9", "4:3", "1:1", "3:4", "9:16", "21:9"],
+        "description_zh": "视频宽高比。"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
+      "class": "Seedance_2_0_I2V_API"
     }
   }
 ]

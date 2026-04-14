@@ -71,6 +71,33 @@ def _transform_upload_media_list(value, params, kwargs, context, model_def, clie
     return urls
 
 
+def _transform_upload_single_media(value, params, kwargs, context, model_def, client):
+    from .engine import _upload_media_value
+
+    if _is_blank(value):
+        return None
+    media_type = str(params["media_type"])
+    options = {
+        "file_name_prefix": params.get("file_name_prefix", "media"),
+        "total_pixels": params.get("total_pixels", 10000 * 10000),
+        "max_size": params.get("max_size", 20 * 1024 * 1024),
+        "enforce_duration_range": params.get("enforce_duration_range"),
+    }
+    return _upload_media_value(
+        value,
+        media_type,
+        client,
+        params.get("input_name", "media"),
+        options,
+    )
+
+
+def _transform_stringify(value, params, kwargs, context, model_def, client):
+    if value is None:
+        return None
+    return str(value)
+
+
 def _transform_resolve_size(value, params, kwargs, context, model_def, client):
     size = str(value)
     custom_width = int(_resolve_ref(params["custom_width"], kwargs, context, model_def))
@@ -80,6 +107,10 @@ def _transform_resolve_size(value, params, kwargs, context, model_def, client):
     rules = params["rules"]
 
     if size != "Custom":
+        size_mapping = rules.get("mapping", {})
+        if size in size_mapping:
+            return size_mapping[size]
+
         presets = rules.get("presets", {})
         if size in presets:
             preset_rule = presets[size]
@@ -131,7 +162,8 @@ def _transform_resolve_size(value, params, kwargs, context, model_def, client):
             f"Custom size total pixels exceed the current scene limit: {max_pixels}"
         )
 
-    return f"{custom_width}*{custom_height}"
+    separator = custom_rules.get("separator", "*")
+    return f"{custom_width}{separator}{custom_height}"
 
 
 def _parse_bbox_list(bbox_list_str: str, image_count: int):
@@ -227,9 +259,11 @@ TRANSFORMS: dict[str, Callable[..., Any]] = {
     "count": _transform_count,
     "collect_counted_inputs": _transform_collect_counted_inputs,
     "upload_media_list": _transform_upload_media_list,
+    "upload_single_media": _transform_upload_single_media,
     "resolve_size": _transform_resolve_size,
     "parse_bbox_list": _transform_parse_bbox_list,
     "parse_color_palette": _transform_parse_color_palette,
+    "stringify": _transform_stringify,
 }
 
 

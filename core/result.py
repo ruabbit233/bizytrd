@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import io
 import json
-import logging
 from typing import Any
+
+from ..bizytrd_sdk import AsyncBizyTRD
 
 
 async def download_outputs(
+    client: AsyncBizyTRD,
     outputs: dict[str, Any],
 ) -> tuple[list, list, list[str], str]:
     """Download videos, images, and texts from task outputs.
@@ -19,45 +21,30 @@ async def download_outputs(
     - Texts: extract as-is
     - URLs: collected as a JSON string array
     """
-    import aiohttp
-
     videos: list[Any] = []
     images: list[Any] = []
     texts: list[str] = []
-    urls: list[str] = []
+    downloaded = await client.download_outputs(outputs)
 
-    async with aiohttp.ClientSession(
-        timeout=aiohttp.ClientTimeout(total=3600)
-    ) as session:
-        if "videos" in outputs:
-            for video_url in outputs["videos"]:
-                async with session.get(video_url) as video_resp:
-                    video_resp.raise_for_status()
-                    video_content = await video_resp.read()
-                    try:
-                        from comfy_api.latest._input_impl import VideoFromFile
-                        videos.append(VideoFromFile(io.BytesIO(video_content)))
-                    except ImportError:
-                        videos.append(io.BytesIO(video_content))
-                    urls.append(video_url)
+    for video_content in downloaded.videos:
+        try:
+            from comfy_api.latest._input_impl import VideoFromFile
 
-        if "images" in outputs:
-            for image_url in outputs["images"]:
-                async with session.get(image_url) as image_resp:
-                    image_resp.raise_for_status()
-                    image_content = await image_resp.read()
-                    try:
-                        from bizyairsdk import bytesio_to_image_tensor
-                        images.append(bytesio_to_image_tensor(io.BytesIO(image_content)))
-                    except ImportError:
-                        images.append(io.BytesIO(image_content))
-                    urls.append(image_url)
+            videos.append(VideoFromFile(io.BytesIO(video_content)))
+        except ImportError:
+            videos.append(io.BytesIO(video_content))
 
-    if "texts" in outputs:
-        for text in outputs["texts"]:
-            texts.append(text)
+    for image_content in downloaded.images:
+        try:
+            from bizyairsdk import bytesio_to_image_tensor
 
-    urls_str = json.dumps(urls)
+            images.append(bytesio_to_image_tensor(io.BytesIO(image_content)))
+        except ImportError:
+            images.append(io.BytesIO(image_content))
+
+    texts.extend(downloaded.texts)
+
+    urls_str = json.dumps(downloaded.urls)
     return videos, images, texts, urls_str
 
 

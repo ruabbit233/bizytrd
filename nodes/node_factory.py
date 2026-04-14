@@ -189,8 +189,9 @@ def create_node_class(model_def: dict[str, Any]) -> type:
 def create_all_nodes():
     class_mappings: dict[str, type] = {}
     display_mappings: dict[str, str] = {}
+    registry = _load_registry()
 
-    for model_def in _load_registry():
+    for model_def in registry:
         node_class = create_node_class(model_def)
         class_mappings[model_def["internal_name"]] = node_class
         display_mappings[model_def["internal_name"]] = model_def["display_name"]

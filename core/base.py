@@ -10,10 +10,11 @@ import os
 from abc import ABC
 from typing import Any
 
+from ..bizytrd_sdk import AsyncBizyTRD
+
 from .adapters import build_payload_for_model
 from .config import get_config
 from .result import download_outputs
-from .task import poll_task, submit_task
 
 
 class _AsyncAtomicCounter:
@@ -172,21 +173,31 @@ class BizyTRDBaseNode(ABC):
         prompt_id: str | None = None,
     ) -> tuple[list, list, list[str], str]:
         """Create a task and wait for completion, matching bizyengine's flow."""
-        request_id, _ = await submit_task(
-            self.API_NODE, payload, config, prompt_id=prompt_id
-        )
-        poll_payload = await poll_task(
-            request_id, config,
-            prompt_id=prompt_id,
-            original_urls=self.original_urls,
-        )
+        async with AsyncBizyTRD(
+            api_key=config.get("api_key"),
+            base_url=config.get("base_url"),
+            upload_base_url=config.get("upload_base_url"),
+            timeout=config.get("timeout"),
+            polling_interval=config.get("polling_interval"),
+            max_polling_time=config.get("max_polling_time"),
+        ) as client:
+            task = await client.create_task(
+                self.API_NODE,
+                payload,
+                prompt_id=prompt_id,
+            )
+            result = await client.wait_for_task(
+                task.request_id,
+                prompt_id=prompt_id,
+                original_urls=self.original_urls,
+            )
 
-        data = poll_payload.get("data") or {}
-        outputs = data.get("outputs") or {}
-
-        # Download actual media content, matching bizyengine's download loop
-        videos, images, texts, urls_str = await download_outputs(outputs)
-        return (videos, images, texts, urls_str)
+            # Download actual media content, matching bizyengine's download loop.
+            videos, images, texts, urls_str = await download_outputs(
+                client,
+                result.outputs,
+            )
+            return (videos, images, texts, urls_str)
 
     def handle_outputs(
         self,

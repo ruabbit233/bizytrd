@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import shutil
 from pathlib import Path
 
@@ -22,7 +23,15 @@ def get_web_directory() -> Path:
 def sync_web_assets(target_dir: str | Path, *, subdir: str = "bizytrd") -> Path:
     source_root = get_web_directory() / "js"
     destination_root = Path(target_dir).expanduser().resolve() / subdir
-    destination_root.mkdir(parents=True, exist_ok=True)
+    try:
+        destination_root.mkdir(parents=True, exist_ok=True)
+    except OSError as exc:
+        logging.warning(
+            "bizytrd web asset sync skipped because '%s' is not writable: %s",
+            destination_root,
+            exc,
+        )
+        return destination_root
 
     if not source_root.is_dir():
         return destination_root
@@ -32,10 +41,20 @@ def sync_web_assets(target_dir: str | Path, *, subdir: str = "bizytrd") -> Path:
             continue
         relative_path = source_path.relative_to(source_root)
         destination_path = destination_root / relative_path
-        destination_path.parent.mkdir(parents=True, exist_ok=True)
-        if destination_path.exists() and destination_path.read_bytes() == source_path.read_bytes():
-            continue
-        shutil.copy2(source_path, destination_path)
+        try:
+            destination_path.parent.mkdir(parents=True, exist_ok=True)
+            if (
+                destination_path.exists()
+                and destination_path.read_bytes() == source_path.read_bytes()
+            ):
+                continue
+            shutil.copy2(source_path, destination_path)
+        except OSError as exc:
+            logging.warning(
+                "bizytrd web asset sync skipped for '%s': %s",
+                destination_path,
+                exc,
+            )
     return destination_root
 
 __all__ = [

@@ -1,4 +1,4 @@
-"""Configuration helpers for the async BizyTRD SDK."""
+"""Configuration helpers for the BizyTRD SDK."""
 
 from __future__ import annotations
 
@@ -31,28 +31,16 @@ class SDKConfig:
     max_polling_time: int = DEFAULT_MAX_POLLING_TIME
 
 
-def _repo_root() -> Path:
-    return Path(__file__).resolve().parent.parent
-
-
-def _bizyair_comfyui_path() -> Path | None:
-    env_path = os.getenv("BIZYAIR_COMFYUI_PATH")
-    if env_path:
-        return Path(env_path).expanduser()
-    return None
-
-
 def _candidate_api_key_paths() -> list[Path]:
-    repo_root = _repo_root()
-    bizyair_comfyui_path = _bizyair_comfyui_path()
     candidates = [
-        bizyair_comfyui_path / "api_key.ini" if bizyair_comfyui_path else None,
-        repo_root.parent / "ComfyUI" / "custom_nodes" / "BizyAir" / "api_key.ini",
-        repo_root / "api_key.ini",
-        repo_root.parent / "api_key.ini",
-        repo_root.parent.parent / "api_key.ini",
+        (
+            Path(os.getenv("BIZYTRD_API_KEY_PATH")).expanduser()
+            if os.getenv("BIZYTRD_API_KEY_PATH")
+            else None
+        ),
         Path.cwd() / "api_key.ini",
-        Path.cwd() / "ComfyUI" / "custom_nodes" / "BizyAir" / "api_key.ini",
+        Path.home() / ".config" / "bizytrd" / "api_key.ini",
+        Path.home() / ".bizytrd" / "api_key.ini",
     ]
     ordered: list[Path] = []
     seen: set[str] = set()
@@ -79,32 +67,12 @@ def _load_api_key_file() -> str:
     return ""
 
 
-def _load_dotenv() -> dict[str, str]:
-    env_path = _repo_root() / "config" / ".env"
-    if not env_path.exists():
-        return {}
-
-    values: dict[str, str] = {}
-    for line in env_path.read_text(encoding="utf-8").splitlines():
-        line = line.strip()
-        if not line or line.startswith("#") or "=" not in line:
-            continue
-        key, value = line.split("=", 1)
-        values[key.strip()] = value.strip().strip('"').strip("'")
-    return values
-
-
-def _shared_bizyair_base_url(env_values: dict[str, str]) -> str:
-    direct_base_url = (
-        os.getenv("BIZYAIR_API_BASE_URL")
-        or env_values.get("BIZYAIR_API_BASE_URL")
-        or os.getenv("BIZYAIR_X_SERVER")
-        or env_values.get("BIZYAIR_X_SERVER")
-    )
+def _legacy_bizyair_base_url() -> str:
+    direct_base_url = os.getenv("BIZYAIR_API_BASE_URL") or os.getenv("BIZYAIR_X_SERVER")
     if direct_base_url:
         return str(direct_base_url).strip().rstrip("/")
 
-    domain = os.getenv("BIZYAIR_DOMAIN") or env_values.get("BIZYAIR_DOMAIN")
+    domain = os.getenv("BIZYAIR_DOMAIN")
     if domain:
         return f"{str(domain).strip().rstrip('/')}/x/v1"
     return ""
@@ -122,28 +90,34 @@ def _normalize_upload_base_url(upload_base_url: str, api_base_url: str) -> str:
 
 
 def get_config() -> SDKConfig:
-    env_values = _load_dotenv()
-    bizyair_base_url = _shared_bizyair_base_url(env_values)
+    """Resolve SDK config from environment variables and optional local api_key.ini.
+
+    Priority:
+    1. `BIZYTRD_*`
+    2. legacy `BIZYAIR_*` compatibility fallbacks
+    3. local `api_key.ini`
+    4. built-in defaults
+    """
+
+    legacy_bizyair_base_url = _legacy_bizyair_base_url()
 
     api_base_url = (
-        os.getenv("BIZYAIR_TEST_TRD_BASE_URL")
-        or env_values.get("BIZYAIR_TEST_TRD_BASE_URL")
+        os.getenv("BIZYTRD_BASE_URL")
         or os.getenv("BIZYTRD_API_BASE_URL")
-        or env_values.get("BIZYTRD_API_BASE_URL")
-        or bizyair_base_url
+        or os.getenv("BIZYTRD_SERVER_URL")
+        or os.getenv("BIZYAIR_TEST_TRD_BASE_URL")
+        or legacy_bizyair_base_url
         or DEFAULT_API_BASE_URL
     )
     api_key = (
-        os.getenv("BIZYAIR_API_KEY")
-        or env_values.get("BIZYAIR_API_KEY")
-        or os.getenv("BIZYTRD_API_KEY")
-        or env_values.get("BIZYTRD_API_KEY")
+        os.getenv("BIZYTRD_API_KEY")
+        or os.getenv("BIZYAIR_API_KEY")
         or _load_api_key_file()
         or ""
     )
     upload_base_url = (
         os.getenv("BIZYTRD_UPLOAD_BASE_URL")
-        or env_values.get("BIZYTRD_UPLOAD_BASE_URL")
+        or os.getenv("BIZYTRD_UPLOAD_URL")
         or api_base_url
     )
 
@@ -151,19 +125,11 @@ def get_config() -> SDKConfig:
         base_url=str(api_base_url).rstrip("/"),
         api_key=str(api_key).strip(),
         upload_base_url=_normalize_upload_base_url(upload_base_url, api_base_url),
-        timeout=int(
-            os.getenv("BIZYTRD_TIMEOUT")
-            or env_values.get("BIZYTRD_TIMEOUT")
-            or DEFAULT_TIMEOUT
-        ),
+        timeout=int(os.getenv("BIZYTRD_TIMEOUT") or DEFAULT_TIMEOUT),
         polling_interval=float(
-            os.getenv("BIZYTRD_POLLING_INTERVAL")
-            or env_values.get("BIZYTRD_POLLING_INTERVAL")
-            or DEFAULT_POLLING_INTERVAL
+            os.getenv("BIZYTRD_POLLING_INTERVAL") or DEFAULT_POLLING_INTERVAL
         ),
         max_polling_time=int(
-            os.getenv("BIZYTRD_MAX_POLLING_TIME")
-            or env_values.get("BIZYTRD_MAX_POLLING_TIME")
-            or DEFAULT_MAX_POLLING_TIME
+            os.getenv("BIZYTRD_MAX_POLLING_TIME") or DEFAULT_MAX_POLLING_TIME
         ),
     )

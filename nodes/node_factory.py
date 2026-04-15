@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -34,9 +35,20 @@ def _param_description(param: dict[str, Any]) -> str:
     return ""
 
 
+def _param_value(param: dict[str, Any], *names: str, default: Any = None) -> Any:
+    for name in names:
+        if name in param:
+            return param[name]
+    return default
+
+
+def _param_truthy(param: dict[str, Any], *names: str) -> bool:
+    return bool(_param_value(param, *names, default=False))
+
+
 def _build_input_def(param: dict[str, Any]):
-    param_type = param["type"]
-    default = param.get("default")
+    param_type = _param_value(param, "type", default="STRING")
+    default = _param_value(param, "defaultValue", "default")
     description = _param_description(param)
 
     if param_type == "STRING":
@@ -44,7 +56,7 @@ def _build_input_def(param: dict[str, Any]):
             "STRING",
             {
                 "default": default or "",
-                "multiline": bool(param.get("multiline", False)),
+                "multiline": bool(_param_value(param, "multiline", default=False)),
                 "description": description,
             },
         )
@@ -107,6 +119,17 @@ def _multi_input_base_name(param_name: str) -> str:
     return param_name
 
 
+def _auto_inputcount_name(param: dict[str, Any]) -> str | None:
+    if _param_value(param, "type") not in {"IMAGE", "VIDEO", "AUDIO"}:
+        return None
+    if not _param_truthy(param, "multipleInputs", "multiple_inputs"):
+        return None
+    name = str(param.get("name") or "")
+    if name not in {"image", "images", "video", "videos", "audio", "audios"}:
+        return None
+    return f"{_multi_input_base_name(name)}_inputcount"
+
+
 def _extra_input_name(param: dict[str, Any], index: int) -> str:
     return f"{_multi_input_base_name(param['name'])}_{index}"
 
@@ -115,15 +138,41 @@ def _resolved_max_inputs(
     param: dict[str, Any],
     params_by_name: dict[str, dict[str, Any]],
 ) -> int:
-    count_param_name = param.get("inputcount_param")
+    count_param_name = _param_value(param, "inputcountParam", "inputcount_param") or _auto_inputcount_name(param)
     if count_param_name:
         count_param = params_by_name.get(count_param_name, {})
-        count_param_max = count_param.get("max")
+        count_param_max = _param_value(count_param, "max", "maxInputNum", "maxInputCount")
         if count_param_max is not None:
             return int(count_param_max)
-    if "max_inputs" in param:
-        return int(param["max_inputs"])
+    max_inputs = _param_value(param, "maxInputNum", "maxInputCount", "max_inputs")
+    if max_inputs is not None:
+        return int(max_inputs)
     return 1
+
+
+def _build_auto_inputcount_def(param: dict[str, Any], params_by_name: dict[str, dict[str, Any]]):
+    count_name = _auto_inputcount_name(param)
+    if not count_name or count_name in params_by_name:
+        return None
+
+    max_inputs = _resolved_max_inputs(param, params_by_name)
+    if max_inputs <= 1:
+        return None
+
+    media_label = _multi_input_base_name(param["name"])
+    return (
+        count_name,
+        (
+            "INT",
+            {
+                "default": 1,
+                "min": 1,
+                "max": max_inputs,
+                "description": f"Controls how many {media_label} inputs are shown and read.",
+            },
+        ),
+        False,
+    )
 
 
 def _iter_param_inputs(
@@ -132,11 +181,17 @@ def _iter_param_inputs(
 ) -> list[tuple[str, tuple[Any, ...], bool]]:
     input_name = param["name"]
     input_def = _build_input_def(param)
-    entries = [(input_name, input_def, bool(param.get("required", False)))]
+    entries: list[tuple[str, tuple[Any, ...], bool]] = []
 
-    if param.get("type") not in {"IMAGE", "VIDEO", "AUDIO"}:
+    auto_count_def = _build_auto_inputcount_def(param, params_by_name)
+    if auto_count_def is not None:
+        entries.append(auto_count_def)
+
+    entries.append((input_name, input_def, bool(_param_value(param, "required", default=False))))
+
+    if _param_value(param, "type") not in {"IMAGE", "VIDEO", "AUDIO"}:
         return entries
-    if not param.get("multiple_inputs"):
+    if not _param_truthy(param, "multipleInputs", "multiple_inputs"):
         return entries
 
     max_inputs = _resolved_max_inputs(param, params_by_name)
@@ -146,6 +201,12 @@ def _iter_param_inputs(
     for index in range(2, max_inputs + 1):
         entries.append((_extra_input_name(param, index), _clone_input_def(input_def), False))
     return entries
+
+
+def _normalize_endpoint_category(value: str) -> str:
+    normalized = re.sub(r"\s+", "-", str(value or "").strip().lower())
+    normalized = normalized.replace("_", "-")
+    return normalized.strip("-")
 
 
 def create_node_class(model_def: dict[str, Any]) -> type:
@@ -162,20 +223,25 @@ def create_node_class(model_def: dict[str, Any]) -> type:
 
     return_types, return_names = _return_signature(model_def.get("output_type", "string"))
     class_name = model_def["class_name"]
-    api_node = model_def["api_node"]
+    model_name = model_def["model_name"]
+    endpoint_category = model_def.get("endpoint_category", "")
     category = model_def["category"]
     params = list(model_def.get("params", []))
     output_type = model_def.get("output_type", "string")
     node_definition = dict(model_def)
 
     class GeneratedBizyTRDNode(BizyTRDBaseNode):
-        API_NODE = api_node
+        MODEL_NAME = model_name
+        ENDPOINT_CATEGORY = endpoint_category
         MODEL_DEF = node_definition
         PARAMS = params
         OUTPUT_TYPE = output_type
         RETURN_TYPES = return_types
         RETURN_NAMES = return_names
         CATEGORY = category
+        CHANNEL_PARAM = model_def.get("channelParam", model_def.get("channel_param", "channel"))
+        CHANNEL_SUFFIX_MAP = dict(model_def.get("channelSuffixMap") or model_def.get("channel_suffix_map") or {})
+        NORMALIZED_ENDPOINT_CATEGORY = _normalize_endpoint_category(endpoint_category)
 
         @classmethod
         def INPUT_TYPES(cls):

@@ -94,7 +94,11 @@ def _get_prompt_id() -> str | None:
 class BizyTRDBaseNode(ABC):
     """Shared base class for registry-generated bizytrd nodes."""
 
-    API_NODE = ""
+    MODEL_NAME = ""
+    ENDPOINT_CATEGORY = ""
+    NORMALIZED_ENDPOINT_CATEGORY = ""
+    CHANNEL_PARAM = "channel"
+    CHANNEL_SUFFIX_MAP: dict[str, str] = {}
     MODEL_DEF: dict[str, Any] = {}
     PARAMS: list[dict[str, Any]] = []
     OUTPUT_TYPE = "string"
@@ -107,10 +111,35 @@ class BizyTRDBaseNode(ABC):
 
     def build_payload(self, config: dict[str, Any], **kwargs: Any) -> dict[str, Any]:
         model_def = self.MODEL_DEF or {
-            "api_node": self.API_NODE,
+            "model_name": self.MODEL_NAME,
+            "endpoint_category": self.ENDPOINT_CATEGORY,
             "params": self.PARAMS,
         }
         return build_payload_for_model(model_def, config, kwargs)
+
+    def resolve_endpoint(self, **kwargs: Any) -> str:
+        model_name = str(self.MODEL_NAME or "").strip()
+        endpoint_category = str(
+            self.NORMALIZED_ENDPOINT_CATEGORY or self.ENDPOINT_CATEGORY or ""
+        ).strip("/")
+
+        channel_param = str(self.CHANNEL_PARAM or "").strip()
+        channel_value = kwargs.get(channel_param) if channel_param else None
+        channel_suffix_map = self.CHANNEL_SUFFIX_MAP or {}
+
+        if channel_value is not None:
+            channel_key = str(channel_value).strip()
+            if channel_key:
+                mapped_suffix = channel_suffix_map.get(channel_key, channel_key)
+                suffix = str(mapped_suffix).strip()
+                if suffix:
+                    if not suffix.startswith("-"):
+                        suffix = f"-{suffix}"
+                    model_name = f"{model_name}{suffix}"
+
+        if model_name and endpoint_category:
+            return f"{model_name}/{endpoint_category}"
+        return model_name
 
     async def execute(self, **kwargs: Any):
         """Main execution entry, matching bizyengine's BizyAirTrdApiBaseNode.api_call()."""
@@ -118,6 +147,7 @@ class BizyTRDBaseNode(ABC):
         config = get_config()
         prompt_id = _get_prompt_id()
         payload = self.build_payload(config, **kwargs)
+        endpoint = self.resolve_endpoint(**kwargs)
 
         e = None
         outputs = ([], [], [], "")
@@ -125,7 +155,7 @@ class BizyTRDBaseNode(ABC):
         try:
             await _trd_api_counter.increment(1)
             outputs = await self._create_task_and_wait(
-                payload, config, prompt_id=prompt_id
+                endpoint, payload, config, prompt_id=prompt_id
             )
         except Exception as api_err:
             e = api_err
@@ -167,6 +197,7 @@ class BizyTRDBaseNode(ABC):
 
     async def _create_task_and_wait(
         self,
+        endpoint: str,
         payload: dict[str, Any],
         config: dict[str, Any],
         *,
@@ -182,7 +213,7 @@ class BizyTRDBaseNode(ABC):
             max_polling_time=config.get("max_polling_time"),
         ) as client:
             task = await client.create_task(
-                self.API_NODE,
+                endpoint,
                 payload,
                 prompt_id=prompt_id,
             )

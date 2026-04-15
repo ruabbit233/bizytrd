@@ -1,171 +1,507 @@
 [
   {
-    "internal_name": "BizyTRD_Wan27Image",
-    "class_name": "BizyTRDWan27Image",
-    "display_name": "BizyTRD Wan 2.7 Image",
+    "internal_name": "BizyTRD_Wan27ImageProTextToImage",
+    "class_name": "BizyTRDWan27ImageProTextToImage",
+    "display_name": "BizyTRD Wan 2.7 Image Pro Text To Image",
     "category": "BizyTRD/Wan",
-    "api_node": "wan2.7-image",
-    "request_model_from": "model",
-    "require_any_of": [
-      "prompt",
-      "images"
-    ],
-    "require_any_message": "At least a prompt or one input image is required",
+    "model_name": "wan2.7-image-pro",
+    "endpoint_category": "Text To Image",
     "output_type": "image",
     "params": [
       {
         "name": "prompt",
-        "api_field": "prompt",
         "type": "STRING",
         "required": true,
         "multiline": true,
-        "description": "提示词。可为空，但至少需要与参考图二选一提供。"
-      },
-      {
-        "name": "model",
-        "api_field": "model",
-        "type": "LIST",
-        "internal": true,
-        "required": false,
-        "default": "wan2.7-image-pro",
-        "options": [
-          "wan2.7-image-pro",
-          "wan2.7-image"
-        ],
-        "description": "模型版本。`wan2.7-image-pro` 支持更高质量与 4K 纯文生图。"
+        "description": "提示词。文生图节点必须提供提示词。",
+        "fieldKey": "prompt"
       },
       {
         "name": "size",
-        "api_field": "size",
         "type": "LIST",
-        "transform": "custom_size",
-        "transform_model_param": "model",
-        "transform_width_param": "custom_width",
-        "transform_height_param": "custom_height",
-        "transform_media_param": "images",
-        "transform_sequential_param": "enable_sequential",
         "required": false,
-        "default": "2K",
         "options": [
           "1K",
           "2K",
           "4K",
           "Custom"
         ],
-        "description": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。"
+        "description": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。",
+        "fieldKey": "size",
+        "defaultValue": "2K",
+        "hookHeightParam": "custom_height",
+        "hookSequentialParam": "enable_sequential",
+        "hookWidthParam": "custom_width",
+        "valueHook": "wan_custom_size"
       },
       {
         "name": "custom_width",
-        "api_field": "custom_width",
         "type": "INT",
         "internal": true,
         "required": false,
-        "default": 2048,
         "min": 768,
         "max": 4096,
-        "description": "自定义输出宽度。仅在 `size=Custom` 时生效。"
+        "description": "自定义输出宽度。仅在 `size=Custom` 时生效。",
+        "fieldKey": "custom_width",
+        "defaultValue": 2048
       },
       {
         "name": "custom_height",
-        "api_field": "custom_height",
         "type": "INT",
         "internal": true,
         "required": false,
-        "default": 2048,
         "min": 768,
         "max": 4096,
-        "description": "自定义输出高度。仅在 `size=Custom` 时生效。"
+        "description": "自定义输出高度。仅在 `size=Custom` 时生效。",
+        "fieldKey": "custom_height",
+        "defaultValue": 2048
       },
       {
         "name": "n",
-        "api_field": "n",
         "type": "INT",
         "required": false,
-        "default": 4,
         "min": 1,
         "max": 12,
-        "description": "生成张数。普通模式范围 1-4，组图模式范围 1-12。"
-      },
-      {
-        "name": "images",
-        "api_field": "urls",
-        "type": "IMAGE",
-        "required": false,
-        "multiple_inputs": true,
-        "inputcount_param": "inputcount",
-        "flatten_batches": true,
-        "description": "参考图输入。可为空，最多 9 张，用于图像编辑、多图参考生成或组图生成。"
-      },
-      {
-        "name": "inputcount",
-        "api_field": "inputcount",
-        "type": "INT",
-        "internal": true,
-        "required": false,
-        "default": 1,
-        "min": 1,
-        "max": 9,
-        "description": "参考图输入端口数量。`images` 为第 1 张，`image_2` 到 `image_9` 为附加端口；节点仅会读取前 `inputcount` 个端口。"
+        "description": "生成张数。",
+        "fieldKey": "n",
+        "defaultValue": 4
       },
       {
         "name": "enable_sequential",
-        "api_field": "enable_sequential",
         "type": "BOOLEAN",
-        "send_if": "true",
         "required": false,
-        "default": false,
-        "description": "是否启用组图模式。开启后可生成一组保持主体一致性的图片。"
+        "description": "是否启用组图模式。开启后可生成一组保持主体一致性的图片。",
+        "fieldKey": "enable_sequential",
+        "defaultValue": false,
+        "sendIf": "true"
       },
       {
         "name": "thinking_mode",
-        "api_field": "thinking_mode",
         "type": "BOOLEAN",
-        "only_if_false_param": "enable_sequential",
-        "only_if_media_absent": "images",
         "required": false,
-        "default": true,
-        "description": "仅在纯文生图且未开启组图模式时生效。"
-      },
-      {
-        "name": "bbox_list",
-        "api_field": "bbox_list",
-        "type": "STRING",
-        "transform": "bbox_list",
-        "transform_media_param": "images",
-        "send_if": "non_empty",
-        "required": false,
-        "multiline": true,
-        "description": "可选框选编辑区域 JSON 数组，长度需与输入图片数量一致。"
+        "description": "仅在未开启组图模式时生效。",
+        "fieldKey": "thinking_mode",
+        "defaultValue": true,
+        "onlyIfFalseParam": "enable_sequential",
+        "onlyIfMediaAbsent": "images"
       },
       {
         "name": "color_palette",
-        "api_field": "color_palette",
         "type": "STRING",
-        "transform": "color_palette",
-        "transform_sequential_param": "enable_sequential",
-        "send_if": "non_empty",
         "required": false,
         "multiline": true,
-        "description": "可选配色 JSON 数组，仅在未开启组图模式时生效。"
+        "description": "可选配色 JSON 数组，仅在未开启组图模式时生效。",
+        "fieldKey": "color_palette",
+        "hookSequentialParam": "enable_sequential",
+        "sendIf": "non_empty",
+        "valueHook": "wan_color_palette"
       },
       {
         "name": "watermark",
-        "api_field": "watermark",
         "type": "BOOLEAN",
         "required": false,
-        "default": false,
-        "description": "是否添加 AI 生成水印。"
+        "description": "是否添加 AI 生成水印。",
+        "fieldKey": "watermark",
+        "defaultValue": false
       },
       {
         "name": "seed",
-        "api_field": "seed",
         "type": "INT",
-        "send_if": "gte_zero",
         "required": false,
-        "default": -1,
         "min": -1,
         "max": 2147483647,
-        "description": "随机种子。设为 -1 时不传此参数，由服务端随机。"
+        "description": "随机种子。设为 -1 时不传此参数，由服务端随机。",
+        "fieldKey": "seed",
+        "defaultValue": -1,
+        "sendIf": "gte_zero"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_wan_api.py",
+      "class": "Wan_V2_7_IMAGE_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Wan27ImageTextToImage",
+    "class_name": "BizyTRDWan27ImageTextToImage",
+    "display_name": "BizyTRD Wan 2.7 Image Text To Image",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan2.7-image",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description": "提示词。文生图节点必须提供提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "1K",
+          "2K",
+          "Custom"
+        ],
+        "description": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。",
+        "fieldKey": "size",
+        "defaultValue": "2K",
+        "hookHeightParam": "custom_height",
+        "hookSequentialParam": "enable_sequential",
+        "hookWidthParam": "custom_width",
+        "valueHook": "wan_custom_size"
+      },
+      {
+        "name": "custom_width",
+        "type": "INT",
+        "internal": true,
+        "required": false,
+        "min": 768,
+        "max": 4096,
+        "description": "自定义输出宽度。仅在 `size=Custom` 时生效。",
+        "fieldKey": "custom_width",
+        "defaultValue": 2048
+      },
+      {
+        "name": "custom_height",
+        "type": "INT",
+        "internal": true,
+        "required": false,
+        "min": 768,
+        "max": 4096,
+        "description": "自定义输出高度。仅在 `size=Custom` 时生效。",
+        "fieldKey": "custom_height",
+        "defaultValue": 2048
+      },
+      {
+        "name": "n",
+        "type": "INT",
+        "required": false,
+        "min": 1,
+        "max": 12,
+        "description": "生成张数。",
+        "fieldKey": "n",
+        "defaultValue": 4
+      },
+      {
+        "name": "enable_sequential",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "是否启用组图模式。开启后可生成一组保持主体一致性的图片。",
+        "fieldKey": "enable_sequential",
+        "defaultValue": false,
+        "sendIf": "true"
+      },
+      {
+        "name": "thinking_mode",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "仅在未开启组图模式时生效。",
+        "fieldKey": "thinking_mode",
+        "defaultValue": true,
+        "onlyIfFalseParam": "enable_sequential"
+      },
+      {
+        "name": "color_palette",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description": "可选配色 JSON 数组，仅在未开启组图模式时生效。",
+        "fieldKey": "color_palette",
+        "hookSequentialParam": "enable_sequential",
+        "sendIf": "non_empty",
+        "valueHook": "wan_color_palette"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "是否添加 AI 生成水印。",
+        "fieldKey": "watermark",
+        "defaultValue": false
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机种子。设为 -1 时不传此参数，由服务端随机。",
+        "fieldKey": "seed",
+        "defaultValue": -1,
+        "sendIf": "gte_zero"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_wan_api.py",
+      "class": "Wan_V2_7_IMAGE_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Wan27ImageProImageToImage",
+    "class_name": "BizyTRDWan27ImageProImageToImage",
+    "display_name": "BizyTRD Wan 2.7 Image Pro Image To Image",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan2.7-image-pro",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description": "可选提示词。用于补充图像编辑目标。",
+        "fieldKey": "prompt",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "1K",
+          "2K",
+          "Custom"
+        ],
+        "description": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。",
+        "fieldKey": "size",
+        "defaultValue": "2K",
+        "hookHeightParam": "custom_height",
+        "hookMediaParam": "images",
+        "hookSequentialParam": "enable_sequential",
+        "hookWidthParam": "custom_width",
+        "valueHook": "wan_custom_size"
+      },
+      {
+        "name": "custom_width",
+        "type": "INT",
+        "internal": true,
+        "required": false,
+        "min": 768,
+        "max": 4096,
+        "description": "自定义输出宽度。仅在 `size=Custom` 时生效。",
+        "fieldKey": "custom_width",
+        "defaultValue": 2048
+      },
+      {
+        "name": "custom_height",
+        "type": "INT",
+        "internal": true,
+        "required": false,
+        "min": 768,
+        "max": 4096,
+        "description": "自定义输出高度。仅在 `size=Custom` 时生效。",
+        "fieldKey": "custom_height",
+        "defaultValue": 2048
+      },
+      {
+        "name": "n",
+        "type": "INT",
+        "required": false,
+        "min": 1,
+        "max": 12,
+        "description": "生成张数。",
+        "fieldKey": "n",
+        "defaultValue": 4
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "description": "参考图输入。最多 9 张。",
+        "fieldKey": "urls",
+        "flattenBatches": true,
+        "maxInputNum": 9,
+        "multipleInputs": true
+      },
+      {
+        "name": "enable_sequential",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "是否启用组图模式。",
+        "fieldKey": "enable_sequential",
+        "defaultValue": false,
+        "sendIf": "true"
+      },
+      {
+        "name": "bbox_list",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description": "可选框选编辑区域 JSON 数组，长度需与输入图片数量一致。",
+        "fieldKey": "bbox_list",
+        "hookMediaParam": "images",
+        "sendIf": "non_empty",
+        "valueHook": "wan_bbox_list"
+      },
+      {
+        "name": "color_palette",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description": "可选配色 JSON 数组，仅在未开启组图模式时生效。",
+        "fieldKey": "color_palette",
+        "hookSequentialParam": "enable_sequential",
+        "sendIf": "non_empty",
+        "valueHook": "wan_color_palette"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "是否添加 AI 生成水印。",
+        "fieldKey": "watermark",
+        "defaultValue": false
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机种子。设为 -1 时不传此参数，由服务端随机。",
+        "fieldKey": "seed",
+        "defaultValue": -1,
+        "sendIf": "gte_zero"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_wan_api.py",
+      "class": "Wan_V2_7_IMAGE_API"
+    }
+  },
+  {
+    "internal_name": "BizyTRD_Wan27ImageImageToImage",
+    "class_name": "BizyTRDWan27ImageImageToImage",
+    "display_name": "BizyTRD Wan 2.7 Image Image To Image",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan2.7-image",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description": "可选提示词。用于补充图像编辑目标。",
+        "fieldKey": "prompt",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "1K",
+          "2K",
+          "Custom"
+        ],
+        "description": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。",
+        "fieldKey": "size",
+        "defaultValue": "2K",
+        "hookHeightParam": "custom_height",
+        "hookMediaParam": "images",
+        "hookSequentialParam": "enable_sequential",
+        "hookWidthParam": "custom_width",
+        "valueHook": "wan_custom_size"
+      },
+      {
+        "name": "custom_width",
+        "type": "INT",
+        "internal": true,
+        "required": false,
+        "min": 768,
+        "max": 4096,
+        "description": "自定义输出宽度。仅在 `size=Custom` 时生效。",
+        "fieldKey": "custom_width",
+        "defaultValue": 2048
+      },
+      {
+        "name": "custom_height",
+        "type": "INT",
+        "internal": true,
+        "required": false,
+        "min": 768,
+        "max": 4096,
+        "description": "自定义输出高度。仅在 `size=Custom` 时生效。",
+        "fieldKey": "custom_height",
+        "defaultValue": 2048
+      },
+      {
+        "name": "n",
+        "type": "INT",
+        "required": false,
+        "min": 1,
+        "max": 12,
+        "description": "生成张数。",
+        "fieldKey": "n",
+        "defaultValue": 4
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "description": "参考图输入。最多 9 张。",
+        "fieldKey": "urls",
+        "flattenBatches": true,
+        "maxInputNum": 9,
+        "multipleInputs": true
+      },
+      {
+        "name": "enable_sequential",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "是否启用组图模式。",
+        "fieldKey": "enable_sequential",
+        "defaultValue": false,
+        "sendIf": "true"
+      },
+      {
+        "name": "bbox_list",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description": "可选框选编辑区域 JSON 数组，长度需与输入图片数量一致。",
+        "fieldKey": "bbox_list",
+        "hookMediaParam": "images",
+        "sendIf": "non_empty",
+        "valueHook": "wan_bbox_list"
+      },
+      {
+        "name": "color_palette",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description": "可选配色 JSON 数组，仅在未开启组图模式时生效。",
+        "fieldKey": "color_palette",
+        "hookSequentialParam": "enable_sequential",
+        "sendIf": "non_empty",
+        "valueHook": "wan_color_palette"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "是否添加 AI 生成水印。",
+        "fieldKey": "watermark",
+        "defaultValue": false
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机种子。设为 -1 时不传此参数，由服务端随机。",
+        "fieldKey": "seed",
+        "defaultValue": -1,
+        "sendIf": "gte_zero"
       }
     ],
     "migration_source": {
@@ -178,86 +514,84 @@
     "class_name": "BizyTRDWan27VideoEdit",
     "display_name": "BizyTRD Wan 2.7 Video Edit",
     "category": "BizyTRD/Wan",
-    "api_node": "wan2.7-videoedit",
+    "model_name": "wan2.7-videoedit",
+    "endpoint_category": "Video Edit",
     "output_type": "video",
     "params": [
       {
         "name": "video",
-        "api_field": "media",
         "type": "VIDEO",
-        "media_item_type": "video",
         "required": true,
-        "description": "输入视频。时长需在 2-10 秒之间。"
+        "description": "输入视频。时长需在 2-10 秒之间。",
+        "fieldKey": "media",
+        "mediaItemType": "video"
       },
       {
         "name": "prompt",
-        "api_field": "prompt",
         "type": "STRING",
-        "send_if": "non_empty",
         "required": false,
         "multiline": true,
-        "description": "正向提示词。描述希望如何编辑视频。"
+        "description": "正向提示词。描述希望如何编辑视频。",
+        "fieldKey": "prompt",
+        "sendIf": "non_empty"
       },
       {
         "name": "negative_prompt",
-        "api_field": "negative_prompt",
         "type": "STRING",
-        "send_if": "non_empty",
         "required": false,
         "multiline": true,
-        "description": "反向提示词。描述不希望在结果中出现的内容。"
+        "description": "反向提示词。描述不希望在结果中出现的内容。",
+        "fieldKey": "negative_prompt",
+        "sendIf": "non_empty"
       },
       {
         "name": "first_frame_image",
-        "api_field": "media",
         "type": "IMAGE",
-        "media_item_type": "first_frame",
         "required": false,
-        "description": "可选首帧参考图，用于更精细地约束首帧表现。"
+        "description": "可选首帧参考图，用于更精细地约束首帧表现。",
+        "fieldKey": "media",
+        "mediaItemType": "first_frame"
       },
       {
         "name": "ref_image_1",
-        "api_field": "media",
         "type": "IMAGE",
-        "media_item_type": "reference_image",
         "required": false,
-        "description": "可选参考图 1，用于约束角色、风格或主体。"
+        "description": "可选参考图 1，用于约束角色、风格或主体。",
+        "fieldKey": "media",
+        "mediaItemType": "reference_image"
       },
       {
         "name": "ref_image_2",
-        "api_field": "media",
         "type": "IMAGE",
-        "media_item_type": "reference_image",
         "required": false,
-        "description": "可选参考图 2，用于约束角色、风格或主体。"
+        "description": "可选参考图 2，用于约束角色、风格或主体。",
+        "fieldKey": "media",
+        "mediaItemType": "reference_image"
       },
       {
         "name": "ref_image_3",
-        "api_field": "media",
         "type": "IMAGE",
-        "media_item_type": "reference_image",
         "required": false,
-        "description": "可选参考图 3，用于约束角色、风格或主体。"
+        "description": "可选参考图 3，用于约束角色、风格或主体。",
+        "fieldKey": "media",
+        "mediaItemType": "reference_image"
       },
       {
         "name": "resolution",
-        "api_field": "resolution",
         "type": "LIST",
         "required": false,
-        "default": "1080P",
         "options": [
           "720P",
           "1080P"
         ],
-        "description": "输出分辨率。"
+        "description": "输出分辨率。",
+        "fieldKey": "resolution",
+        "defaultValue": "1080P"
       },
       {
         "name": "ratio",
-        "api_field": "ratio",
         "type": "LIST",
-        "send_if": "not_default",
         "required": false,
-        "default": "default",
         "options": [
           "default",
           "16:9",
@@ -266,57 +600,60 @@
           "4:3",
           "3:4"
         ],
-        "description": "输出画幅比例。`default` 表示跟随输入视频比例。"
+        "description": "输出画幅比例。`default` 表示跟随输入视频比例。",
+        "fieldKey": "ratio",
+        "defaultValue": "default",
+        "sendIf": "not_default"
       },
       {
         "name": "duration",
-        "api_field": "duration",
         "type": "INT",
-        "send_if": "nonzero",
         "required": false,
-        "default": 0,
         "min": 0,
         "max": 10,
-        "description": "输出时长。0 表示保持输入视频时长，2-10 表示截断到指定秒数。"
+        "description": "输出时长。0 表示保持输入视频时长，2-10 表示截断到指定秒数。",
+        "fieldKey": "duration",
+        "defaultValue": 0,
+        "sendIf": "nonzero"
       },
       {
         "name": "audio_setting",
-        "api_field": "audio_setting",
         "type": "LIST",
         "required": false,
-        "default": "auto",
         "options": [
           "auto",
           "origin"
         ],
-        "description": "音频处理方式。`auto` 自动判断，`origin` 尽量保留输入原声。"
+        "description": "音频处理方式。`auto` 自动判断，`origin` 尽量保留输入原声。",
+        "fieldKey": "audio_setting",
+        "defaultValue": "auto"
       },
       {
         "name": "prompt_extend",
-        "api_field": "prompt_extend",
         "type": "BOOLEAN",
         "required": false,
-        "default": true,
-        "description": "是否启用提示词智能改写。"
+        "description": "是否启用提示词智能改写。",
+        "fieldKey": "prompt_extend",
+        "defaultValue": true
       },
       {
         "name": "watermark",
-        "api_field": "watermark",
         "type": "BOOLEAN",
         "required": false,
-        "default": false,
-        "description": "是否添加 AI 生成水印。"
+        "description": "是否添加 AI 生成水印。",
+        "fieldKey": "watermark",
+        "defaultValue": false
       },
       {
         "name": "seed",
-        "api_field": "seed",
         "type": "INT",
-        "send_if": "gte_zero",
         "required": false,
-        "default": -1,
         "min": -1,
         "max": 2147483647,
-        "description": "随机种子。设为 -1 时不传此参数，由服务端随机。"
+        "description": "随机种子。设为 -1 时不传此参数，由服务端随机。",
+        "fieldKey": "seed",
+        "defaultValue": -1,
+        "sendIf": "gte_zero"
       }
     ],
     "migration_source": {
@@ -329,31 +666,30 @@
     "class_name": "BizyTRDWan25TextToVideo",
     "display_name": "BizyTRD Wan 2.5 Text To Video",
     "category": "BizyTRD/Wan",
-    "api_node": "wan2.5-t2v-preview",
+    "model_name": "wan2.5-t2v-preview",
+    "endpoint_category": "Text To Video",
     "output_type": "video",
     "params": [
       {
         "name": "prompt",
-        "api_field": "prompt",
         "type": "STRING",
         "required": true,
         "multiline": true,
-        "description": "提示词。描述希望生成的视频内容。"
+        "description": "提示词。描述希望生成的视频内容。",
+        "fieldKey": "prompt"
       },
       {
         "name": "negative_prompt",
-        "api_field": "negative_prompt",
         "type": "STRING",
         "required": false,
         "multiline": true,
-        "description": "反向提示词。描述不希望出现的内容。"
+        "description": "反向提示词。描述不希望出现的内容。",
+        "fieldKey": "negative_prompt"
       },
       {
         "name": "size",
-        "api_field": "size",
         "type": "LIST",
         "required": false,
-        "default": "1920*1080",
         "options": [
           "832*480",
           "480*832",
@@ -369,27 +705,29 @@
           "1632*1248",
           "1248*1632"
         ],
-        "description": "输出分辨率与画幅。"
+        "description": "输出分辨率与画幅。",
+        "fieldKey": "size",
+        "defaultValue": "1920*1080"
       },
       {
         "name": "duration",
-        "api_field": "duration",
         "type": "LIST",
         "required": false,
-        "default": 5,
         "options": [
           5,
           10
         ],
-        "description": "输出时长，单位秒。"
+        "description": "输出时长，单位秒。",
+        "fieldKey": "duration",
+        "defaultValue": 5
       },
       {
         "name": "prompt_extend",
-        "api_field": "prompt_extend",
         "type": "BOOLEAN",
         "required": false,
-        "default": true,
-        "description": "是否启用提示词智能改写。"
+        "description": "是否启用提示词智能改写。",
+        "fieldKey": "prompt_extend",
+        "defaultValue": true
       }
     ],
     "migration_source": {
@@ -402,55 +740,56 @@
     "class_name": "BizyTRDWan25ImageToVideo",
     "display_name": "BizyTRD Wan 2.5 Image To Video",
     "category": "BizyTRD/Wan",
-    "api_node": "wan2.5-i2v-preview",
+    "model_name": "wan2.5-i2v-preview",
+    "endpoint_category": "Image To Video",
     "output_type": "video",
     "params": [
       {
         "name": "image",
-        "api_field": "image",
         "type": "IMAGE",
         "required": true,
-        "description": "输入首帧图片。"
+        "description": "输入首帧图片。",
+        "fieldKey": "image"
       },
       {
         "name": "audio",
-        "api_field": "audio",
         "type": "AUDIO",
         "required": false,
-        "description": "可选引导音频。当前依赖服务端音频上传能力。"
+        "description": "可选引导音频。当前依赖服务端音频上传能力。",
+        "fieldKey": "audio"
       },
       {
         "name": "prompt",
-        "api_field": "prompt",
         "type": "STRING",
         "required": false,
         "multiline": true,
-        "description": "可选提示词，用于补充动作或场景描述。"
+        "description": "可选提示词，用于补充动作或场景描述。",
+        "fieldKey": "prompt"
       },
       {
         "name": "resolution",
-        "api_field": "resolution",
         "type": "LIST",
         "required": false,
-        "default": "1080P",
         "options": [
           "480P",
           "720P",
           "1080P"
         ],
-        "description": "输出分辨率。"
+        "description": "输出分辨率。",
+        "fieldKey": "resolution",
+        "defaultValue": "1080P"
       },
       {
         "name": "duration",
-        "api_field": "duration",
         "type": "LIST",
         "required": false,
-        "default": 5,
         "options": [
           5,
           10
         ],
-        "description": "输出时长，单位秒。"
+        "description": "输出时长，单位秒。",
+        "fieldKey": "duration",
+        "defaultValue": 5
       }
     ],
     "migration_source": {
@@ -463,49 +802,50 @@
     "class_name": "BizyTRDViduQ1TextToVideo",
     "display_name": "BizyTRD Vidu Q1 Text To Video",
     "category": "BizyTRD/Vidu",
-    "api_node": "vidu-q1-text2video",
+    "model_name": "vidu-q1-text2video",
+    "endpoint_category": "Text To Video",
     "output_type": "video",
     "params": [
       {
         "name": "prompt",
-        "api_field": "prompt",
         "type": "STRING",
         "required": true,
         "multiline": true,
-        "description": "提示词。描述希望生成的视频内容。"
+        "description": "提示词。描述希望生成的视频内容。",
+        "fieldKey": "prompt"
       },
       {
         "name": "seed",
-        "api_field": "seed",
         "type": "INT",
         "required": false,
-        "default": 0,
         "min": 0,
         "max": 2147483647,
-        "description": "随机种子。相同参数下可用于复现结果。"
+        "description": "随机种子。相同参数下可用于复现结果。",
+        "fieldKey": "seed",
+        "defaultValue": 0
       },
       {
         "name": "style",
-        "api_field": "style",
         "type": "LIST",
         "required": false,
-        "default": "general",
         "options": [
           "general",
           "anime"
         ],
-        "description": "风格类型。"
+        "description": "风格类型。",
+        "fieldKey": "style",
+        "defaultValue": "general"
       },
       {
         "name": "duration",
-        "api_field": "duration",
         "type": "LIST",
         "required": false,
-        "default": 5,
         "options": [
           5
         ],
-        "description": "输出时长。当前模型固定为 5 秒。"
+        "description": "输出时长。当前模型固定为 5 秒。",
+        "fieldKey": "duration",
+        "defaultValue": 5
       }
     ],
     "migration_source": {
@@ -518,40 +858,41 @@
     "class_name": "BizyTRDViduQ1ImageToVideo",
     "display_name": "BizyTRD Vidu Q1 Image To Video",
     "category": "BizyTRD/Vidu",
-    "api_node": "vidu-q1-img2video",
+    "model_name": "vidu-q1-img2video",
+    "endpoint_category": "Image To Video",
     "output_type": "video",
     "params": [
       {
         "name": "prompt",
-        "api_field": "prompt",
         "type": "STRING",
         "required": true,
         "multiline": true,
-        "description": "提示词。描述希望生成的视频内容。"
+        "description": "提示词。描述希望生成的视频内容。",
+        "fieldKey": "prompt"
       },
       {
         "name": "first_frame_image",
-        "api_field": "first_frame_image",
         "type": "IMAGE",
         "required": true,
-        "description": "输入首帧图片。"
+        "description": "输入首帧图片。",
+        "fieldKey": "first_frame_image"
       },
       {
         "name": "last_frame_image",
-        "api_field": "last_frame_image",
         "type": "IMAGE",
         "required": false,
-        "description": "可选末帧图片，用于约束结束画面。"
+        "description": "可选末帧图片，用于约束结束画面。",
+        "fieldKey": "last_frame_image"
       },
       {
         "name": "seed",
-        "api_field": "seed",
         "type": "INT",
         "required": false,
-        "default": 0,
         "min": 0,
         "max": 2147483647,
-        "description": "随机种子。相同参数下可用于复现结果。"
+        "description": "随机种子。相同参数下可用于复现结果。",
+        "fieldKey": "seed",
+        "defaultValue": 0
       }
     ],
     "migration_source": {
@@ -564,42 +905,43 @@
     "class_name": "BizyTRDGPTImage1TextToImage",
     "display_name": "BizyTRD GPT Image 1 Text To Image",
     "category": "BizyTRD/OpenAI",
-    "api_node": "gpt-image-1",
+    "model_name": "gpt-image-1",
+    "endpoint_category": "Text To Image",
     "output_type": "image",
     "params": [
       {
         "name": "prompt",
-        "api_field": "prompt",
         "type": "STRING",
         "required": true,
         "multiline": true,
-        "description": "提示词。描述希望生成的图像内容。"
+        "description": "提示词。描述希望生成的图像内容。",
+        "fieldKey": "prompt"
       },
       {
         "name": "size",
-        "api_field": "size",
         "type": "LIST",
         "required": false,
-        "default": "1:1",
         "options": [
           "1:1",
           "2:3",
           "3:2"
         ],
-        "description": "输出画幅比例。"
+        "description": "输出画幅比例。",
+        "fieldKey": "size",
+        "defaultValue": "1:1"
       },
       {
         "name": "variants",
-        "api_field": "variants",
         "type": "LIST",
         "required": false,
-        "default": 1,
         "options": [
           1,
           2,
           4
         ],
-        "description": "生成张数。"
+        "description": "生成张数。",
+        "fieldKey": "variants",
+        "defaultValue": 1
       }
     ],
     "migration_source": {
@@ -612,38 +954,39 @@
     "class_name": "BizyTRDGPTImage1Edit",
     "display_name": "BizyTRD GPT Image Edit",
     "category": "BizyTRD/OpenAI",
-    "api_node": "gpt-image-1-edit",
+    "model_name": "gpt-image-1",
+    "endpoint_category": "Image To Image",
     "output_type": "image",
     "params": [
       {
         "name": "images",
-        "api_field": "images",
         "type": "IMAGE",
         "required": true,
-        "multiple_inputs": true,
-        "max_inputs": 4,
-        "description": "输入参考图。最多 4 张，用于图像编辑。"
+        "description": "输入参考图。最多 4 张，用于图像编辑。",
+        "fieldKey": "images",
+        "maxInputNum": 4,
+        "multipleInputs": true
       },
       {
         "name": "prompt",
-        "api_field": "prompt",
         "type": "STRING",
         "required": true,
         "multiline": true,
-        "description": "编辑提示词。描述希望如何修改输入图片。"
+        "description": "编辑提示词。描述希望如何修改输入图片。",
+        "fieldKey": "prompt"
       },
       {
         "name": "size",
-        "api_field": "size",
         "type": "LIST",
         "required": false,
-        "default": "1:1",
         "options": [
           "1:1",
           "2:3",
           "3:2"
         ],
-        "description": "输出画幅比例。"
+        "description": "输出画幅比例。",
+        "fieldKey": "size",
+        "defaultValue": "1:1"
       }
     ],
     "migration_source": {
@@ -656,44 +999,35 @@
     "class_name": "BizyTRDSeedance20MultimodalVideo",
     "display_name": "BizyTRD Seedance 2.0 Multimodal To Video",
     "category": "BizyTRD/Doubao",
-    "api_node": "seedance-2-0-std",
-    "request_model": "multimodal-to-video",
-    "require_any_of": [
-      "prompt",
-      "images",
-      "video",
-      "audio"
-    ],
-    "require_any_message": "At least a prompt or one media input is required",
+    "model_name": "seedance-2-0-std",
+    "endpoint_category": "Multimodal To Video",
     "output_type": "video",
     "params": [
       {
         "name": "mode",
-        "api_field": "mode",
         "type": "LIST",
         "required": true,
-        "default": "std",
         "options": [
           "std",
           "fast"
         ],
-        "description": "生成模式。`std` 质量更稳，`fast` 响应更快。"
+        "description": "生成模式。`std` 质量更稳，`fast` 响应更快。",
+        "fieldKey": "mode",
+        "defaultValue": "std"
       },
       {
         "name": "prompt",
-        "api_field": "prompt",
         "type": "STRING",
-        "send_if": "non_empty",
-        "required": true,
+        "required": false,
         "multiline": true,
-        "description": "视频生成提示词。可为空，但建议与多模态素材一起描述目标效果。"
+        "description": "视频生成提示词。可为空，但建议与多模态素材一起描述目标效果。",
+        "fieldKey": "prompt",
+        "sendIf": "non_empty"
       },
       {
         "name": "resolution",
-        "api_field": "resolution",
         "type": "LIST",
         "required": true,
-        "default": "720p",
         "options": [
           "480p",
           "720p",
@@ -701,93 +1035,60 @@
           "2k",
           "4k"
         ],
-        "description": "输出分辨率。"
+        "description": "输出分辨率。",
+        "fieldKey": "resolution",
+        "defaultValue": "720p"
       },
       {
         "name": "duration",
-        "api_field": "duration",
         "type": "INT",
         "required": true,
-        "default": 5,
         "min": 4,
         "max": 15,
-        "description": "视频时长，单位秒。"
+        "description": "视频时长，单位秒。",
+        "fieldKey": "duration",
+        "defaultValue": 5
       },
       {
         "name": "images",
-        "api_field": "imageUrls",
         "type": "IMAGE",
         "required": false,
-        "multiple_inputs": true,
-        "inputcount_param": "image_inputcount",
-        "flatten_batches": true,
-        "description": "参考图片输入。最多 9 张，会作为 `imageUrls` 传给后端。"
-      },
-      {
-        "name": "image_inputcount",
-        "api_field": "image_inputcount",
-        "type": "INT",
-        "internal": true,
-        "required": false,
-        "default": 1,
-        "min": 1,
-        "max": 9,
-        "description": "图片输入端口数量。控制 `images` 到 `image_9` 的显示与读取范围。"
+        "description": "参考图片输入。最多 9 张，会作为 `imageUrls` 传给后端。",
+        "fieldKey": "imageUrls",
+        "flattenBatches": true,
+        "maxInputNum": 9,
+        "multipleInputs": true
       },
       {
         "name": "video",
-        "api_field": "videoUrls",
         "type": "VIDEO",
         "required": false,
-        "multiple_inputs": true,
-        "inputcount_param": "video_inputcount",
-        "description": "参考视频输入。最多 3 个，会作为 `videoUrls` 传给后端。"
-      },
-      {
-        "name": "video_inputcount",
-        "api_field": "video_inputcount",
-        "type": "INT",
-        "internal": true,
-        "required": false,
-        "default": 1,
-        "min": 1,
-        "max": 3,
-        "description": "视频输入端口数量。控制 `video` 到 `video_3` 的显示与读取范围。"
+        "description": "参考视频输入。最多 3 个，会作为 `videoUrls` 传给后端。",
+        "fieldKey": "videoUrls",
+        "maxInputNum": 3,
+        "multipleInputs": true
       },
       {
         "name": "audio",
-        "api_field": "audioUrls",
         "type": "AUDIO",
         "required": false,
-        "multiple_inputs": true,
-        "inputcount_param": "audio_inputcount",
-        "description": "参考音频输入。最多 3 个，会作为 `audioUrls` 传给后端。"
-      },
-      {
-        "name": "audio_inputcount",
-        "api_field": "audio_inputcount",
-        "type": "INT",
-        "internal": true,
-        "required": false,
-        "default": 1,
-        "min": 1,
-        "max": 3,
-        "description": "音频输入端口数量。控制 `audio` 到 `audio_3` 的显示与读取范围。"
+        "description": "参考音频输入。最多 3 个，会作为 `audioUrls` 传给后端。",
+        "fieldKey": "audioUrls",
+        "maxInputNum": 3,
+        "multipleInputs": true
       },
       {
         "name": "generate_audio",
-        "api_field": "generateAudio",
         "type": "BOOLEAN",
         "required": false,
-        "default": true,
-        "description": "是否为输出视频生成音频。"
+        "description": "是否为输出视频生成音频。",
+        "fieldKey": "generateAudio",
+        "defaultValue": true
       },
       {
         "name": "ratio",
-        "api_field": "ratio",
         "type": "LIST",
         "required": false,
-        "default": "adaptive",
         "options": [
           "adaptive",
           "16:9",
@@ -797,7 +1098,9 @@
           "9:16",
           "21:9"
         ],
-        "description": "视频宽高比。`adaptive` 表示自动匹配。"
+        "description": "视频宽高比。`adaptive` 表示自动匹配。",
+        "fieldKey": "ratio",
+        "defaultValue": "adaptive"
       }
     ],
     "migration_source": {

@@ -8,6 +8,7 @@ without needing a bespoke Python adapter function.
 from __future__ import annotations
 
 import json
+import re
 from typing import Any
 
 from .upload import (
@@ -15,6 +16,17 @@ from .upload import (
     upload_image_input,
     upload_video_input,
 )
+
+
+def _param_value(param: dict[str, Any], *names: str, default: Any = None) -> Any:
+    for name in names:
+        if name in param:
+            return param[name]
+    return default
+
+
+def _param_truthy(param: dict[str, Any], *names: str) -> bool:
+    return bool(_param_value(param, *names, default=False))
 
 
 def _is_blank(value: Any) -> bool:
@@ -74,15 +86,27 @@ def _resolved_max_inputs(
     param: dict[str, Any],
     params_by_name: dict[str, dict[str, Any]],
 ) -> int:
-    count_param_name = param.get("inputcount_param")
+    count_param_name = _param_value(param, "inputcountParam", "inputcount_param") or _auto_inputcount_name(param)
     if count_param_name:
         count_param = params_by_name.get(count_param_name, {})
-        count_param_max = count_param.get("max")
+        count_param_max = _param_value(count_param, "max", "maxInputNum", "maxInputCount")
         if count_param_max is not None:
             return int(count_param_max)
-    if "max_inputs" in param:
-        return int(param["max_inputs"])
+    max_inputs = _param_value(param, "maxInputNum", "maxInputCount", "max_inputs")
+    if max_inputs is not None:
+        return int(max_inputs)
     return 1
+
+
+def _auto_inputcount_name(param: dict[str, Any]) -> str | None:
+    if _param_value(param, "type") not in {"IMAGE", "VIDEO", "AUDIO"}:
+        return None
+    if not (_param_truthy(param, "multipleInputs", "multiple_inputs", "multiple")):
+        return None
+    name = str(param.get("name") or "")
+    if name not in {"image", "images", "video", "videos", "audio", "audios"}:
+        return None
+    return f"{_multi_input_base_name(name)}_inputcount"
 
 
 def _resolve_custom_size(
@@ -192,19 +216,19 @@ def _collect_media_values(param: dict[str, Any], kwargs: dict[str, Any]) -> list
     def _append(value: Any) -> None:
         if _is_blank(value):
             return
-        if param.get("flatten_batches"):
+        if _param_truthy(param, "flattenBatches", "flatten_batches"):
             values.extend(_image_batches(value))
         else:
             values.append(value)
 
     _append(kwargs.get(input_name))
 
-    if not (param.get("multiple_inputs") or param.get("multiple")):
+    if not (_param_truthy(param, "multipleInputs", "multiple_inputs", "multiple")):
         return values
 
     params_by_name = kwargs.get("__params_by_name__", {})
     max_inputs = _resolved_max_inputs(param, params_by_name)
-    count_param = param.get("inputcount_param")
+    count_param = _param_value(param, "inputcountParam", "inputcount_param")
     if count_param:
         input_count = max(1, min(_coerce_int(kwargs.get(count_param), 1), max_inputs))
     else:
@@ -220,7 +244,7 @@ def _upload_media_values(
     values: list[Any],
     config: dict[str, Any],
 ) -> list[str]:
-    media_type = param.get("type")
+    media_type = _param_value(param, "type")
     if media_type not in {"IMAGE", "VIDEO", "AUDIO"}:
         return []
 
@@ -266,7 +290,7 @@ def _build_media_context(
         param["name"]: param for param in model_def.get("params", [])
     }
     for param in model_def.get("params", []):
-        if param.get("type") not in {"IMAGE", "VIDEO", "AUDIO"}:
+        if _param_value(param, "type") not in {"IMAGE", "VIDEO", "AUDIO"}:
             continue
         values = _collect_media_values(param, kwargs)
         urls = _upload_media_values(param, values, config)
@@ -278,45 +302,98 @@ def _build_media_context(
     return context
 
 
-def _apply_transform(
+def _value_hook_json_loads(
     param: dict[str, Any],
     value: Any,
     kwargs: dict[str, Any],
     media_context: dict[str, dict[str, Any]],
 ) -> Any:
-    transform = param.get("transform")
-    if not transform:
+    if _is_blank(value):
+        return None
+    return json.loads(str(value))
+
+
+def _value_hook_wan_custom_size(
+    param: dict[str, Any],
+    value: Any,
+    kwargs: dict[str, Any],
+    media_context: dict[str, dict[str, Any]],
+) -> Any:
+    model_param = _param_value(param, "hookModelParam", "hook_model_param", default="model")
+    width_param = _param_value(param, "hookWidthParam", "hook_width_param", default="custom_width")
+    height_param = _param_value(param, "hookHeightParam", "hook_height_param", default="custom_height")
+    media_param = _param_value(param, "hookMediaParam", "hook_media_param", default="images")
+    sequential_param = _param_value(param, "hookSequentialParam", "hook_sequential_param", default="enable_sequential")
+    resolved_model = kwargs.get(model_param) or kwargs.get("__resolved_model__") or ""
+    return _resolve_custom_size(
+        str(value),
+        str(resolved_model),
+        int(kwargs.get(width_param) or 0),
+        int(kwargs.get(height_param) or 0),
+        bool(media_context.get(media_param, {}).get("count", 0)),
+        bool(kwargs.get(sequential_param, False)),
+    )
+
+
+def _value_hook_wan_bbox_list(
+    param: dict[str, Any],
+    value: Any,
+    kwargs: dict[str, Any],
+    media_context: dict[str, dict[str, Any]],
+) -> Any:
+    media_param = _param_value(param, "hookMediaParam", "hook_media_param", default="images")
+    return _parse_bbox_list(
+        str(value or ""),
+        int(media_context.get(media_param, {}).get("count", 0)),
+    )
+
+
+def _value_hook_wan_color_palette(
+    param: dict[str, Any],
+    value: Any,
+    kwargs: dict[str, Any],
+    media_context: dict[str, dict[str, Any]],
+) -> Any:
+    sequential_param = _param_value(param, "hookSequentialParam", "hook_sequential_param", default="enable_sequential")
+    return _parse_color_palette(
+        str(value or ""),
+        bool(kwargs.get(sequential_param, False)),
+    )
+
+
+VALUE_HOOKS = {
+    "json_loads": _value_hook_json_loads,
+    "wan_custom_size": _value_hook_wan_custom_size,
+    "wan_bbox_list": _value_hook_wan_bbox_list,
+    "wan_color_palette": _value_hook_wan_color_palette,
+}
+
+
+def _apply_value_hook(
+    param: dict[str, Any],
+    value: Any,
+    kwargs: dict[str, Any],
+    media_context: dict[str, dict[str, Any]],
+) -> Any:
+    hook_name = _param_value(param, "valueHook", "value_hook")
+    if not hook_name:
         return value
 
-    if transform == "custom_size":
-        model_param = param.get("transform_model_param", "model")
-        width_param = param.get("transform_width_param", "custom_width")
-        height_param = param.get("transform_height_param", "custom_height")
-        media_param = param.get("transform_media_param", "images")
-        sequential_param = param.get("transform_sequential_param", "enable_sequential")
-        return _resolve_custom_size(
-            str(value),
-            str(kwargs.get(model_param) or ""),
-            int(kwargs.get(width_param) or 0),
-            int(kwargs.get(height_param) or 0),
-            bool(media_context.get(media_param, {}).get("count", 0)),
-            bool(kwargs.get(sequential_param, False)),
-        )
+    hook = VALUE_HOOKS.get(str(hook_name))
+    if hook is None:
+        raise ValueError(f"Unsupported value_hook '{hook_name}' for param '{param['name']}'")
+    return hook(param, value, kwargs, media_context)
 
-    if transform == "bbox_list":
-        media_param = param.get("transform_media_param", "images")
-        return _parse_bbox_list(str(value or ""), int(media_context.get(media_param, {}).get("count", 0)))
 
-    if transform == "color_palette":
-        sequential_param = param.get("transform_sequential_param", "enable_sequential")
-        return _parse_color_palette(str(value or ""), bool(kwargs.get(sequential_param, False)))
-
-    if transform == "json":
-        if _is_blank(value):
-            return None
-        return json.loads(str(value))
-
-    raise ValueError(f"Unsupported transform '{transform}' for param '{param['name']}'")
+def _normalize_channel_suffix(value: Any) -> str:
+    text = str(value or "").strip().lower()
+    if not text:
+        return ""
+    text = re.sub(r"\s+", "-", text)
+    text = text.replace("_", "-")
+    if not text.startswith("-"):
+        text = f"-{text}"
+    return text
 
 
 def _should_include_param(
@@ -328,23 +405,23 @@ def _should_include_param(
     if value is None:
         return False
 
-    only_if_true_param = param.get("only_if_true_param")
+    only_if_true_param = _param_value(param, "onlyIfTrueParam", "only_if_true_param")
     if only_if_true_param and not bool(kwargs.get(only_if_true_param)):
         return False
 
-    only_if_false_param = param.get("only_if_false_param")
+    only_if_false_param = _param_value(param, "onlyIfFalseParam", "only_if_false_param")
     if only_if_false_param and bool(kwargs.get(only_if_false_param)):
         return False
 
-    only_if_media_absent = param.get("only_if_media_absent")
+    only_if_media_absent = _param_value(param, "onlyIfMediaAbsent", "only_if_media_absent")
     if only_if_media_absent and media_context.get(only_if_media_absent, {}).get("count", 0) > 0:
         return False
 
-    only_if_media_present = param.get("only_if_media_present")
+    only_if_media_present = _param_value(param, "onlyIfMediaPresent", "only_if_media_present")
     if only_if_media_present and media_context.get(only_if_media_present, {}).get("count", 0) <= 0:
         return False
 
-    send_if = param.get("send_if")
+    send_if = _param_value(param, "sendIf", "send_if")
     if send_if == "non_empty":
         return not _is_blank(value)
     if send_if == "true":
@@ -354,7 +431,7 @@ def _should_include_param(
     if send_if == "nonzero":
         return value not in (0, "0")
     if send_if == "not_default":
-        return value != param.get("default")
+        return value != _param_value(param, "defaultValue", "default")
     if send_if == "always":
         return True
 
@@ -362,39 +439,22 @@ def _should_include_param(
     if isinstance(skip_values, list) and value in skip_values:
         return False
 
-    if _is_blank(value) and param.get("type") == "STRING":
+    if _is_blank(value) and _param_value(param, "type") == "STRING":
         return False
     return True
 
 
 def _resolve_model_value(model_def: dict[str, Any], kwargs: dict[str, Any]) -> Any:
-    model_param = model_def.get("request_model_from")
-    if model_param:
-        value = kwargs.get(model_param)
-        if value is not None:
-            return value
-    if "request_model" in model_def:
-        return model_def["request_model"]
-    return model_def["api_node"]
-
-
-def _validate_required_any_of(
-    model_def: dict[str, Any],
-    kwargs: dict[str, Any],
-    media_context: dict[str, dict[str, Any]],
-) -> None:
-    require_any = model_def.get("require_any_of") or []
-    if not require_any:
-        return
-
-    for name in require_any:
-        if name in media_context and media_context[name]["count"] > 0:
-            return
-        if not _is_blank(kwargs.get(name)):
-            return
-
-    message = model_def.get("require_any_message") or "At least one value is required"
-    raise ValueError(message)
+    model_name = model_def.get("model_name")
+    if model_name is not None:
+        channel_param = str(model_def.get("channelParam", model_def.get("channel_param", "channel")) or "").strip()
+        channel_value = kwargs.get(channel_param) if channel_param else None
+        if channel_value is not None and str(channel_value).strip():
+            suffix_map = model_def.get("channelSuffixMap") or model_def.get("channel_suffix_map") or {}
+            mapped = suffix_map.get(str(channel_value), channel_value)
+            return f"{model_name}{_normalize_channel_suffix(mapped)}"
+        return model_name
+    raise KeyError("model_name")
 
 
 def build_payload_for_model(
@@ -403,13 +463,13 @@ def build_payload_for_model(
     kwargs: dict[str, Any],
 ) -> dict[str, Any]:
     media_context = _build_media_context(model_def, config, kwargs)
-    _validate_required_any_of(model_def, kwargs, media_context)
-
     payload: dict[str, Any] = {"model": _resolve_model_value(model_def, kwargs)}
+    hook_kwargs = dict(kwargs)
+    hook_kwargs["__resolved_model__"] = payload["model"]
     grouped_media: dict[str, list[Any]] = {}
 
     for param in model_def.get("params", []):
-        param_type = param.get("type")
+        param_type = _param_value(param, "type")
         if param_type in {"IMAGE", "VIDEO", "AUDIO"}:
             if param.get("internal"):
                 continue
@@ -418,13 +478,13 @@ def build_payload_for_model(
             if not urls:
                 continue
 
-            api_field = param.get("api_field", param["name"])
-            media_item_type = param.get("media_item_type")
+            api_field = _param_value(param, "fieldKey", "api_field", default=param["name"])
+            media_item_type = _param_value(param, "mediaItemType", "media_item_type")
             if media_item_type:
                 grouped_media.setdefault(api_field, []).extend(
                     {"type": media_item_type, "url": url} for url in urls
                 )
-            elif param.get("multiple_inputs") or param.get("multiple") or param.get("force_list"):
+            elif _param_truthy(param, "multipleInputs", "multiple_inputs", "multiple", "forceList", "force_list"):
                 payload[api_field] = urls
             else:
                 payload[api_field] = urls[0]
@@ -434,10 +494,10 @@ def build_payload_for_model(
             continue
 
         raw_value = kwargs.get(param["name"])
-        value = _apply_transform(param, raw_value, kwargs, media_context)
-        if not _should_include_param(param, value, kwargs, media_context):
+        value = _apply_value_hook(param, raw_value, hook_kwargs, media_context)
+        if not _should_include_param(param, value, hook_kwargs, media_context):
             continue
-        payload[param.get("api_field", param["name"])] = value
+        payload[_param_value(param, "fieldKey", "api_field", default=param["name"])] = value
 
     for field_name, items in grouped_media.items():
         if items:

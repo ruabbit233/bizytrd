@@ -1,144 +1,125 @@
 # Payload Builder
 
-当前版本不再鼓励“每个模型写一个 adapter 函数”。
+[`core/adapters.py`](/Users/huhuhu/Desktop/refactor/bizytrd/core/adapters.py) 现在负责两件事：
 
-目标是尽量接近 `ComfyUI_RH_OpenAPI` 的思路：
+- 把 registry 定义转换成请求 payload
+- 尽量把特殊行为限制在少量预定义 hook，而不是在 registry 里写动作逻辑
 
-- 节点生成逻辑通用化
-- payload 构建逻辑通用化
-- registry 只补少量必要元数据
+## 1. 当前设计
 
-## 1. 基本原则
+整体目标是贴近 `ComfyUI_RH_OpenAPI`：
 
-大多数节点应该只写：
+- 节点定义由 registry 驱动
+- payload 构建由统一 builder 完成
+- registry 只表达数据，不承载任意动作逻辑
 
-- 节点基础信息
-- `params`
+## 2. builder 当前支持的通用能力
 
-只有在默认一一映射不够时，才给参数补充少量元数据，而不是再写一段完整 adapter。
-
-## 2. 当前通用 payload builder 支持什么
-
-[`core/adapters.py`](/Users/huhuhu/Desktop/refactor/bizytrd/core/adapters.py) 现在是一个统一 builder，支持下面这些通用能力：
-
-- 普通参数直接按 `api_field` 写入 payload
+- 普通参数按 `fieldKey` 写入 payload
 - 媒体参数自动上传
-- `multiple_inputs`
-- `inputcount_param`
-- 图片批量输入展开 `flatten_batches`
+- `multipleInputs`
+- 自动或显式的 input count 控制
+- 图片批量输入展开 `flattenBatches`
 - 多媒体直接聚合成 URL 数组
-- 多个媒体参数按 `media_item_type` 聚合成对象数组
+- 多个媒体参数按 `mediaItemType` 聚合成对象数组
 - 简单发送条件：
-  - `send_if: non_empty`
-  - `send_if: true`
-  - `send_if: gte_zero`
-  - `send_if: nonzero`
-  - `send_if: not_default`
+  - `sendIf: non_empty`
+  - `sendIf: true`
+  - `sendIf: gte_zero`
+  - `sendIf: nonzero`
+  - `sendIf: not_default`
 - 简单条件依赖：
-  - `only_if_true_param`
-  - `only_if_false_param`
-  - `only_if_media_absent`
-  - `only_if_media_present`
-- 少量通用 transform：
-  - `custom_size`
-  - `bbox_list`
-  - `color_palette`
-  - `json`
+  - `onlyIfTrueParam`
+  - `onlyIfFalseParam`
+  - `onlyIfMediaAbsent`
+  - `onlyIfMediaPresent`
 
-## 3. registry 新增的元数据
+## 3. 模型级元数据
 
-### 模型级
+- `model_name`
+  - endpoint 组装时使用的基础模型名
+- `endpoint_category`
+  - endpoint 后半段，运行时会规范化为小写并把空格转成 `-`
+- `channelParam`
+  - 可选，指定哪个输入参数控制渠道后缀，默认是 `channel`
+- `channelSuffixMap`
+  - 可选，把渠道下拉值映射到真正要追加到 `model_name` 上的后缀
 
-- `request_model`
-  - 固定覆盖 payload 里的 `model`
-- `request_model_from`
-  - 从某个输入参数取 payload 里的 `model`
-- `require_any_of`
-  - 至少要求这些输入中的一个非空
-- `require_any_message`
-  - 自定义错误提示
-
-### 参数级
+## 4. 参数级元数据
 
 - `internal`
   - 节点输入存在，但不直接发给后端
-- `inputcount_param`
-  - 多输入媒体读取多少个端口
-- `max_inputs`
-  - 仅在没有 `inputcount_param` 的多输入媒体场景下使用
-- `flatten_batches`
+- `multipleInputs`
+  - 多输入媒体
+- `maxInputNum`
+  - 多输入媒体的最大数量
+- `inputcountParam`
+  - 可选，显式指定 count 参数名；没有时，`images` / `image` / `videos` / `video` / `audios` / `audio` 会自动生成 `<base>_inputcount`
+- `flattenBatches`
   - 图片输入按 batch 展开
-- `media_item_type`
+- `mediaItemType`
   - 把媒体拼成对象数组项
-- `send_if`
-- `only_if_true_param`
-- `only_if_false_param`
-- `only_if_media_absent`
-- `only_if_media_present`
-- `transform`
+- `sendIf`
+- `onlyIfTrueParam`
+- `onlyIfFalseParam`
+- `onlyIfMediaAbsent`
+- `onlyIfMediaPresent`
+- `valueHook`
+  - 参数值写入 payload 前，命中预定义 hook 做有限转换
 
-## 4. 为什么这样比命名 adapter 更合适
+## 5. 有限 hook 机制
 
-因为它把“复杂节点的差异”压回到了通用规则里。
+不再使用 `transform` 这类 registry 动作逻辑。现在只允许命中代码里预注册的少量 hook。
 
-新增一个节点时，优先顺序应该是：
+当前内建：
 
-1. 先只写 `params`
-2. 如果不够，再补参数元数据
-3. 只有通用 builder 真的表达不了时，才考虑新增代码
+- `json_loads`
+- `wan_custom_size`
+- `wan_bbox_list`
+- `wan_color_palette`
 
-这比“每来一个复杂模型就新增一个 Python adapter 函数”更符合长期目标。
+如果后面确实需要新能力，应当：
 
-## 5. 当前三个复杂模型是怎么落到通用规则里的
+1. 先在 `core/adapters.py` 里实现命名 hook
+2. 再在 registry 里引用 hook 名
+
+不要把任意表达式或迷你 DSL 放回 registry。
+
+## 6. 复杂节点如何落到通用规则
 
 ### Wan 2.7 Image
 
 主要依赖：
 
-- `request_model_from`
-- `require_any_of`
-- `inputcount_param`
-- `flatten_batches`
-- `transform: custom_size`
-- `transform: bbox_list`
-- `transform: color_palette`
-- `send_if`
+- 扁平化后的固定 `model_name`
+- 自动 `image_inputcount`
+- `flattenBatches`
+- `valueHook: wan_custom_size`
+- `valueHook: wan_bbox_list`
+- `valueHook: wan_color_palette`
+- `sendIf`
 
 ### Wan 2.7 Video Edit
 
 主要依赖：
 
-- 多个媒体参数共享 `api_field = media`
-- 每个媒体参数声明自己的 `media_item_type`
-
-这样 builder 会自动拼出：
-
-```json
-[
-  {"type": "video", "url": "..."},
-  {"type": "first_frame", "url": "..."},
-  {"type": "reference_image", "url": "..."}
-]
-```
+- 多个媒体参数共享 `fieldKey = media`
+- 每个媒体参数声明自己的 `mediaItemType`
 
 ### Seedance 2.0 Multimodal
 
 主要依赖：
 
-- `request_model`
-- `require_any_of`
-- 三组媒体参数各自声明 `inputcount_param`
+- 固定 `model_name`
+- 三组媒体参数的自动 input count
 - 自动聚合成 `imageUrls` / `videoUrls` / `audioUrls`
 
-## 6. 新增节点的建议
+## 7. 新增节点建议
 
-如果一个新节点满足 RH 风格的通用结构：
+优先顺序：
 
-- 普通字段直接传
-- 媒体字段上传后传 URL
-- 多输入媒体传数组
-- 同字段多媒体传对象数组
+1. 先只写基础字段和 `params`
+2. 再补少量声明式元数据
+3. 如果仍然不够，再新增有限 hook
 
-那就不需要新 adapter。
-
-只有真出现新的“全新类别能力”时，才扩展 builder 本身，而不是先写一个新的模型专属函数。
+不要再为单个模型写一份专属 adapter。

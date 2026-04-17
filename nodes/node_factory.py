@@ -58,7 +58,7 @@ def _param_truthy(param: dict[str, Any], *names: str) -> bool:
 
 def _build_input_def(param: dict[str, Any]):
     param_type = _param_value(param, "type", default="STRING")
-    default = _param_value(param, "defaultValue", "default")
+    default = _param_value(param, "defaultValue")
     description = _param_description(param)
 
     if param_type == "STRING":
@@ -132,7 +132,7 @@ def _multi_input_base_name(param_name: str) -> str:
 def _auto_inputcount_name(param: dict[str, Any]) -> str | None:
     if _param_value(param, "type") not in {"IMAGE", "VIDEO", "AUDIO"}:
         return None
-    max_inputs = _param_value(param, "maxInputNum", "maxInputCount", "max_inputs")
+    max_inputs = _param_value(param, "maxInputNum")
     if max_inputs is None or int(max_inputs) <= 1:
         return None
     name = str(param.get("name") or "")
@@ -149,13 +149,13 @@ def _resolved_max_inputs(
     param: dict[str, Any],
     params_by_name: dict[str, dict[str, Any]],
 ) -> int:
-    count_param_name = _param_value(param, "inputcountParam", "inputcount_param") or _auto_inputcount_name(param)
+    count_param_name = _param_value(param, "inputcountParam") or _auto_inputcount_name(param)
     if count_param_name:
         count_param = params_by_name.get(count_param_name, {})
-        count_param_max = _param_value(count_param, "max", "maxInputNum", "maxInputCount")
+        count_param_max = _param_value(count_param, "max", "maxInputNum")
         if count_param_max is not None:
             return int(count_param_max)
-    max_inputs = _param_value(param, "maxInputNum", "maxInputCount", "max_inputs")
+    max_inputs = _param_value(param, "maxInputNum")
     if max_inputs is not None:
         return int(max_inputs)
     return 1
@@ -220,7 +220,7 @@ def _normalize_endpoint_category(value: str) -> str:
 
 def _widget_sort_group(param: dict[str, Any]) -> int:
     name = str(param.get("name") or "").strip().lower()
-    field_key = str(_param_value(param, "fieldKey", "api_field", default=name) or "").strip().lower()
+    field_key = str(_param_value(param, "fieldKey", default=name) or "").strip().lower()
 
     if name == "channel":
         return 0

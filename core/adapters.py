@@ -66,13 +66,13 @@ def _resolved_max_inputs(
     param: dict[str, Any],
     params_by_name: dict[str, dict[str, Any]],
 ) -> int:
-    count_param_name = _param_value(param, "inputcountParam", "inputcount_param") or _auto_inputcount_name(param)
+    count_param_name = _param_value(param, "inputcountParam") or _auto_inputcount_name(param)
     if count_param_name:
         count_param = params_by_name.get(count_param_name, {})
-        count_param_max = _param_value(count_param, "max", "maxInputNum", "maxInputCount")
+        count_param_max = _param_value(count_param, "max", "maxInputNum")
         if count_param_max is not None:
             return int(count_param_max)
-    max_inputs = _param_value(param, "maxInputNum", "maxInputCount", "max_inputs")
+    max_inputs = _param_value(param, "maxInputNum")
     if max_inputs is not None:
         return int(max_inputs)
     return 1
@@ -81,7 +81,7 @@ def _resolved_max_inputs(
 def _auto_inputcount_name(param: dict[str, Any]) -> str | None:
     if _param_value(param, "type") not in {"IMAGE", "VIDEO", "AUDIO"}:
         return None
-    max_inputs = _param_value(param, "maxInputNum", "maxInputCount", "max_inputs")
+    max_inputs = _param_value(param, "maxInputNum")
     if max_inputs is None or int(max_inputs) <= 1:
         return None
     name = str(param.get("name") or "")
@@ -105,7 +105,7 @@ def _collect_media_values(param: dict[str, Any], kwargs: dict[str, Any]) -> list
     max_inputs = _resolved_max_inputs(param, params_by_name)
     if max_inputs <= 1:
         return values
-    count_param = _param_value(param, "inputcountParam", "inputcount_param")
+    count_param = _param_value(param, "inputcountParam")
     if count_param:
         input_count = max(1, min(_coerce_int(kwargs.get(count_param), 1), max_inputs))
     else:
@@ -208,7 +208,7 @@ def _apply_value_hook(
     kwargs: dict[str, Any],
     media_context: dict[str, dict[str, Any]],
 ) -> Any:
-    hook_name = _param_value(param, "valueHook", "value_hook")
+    hook_name = _param_value(param, "valueHook")
     if not hook_name:
         return value
 
@@ -236,23 +236,27 @@ def _should_include_param(
     if value is None:
         return False
 
-    only_if_true_param = _param_value(param, "onlyIfTrueParam", "only_if_true_param")
+    skip_values = param.get("skipValues")
+    if isinstance(skip_values, list) and value in skip_values:
+        return False
+
+    only_if_true_param = _param_value(param, "onlyIfTrueParam")
     if only_if_true_param and not bool(kwargs.get(only_if_true_param)):
         return False
 
-    only_if_false_param = _param_value(param, "onlyIfFalseParam", "only_if_false_param")
+    only_if_false_param = _param_value(param, "onlyIfFalseParam")
     if only_if_false_param and bool(kwargs.get(only_if_false_param)):
         return False
 
-    only_if_media_absent = _param_value(param, "onlyIfMediaAbsent", "only_if_media_absent")
+    only_if_media_absent = _param_value(param, "onlyIfMediaAbsent")
     if only_if_media_absent and media_context.get(only_if_media_absent, {}).get("count", 0) > 0:
         return False
 
-    only_if_media_present = _param_value(param, "onlyIfMediaPresent", "only_if_media_present")
+    only_if_media_present = _param_value(param, "onlyIfMediaPresent")
     if only_if_media_present and media_context.get(only_if_media_present, {}).get("count", 0) <= 0:
         return False
 
-    send_if = _param_value(param, "sendIf", "send_if")
+    send_if = _param_value(param, "sendIf")
     if send_if == "non_empty":
         return not _is_blank(value)
     if send_if == "true":
@@ -262,13 +266,9 @@ def _should_include_param(
     if send_if == "nonzero":
         return value not in (0, "0")
     if send_if == "not_default":
-        return value != _param_value(param, "defaultValue", "default")
+        return value != _param_value(param, "defaultValue")
     if send_if == "always":
         return True
-
-    skip_values = param.get("skip_values")
-    if isinstance(skip_values, list) and value in skip_values:
-        return False
 
     if _is_blank(value) and _param_value(param, "type") == "STRING":
         return False
@@ -305,8 +305,7 @@ def build_payload_for_model(
             if not urls:
                 continue
 
-            api_field = _param_value(param, "fieldKey", "api_field", default=param["name"])
-            payload[api_field] = urls
+            payload[_param_value(param, "fieldKey", default=param["name"])] = urls
             continue
 
         if param.get("internal"):
@@ -316,6 +315,6 @@ def build_payload_for_model(
         value = _apply_value_hook(param, raw_value, hook_kwargs, media_context)
         if not _should_include_param(param, value, hook_kwargs, media_context):
             continue
-        payload[_param_value(param, "fieldKey", "api_field", default=param["name"])] = value
+        payload[_param_value(param, "fieldKey", default=param["name"])] = value
 
     return payload

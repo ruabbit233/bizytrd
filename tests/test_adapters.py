@@ -172,3 +172,31 @@ def test_registry_removes_legacy_media_payload_metadata():
                 model_def["internal_name"],
                 param["name"],
             )
+
+
+def test_registry_removes_legacy_param_compatibility_fields():
+    import json
+    from pathlib import Path
+
+    registry = json.loads(Path("models_registry.json").read_text(encoding="utf-8"))
+    forbidden_fields = {
+        "api_field",
+        "default",
+        "inputcount_param",
+        "maxInputCount",
+        "max_inputs",
+        "only_if_false_param",
+        "only_if_media_absent",
+        "only_if_media_present",
+        "only_if_true_param",
+        "send_if",
+        "skip_values",
+        "value_hook",
+    }
+
+    for model_def in registry:
+        for param in model_def.get("params", []):
+            assert forbidden_fields.isdisjoint(param), (
+                model_def["internal_name"],
+                param["name"],
+            )

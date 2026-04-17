@@ -86,11 +86,11 @@ conda activate comfyenv
 
 - `description`：参数说明。当前项目只保留这一种说明字段
 - `maxInputNum`：媒体参数的最大输入数量。只要 `maxInputNum > 1`，运行时就会把它当作多输入媒体
-- `inputcount_param`：当媒体参数支持动态多输入时，读取哪个 `INT` 参数来控制实际使用的输入数量
+- `inputcountParam`：当媒体参数需要读取某个现有 `INT` 参数来控制实际使用的输入数量时使用
 
 当前约定是：
 
-- 如果媒体参数配置了 `inputcount_param`，则最大输入数量由对应 `inputcount` 参数的 `max` 决定，不再单独写 `max_inputs`
+- 如果媒体参数配置了 `inputcountParam`，则最大输入数量由对应 `inputcount` 参数自己的 `max` 决定
 - 多输入命名规则固定为：
   - 参数名是复数时，附加输入口使用去掉尾部 `s` 后的形式，例如 `images -> image_2`
   - 否则使用 `<name>_2`、`<name>_3`
@@ -98,7 +98,7 @@ conda activate comfyenv
 
 在实际使用中，建议每个 `param` 至少带一个说明字段，这样 registry 本身可读性更强，生成出来的节点也能保持自解释。
 
-如果某些模型需要兼容老 BizyAir 风格的 `inputcount` 行为，可以把 `inputcount` 作为普通 `INT` 参数保留在 registry 中，再让通用 payload builder 通过参数元数据去读取它。这样既能保持节点定义的声明式风格，也能支持多图聚合这类能力。
+如果某些模型需要显式控制启用的媒体输入数量，可以把 `inputcount` 作为普通 `INT` 参数保留在 registry 中，再让通用 payload builder 通过 `inputcountParam` 去读取它。这样既能保持节点定义的声明式风格，也能支持多图聚合这类能力。
 
 ## 推荐的后端边界
 

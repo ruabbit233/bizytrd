@@ -29,10 +29,7 @@
         "description": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。",
         "fieldKey": "size",
         "defaultValue": "2K",
-        "hookHeightParam": "custom_height",
-        "hookSequentialParam": "enable_sequential",
-        "hookWidthParam": "custom_width",
-        "valueHook": "wan_custom_size"
+        "valueHook": "wan.custom_size"
       },
       {
         "name": "custom_width",
@@ -92,9 +89,8 @@
         "multiline": true,
         "description": "可选配色 JSON 数组，仅在未开启组图模式时生效。",
         "fieldKey": "color_palette",
-        "hookSequentialParam": "enable_sequential",
         "sendIf": "non_empty",
-        "valueHook": "wan_color_palette"
+        "valueHook": "wan.color_palette"
       },
       {
         "name": "watermark",
@@ -150,10 +146,7 @@
         "description": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。",
         "fieldKey": "size",
         "defaultValue": "2K",
-        "hookHeightParam": "custom_height",
-        "hookSequentialParam": "enable_sequential",
-        "hookWidthParam": "custom_width",
-        "valueHook": "wan_custom_size"
+        "valueHook": "wan.custom_size"
       },
       {
         "name": "custom_width",
@@ -212,9 +205,8 @@
         "multiline": true,
         "description": "可选配色 JSON 数组，仅在未开启组图模式时生效。",
         "fieldKey": "color_palette",
-        "hookSequentialParam": "enable_sequential",
         "sendIf": "non_empty",
-        "valueHook": "wan_color_palette"
+        "valueHook": "wan.color_palette"
       },
       {
         "name": "watermark",
@@ -271,11 +263,7 @@
         "description": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。",
         "fieldKey": "size",
         "defaultValue": "2K",
-        "hookHeightParam": "custom_height",
-        "hookMediaParam": "images",
-        "hookSequentialParam": "enable_sequential",
-        "hookWidthParam": "custom_width",
-        "valueHook": "wan_custom_size"
+        "valueHook": "wan.custom_size"
       },
       {
         "name": "custom_width",
@@ -335,9 +323,8 @@
         "multiline": true,
         "description": "可选框选编辑区域 JSON 数组，长度需与输入图片数量一致。",
         "fieldKey": "bbox_list",
-        "hookMediaParam": "images",
         "sendIf": "non_empty",
-        "valueHook": "wan_bbox_list"
+        "valueHook": "wan.bbox_list"
       },
       {
         "name": "color_palette",
@@ -346,9 +333,8 @@
         "multiline": true,
         "description": "可选配色 JSON 数组，仅在未开启组图模式时生效。",
         "fieldKey": "color_palette",
-        "hookSequentialParam": "enable_sequential",
         "sendIf": "non_empty",
-        "valueHook": "wan_color_palette"
+        "valueHook": "wan.color_palette"
       },
       {
         "name": "watermark",
@@ -405,11 +391,7 @@
         "description": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。",
         "fieldKey": "size",
         "defaultValue": "2K",
-        "hookHeightParam": "custom_height",
-        "hookMediaParam": "images",
-        "hookSequentialParam": "enable_sequential",
-        "hookWidthParam": "custom_width",
-        "valueHook": "wan_custom_size"
+        "valueHook": "wan.custom_size"
       },
       {
         "name": "custom_width",
@@ -469,9 +451,8 @@
         "multiline": true,
         "description": "可选框选编辑区域 JSON 数组，长度需与输入图片数量一致。",
         "fieldKey": "bbox_list",
-        "hookMediaParam": "images",
         "sendIf": "non_empty",
-        "valueHook": "wan_bbox_list"
+        "valueHook": "wan.bbox_list"
       },
       {
         "name": "color_palette",
@@ -480,9 +461,8 @@
         "multiline": true,
         "description": "可选配色 JSON 数组，仅在未开启组图模式时生效。",
         "fieldKey": "color_palette",
-        "hookSequentialParam": "enable_sequential",
         "sendIf": "non_empty",
-        "valueHook": "wan_color_palette"
+        "valueHook": "wan.color_palette"
       },
       {
         "name": "watermark",

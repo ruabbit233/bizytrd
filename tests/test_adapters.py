@@ -10,7 +10,7 @@ def test_build_payload_uses_value_hook_instead_of_transform():
                 "name": "payload_json",
                 "fieldKey": "payload_json",
                 "type": "STRING",
-                "valueHook": "json_loads",
+                "valueHook": "common.json_loads",
                 "required": False,
             }
         ],
@@ -64,3 +64,46 @@ def test_build_payload_uses_model_name_without_request_model_overrides():
     payload = build_payload_for_model(model_def, {}, {"prompt": "test"})
 
     assert payload["model"] == "seedance-2-0-std"
+
+
+def test_registry_uses_script_path_value_hooks():
+    import json
+    from pathlib import Path
+
+    registry = json.loads(Path("models_registry.json").read_text(encoding="utf-8"))
+
+    hook_values = []
+    for model_def in registry:
+        for param in model_def.get("params", []):
+            hook_name = param.get("valueHook")
+            if hook_name:
+                hook_values.append(hook_name)
+
+    assert hook_values
+    assert all("." in hook_name for hook_name in hook_values)
+
+
+def test_registry_removes_hook_param_metadata():
+    import json
+    from pathlib import Path
+
+    registry = json.loads(Path("models_registry.json").read_text(encoding="utf-8"))
+    forbidden_fields = {
+        "hookModelParam",
+        "hookWidthParam",
+        "hookHeightParam",
+        "hookMediaParam",
+        "hookSequentialParam",
+        "hook_model_param",
+        "hook_width_param",
+        "hook_height_param",
+        "hook_media_param",
+        "hook_sequential_param",
+    }
+
+    for model_def in registry:
+        for param in model_def.get("params", []):
+            assert forbidden_fields.isdisjoint(param), (
+                model_def["internal_name"],
+                param["name"],
+            )

@@ -74,21 +74,30 @@
 
 ## 5. 有限 hook 机制
 
-不再使用 `transform` 这类 registry 动作逻辑。现在只允许命中代码里预注册的少量 hook。
+不再使用 `transform` 这类 registry 动作逻辑。
+
+现在的 hook 体系是“脚本路径 hook”：
+
+- registry 里只写 `valueHook`
+- 格式必须是 `<module>.<function>`
+- 运行时会从 [`core/hooks`](/Users/huhuhu/Desktop/refactor/bizytrd/core/hooks) 下加载对应函数
+- 不允许 `eval`、任意表达式或任意模块执行
 
 当前内建：
 
-- `json_loads`
-- `wan_custom_size`
-- `wan_bbox_list`
-- `wan_color_palette`
+- `common.json_loads`
+- `wan.custom_size`
+- `wan.bbox_list`
+- `wan.color_palette`
 
 如果后面确实需要新能力，应当：
 
-1. 先在 `core/adapters.py` 里实现命名 hook
-2. 再在 registry 里引用 hook 名
+1. 先在 [`core/hooks`](/Users/huhuhu/Desktop/refactor/bizytrd/core/hooks) 下新增模块或函数
+2. 再在 registry 里引用路径形式的 hook 名
 
 不要把任意表达式或迷你 DSL 放回 registry。
+
+当前 [`core/adapters.py`](/Users/huhuhu/Desktop/refactor/bizytrd/core/adapters.py) 只负责 hook 调度，不再承载 provider 专属 hook 细节。
 
 ## 6. 复杂节点如何落到通用规则
 
@@ -99,9 +108,9 @@
 - 扁平化后的固定 `model_name`
 - 自动 `image_inputcount`
 - `flattenBatches`
-- `valueHook: wan_custom_size`
-- `valueHook: wan_bbox_list`
-- `valueHook: wan_color_palette`
+- `valueHook: wan.custom_size`
+- `valueHook: wan.bbox_list`
+- `valueHook: wan.color_palette`
 - `sendIf`
 
 ### Wan 2.7 Video Edit

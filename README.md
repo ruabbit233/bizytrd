@@ -86,11 +86,11 @@ conda activate comfyenv
 
 - `description`：参数说明。当前项目只保留这一种说明字段
 - `maxInputNum`：媒体参数的最大输入数量。只要 `maxInputNum > 1`，运行时就会把它当作多输入媒体
-- `inputcountParam`：当媒体参数需要读取某个现有 `INT` 参数来控制实际使用的输入数量时使用
 
 当前约定是：
 
-- 如果媒体参数配置了 `inputcountParam`，则最大输入数量由对应 `inputcount` 参数自己的 `max` 决定
+- 如果参数名命中自动规则，并且 `maxInputNum > 1`，系统会自动补出 `image_inputcount` / `video_inputcount` / `audio_inputcount`
+- 自动 `inputcount` 的当前值决定这次实际读取几个媒体输入；如果没有自动 `inputcount` 控件，运行时会直接按 `maxInputNum` 读取全部展开输入
 - 多输入命名规则固定为：
   - 参数名是复数时，附加输入口使用去掉尾部 `s` 后的形式，例如 `images -> image_2`
   - 否则使用 `<name>_2`、`<name>_3`
@@ -98,7 +98,7 @@ conda activate comfyenv
 
 在实际使用中，建议每个 `param` 至少带一个说明字段，这样 registry 本身可读性更强，生成出来的节点也能保持自解释。
 
-如果某些模型需要显式控制启用的媒体输入数量，可以把 `inputcount` 作为普通 `INT` 参数保留在 registry 中，再让通用 payload builder 通过 `inputcountParam` 去读取它。这样既能保持节点定义的声明式风格，也能支持多图聚合这类能力。
+如果某个媒体参数命中了自动命名规则，前端会自动得到对应的 `inputcount` 控件；不需要也不支持再通过额外 registry 字段声明一个自定义 count 参数名。
 
 ## 推荐的后端边界
 

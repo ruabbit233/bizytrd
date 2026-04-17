@@ -107,6 +107,47 @@ def test_build_payload_always_sends_media_as_lists():
     ]
 
 
+def test_build_payload_uses_auto_inputcount_to_limit_media_inputs():
+    model_def = {
+        "model_name": "seedance-2-0-std",
+        "endpoint_category": "Multimodal To Video",
+        "params": [
+            {
+                "name": "images",
+                "fieldKey": "imageUrls",
+                "type": "IMAGE",
+                "required": False,
+                "maxInputNum": 4,
+            }
+        ],
+    }
+
+    from unittest.mock import patch
+
+    with patch("bizytrd.core.adapters.upload_image_input") as upload_image_input:
+        upload_image_input.side_effect = [
+            "https://example.com/image-1",
+            "https://example.com/image-2",
+        ]
+        payload = build_payload_for_model(
+            model_def,
+            {},
+            {
+                "images": "image-a",
+                "image_2": "image-b",
+                "image_3": "image-c",
+                "image_4": "image-d",
+                "image_inputcount": 2,
+            },
+        )
+
+    assert payload["imageUrls"] == [
+        "https://example.com/image-1",
+        "https://example.com/image-2",
+    ]
+    assert upload_image_input.call_count == 2
+
+
 def test_registry_uses_script_path_value_hooks():
     import json
     from pathlib import Path
@@ -182,6 +223,7 @@ def test_registry_removes_legacy_param_compatibility_fields():
     forbidden_fields = {
         "api_field",
         "default",
+        "inputcountParam",
         "inputcount_param",
         "maxInputCount",
         "max_inputs",

@@ -17,7 +17,7 @@
 
 - 普通参数按 `fieldKey` 写入 payload
 - 媒体参数自动上传
-- 自动或显式的 input count 控制
+- 自动 input count 控制
 - 多媒体统一聚合成 URL 数组
 - 简单发送条件：
   - `sendIf: non_empty`
@@ -53,8 +53,6 @@
   - 节点输入存在，但不直接发给后端
 - `maxInputNum`
   - 多输入媒体的最大数量。只要媒体参数的 `maxInputNum > 1`，运行时就会把它当作多输入媒体，并生成对应的额外输入口与自动 `inputcount`
-- `inputcountParam`
-  - 可选，显式指定 count 参数名；没有时，`images` / `image` / `videos` / `video` / `audios` / `audio` 会自动生成 `<base>_inputcount`
 - `sendIf`
 - `onlyIfTrueParam`
 - `onlyIfFalseParam`
@@ -98,7 +96,6 @@
 
 - 扁平化后的固定 `model_name`
 - 自动 `image_inputcount`
-- `flattenBatches`
 - `valueHook: wan.custom_size`
 - `valueHook: wan.bbox_list`
 - `valueHook: wan.color_palette`

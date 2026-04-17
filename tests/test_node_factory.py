@@ -286,6 +286,7 @@ def test_registry_uses_camel_case_param_metadata_keys():
         "hook_media_param",
         "hook_sequential_param",
         "hook_width_param",
+        "inputcountParam",
         "inputcount_param",
         "maxInputCount",
         "max_inputs",

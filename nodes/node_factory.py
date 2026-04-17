@@ -149,12 +149,6 @@ def _resolved_max_inputs(
     param: dict[str, Any],
     params_by_name: dict[str, dict[str, Any]],
 ) -> int:
-    count_param_name = _param_value(param, "inputcountParam") or _auto_inputcount_name(param)
-    if count_param_name:
-        count_param = params_by_name.get(count_param_name, {})
-        count_param_max = _param_value(count_param, "max", "maxInputNum")
-        if count_param_max is not None:
-            return int(count_param_max)
     max_inputs = _param_value(param, "maxInputNum")
     if max_inputs is not None:
         return int(max_inputs)

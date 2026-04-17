@@ -97,8 +97,6 @@ class BizyTRDBaseNode(ABC):
     MODEL_NAME = ""
     ENDPOINT_CATEGORY = ""
     NORMALIZED_ENDPOINT_CATEGORY = ""
-    CHANNEL_PARAM = "channel"
-    CHANNEL_SUFFIX_MAP: dict[str, str] = {}
     MODEL_DEF: dict[str, Any] = {}
     PARAMS: list[dict[str, Any]] = []
     OUTPUT_TYPE = "string"
@@ -123,19 +121,13 @@ class BizyTRDBaseNode(ABC):
             self.NORMALIZED_ENDPOINT_CATEGORY or self.ENDPOINT_CATEGORY or ""
         ).strip("/")
 
-        channel_param = str(self.CHANNEL_PARAM or "").strip()
-        channel_value = kwargs.get(channel_param) if channel_param else None
-        channel_suffix_map = self.CHANNEL_SUFFIX_MAP or {}
-
+        channel_value = kwargs.get("channel")
         if channel_value is not None:
             channel_key = str(channel_value).strip()
             if channel_key:
-                mapped_suffix = channel_suffix_map.get(channel_key, channel_key)
-                suffix = str(mapped_suffix).strip()
-                if suffix:
-                    if not suffix.startswith("-"):
-                        suffix = f"-{suffix}"
-                    model_name = f"{model_name}{suffix}"
+                normalized = channel_key.lower().replace("_", "-")
+                normalized = "-".join(normalized.split())
+                model_name = f"{model_name}-{normalized}"
 
         if model_name and endpoint_category:
             return f"{model_name}/{endpoint_category}"

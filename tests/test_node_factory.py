@@ -42,7 +42,7 @@ def test_input_types_adds_channel_and_auto_media_inputcount():
     assert "image_4" in input_types["optional"]
 
 
-def test_resolve_endpoint_appends_channel_suffix_and_normalizes_category():
+def test_resolve_endpoint_appends_normalized_channel_and_normalizes_category():
     model_def = {
         "internal_name": "BizyTRD_TestNode",
         "class_name": "BizyTRDTestNode",
@@ -57,7 +57,7 @@ def test_resolve_endpoint_appends_channel_suffix_and_normalizes_category():
                 "type": "LIST",
                 "required": False,
                 "defaultValue": "",
-                "options": ["", "official", "base"],
+                "options": ["", "Official API", "base_v2"],
             }
         ],
     }
@@ -65,8 +65,11 @@ def test_resolve_endpoint_appends_channel_suffix_and_normalizes_category():
     node_cls = create_node_class(model_def)
     node = node_cls()
 
-    assert node.resolve_endpoint(channel="official") == (
-        "nano-banana-pro-official/image-to-image"
+    assert node.resolve_endpoint(channel="Official API") == (
+        "nano-banana-pro-official-api/image-to-image"
+    )
+    assert node.resolve_endpoint(channel="base_v2") == (
+        "nano-banana-pro-base-v2/image-to-image"
     )
     assert node.resolve_endpoint(channel="") == "nano-banana-pro/image-to-image"
 
@@ -124,6 +127,20 @@ def test_registry_removes_runtime_logic_fields():
         "request_model_from",
         "require_any_of",
         "require_any_message",
+    }
+
+    for model_def in registry:
+        assert forbidden_fields.isdisjoint(model_def), model_def["internal_name"]
+
+
+def test_registry_removes_channel_metadata_aliases():
+    registry = json.loads(Path("models_registry.json").read_text(encoding="utf-8"))
+
+    forbidden_fields = {
+        "channelParam",
+        "channel_param",
+        "channelSuffixMap",
+        "channel_suffix_map",
     }
 
     for model_def in registry:

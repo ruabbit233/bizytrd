@@ -447,12 +447,9 @@ def _should_include_param(
 def _resolve_model_value(model_def: dict[str, Any], kwargs: dict[str, Any]) -> Any:
     model_name = model_def.get("model_name")
     if model_name is not None:
-        channel_param = str(model_def.get("channelParam", model_def.get("channel_param", "channel")) or "").strip()
-        channel_value = kwargs.get(channel_param) if channel_param else None
+        channel_value = kwargs.get("channel")
         if channel_value is not None and str(channel_value).strip():
-            suffix_map = model_def.get("channelSuffixMap") or model_def.get("channel_suffix_map") or {}
-            mapped = suffix_map.get(str(channel_value), channel_value)
-            return f"{model_name}{_normalize_channel_suffix(mapped)}"
+            return f"{model_name}{_normalize_channel_suffix(channel_value)}"
         return model_name
     raise KeyError("model_name")
 

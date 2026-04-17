@@ -40,10 +40,15 @@
   - endpoint 组装时使用的基础模型名
 - `endpoint_category`
   - endpoint 后半段，运行时会规范化为小写并把空格转成 `-`
-- `channelParam`
-  - 可选，指定哪个输入参数控制渠道后缀，默认是 `channel`
-- `channelSuffixMap`
-  - 可选，把渠道下拉值映射到真正要追加到 `model_name` 上的后缀
+
+渠道切换不再使用模型级元数据。
+
+如果节点声明了固定参数名 `channel`，builder 会直接读取这个输入，并把规范化后的值追加到 `model_name` 后面。规范化规则是：
+
+- 去首尾空格
+- 转小写
+- 空白转 `-`
+- `_` 转 `-`
 
 ## 4. 参数级元数据
 

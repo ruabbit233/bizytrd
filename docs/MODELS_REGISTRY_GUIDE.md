@@ -79,34 +79,35 @@ nano-banana-pro/text-to-image
 nano-banana-pro/image-to-image
 ```
 
-### 渠道相关字段
+### 渠道相关约定
 
-- `channelParam`
-  - 可选，指定哪个参数控制渠道后缀，默认是 `channel`
-- `channelSuffixMap`
-  - 可选，渠道值到真正后缀的映射
+不再支持模型级渠道元数据。
 
-如果 `channel` 为空，不修改 `model_name`。
+如果某个模型需要渠道切换，只允许定义一个固定名字的输入参数：
 
-例如：
+- `channel`
 
-```json
-"model_name": "nano-banana-pro",
-"channelSuffixMap": {
-  "official": "official",
-  "base": "base"
-}
-```
+运行时规则：
 
-用户选择 `official` 时，endpoint 前半段会变成：
+- `channel` 为空时，不修改 `model_name`
+- `channel` 非空时，直接把 `channel` 规范化后追加到 `model_name` 后面
+- 规范化规则是：去首尾空格、转小写、空白转 `-`、`_` 转 `-`
+
+例如用户传入：
 
 ```text
-nano-banana-pro-official
+channel = Official API
+```
+
+则 endpoint 前半段会变成：
+
+```text
+nano-banana-pro-official-api
 ```
 
 ### payload model 相关字段
 
-payload 中的 `model` 直接来自 `model_name`，再叠加可选的渠道后缀。
+payload 中的 `model` 与 endpoint 前半段保持一致，也会叠加同样的 `channel` 后缀。
 
 ## 3. 参数级字段
 

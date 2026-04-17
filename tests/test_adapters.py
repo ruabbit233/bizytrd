@@ -26,14 +26,10 @@ def test_build_payload_uses_value_hook_instead_of_transform():
     assert payload["payload_json"] == {"a": 1}
 
 
-def test_build_payload_appends_channel_suffix_to_model_name():
+def test_build_payload_appends_normalized_channel_to_model_name():
     model_def = {
         "model_name": "nano-banana-pro",
         "endpoint_category": "Image To Image",
-        "channel_suffix_map": {
-            "official": "official",
-            "base": "base",
-        },
         "params": [
             {
                 "name": "channel",
@@ -41,14 +37,14 @@ def test_build_payload_appends_channel_suffix_to_model_name():
                 "type": "LIST",
                 "required": False,
                 "defaultValue": "",
-                "options": ["", "official", "base"],
+                "options": ["", "Official API", "base_v2"],
             }
         ],
     }
 
-    payload = build_payload_for_model(model_def, {}, {"channel": "official"})
+    payload = build_payload_for_model(model_def, {}, {"channel": "Official API"})
 
-    assert payload["model"] == "nano-banana-pro-official"
+    assert payload["model"] == "nano-banana-pro-official-api"
 
 
 def test_build_payload_uses_model_name_without_request_model_overrides():

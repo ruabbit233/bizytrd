@@ -239,8 +239,6 @@ def create_node_class(model_def: dict[str, Any]) -> type:
         RETURN_TYPES = return_types
         RETURN_NAMES = return_names
         CATEGORY = category
-        CHANNEL_PARAM = model_def.get("channelParam", model_def.get("channel_param", "channel"))
-        CHANNEL_SUFFIX_MAP = dict(model_def.get("channelSuffixMap") or model_def.get("channel_suffix_map") or {})
         NORMALIZED_ENDPOINT_CATEGORY = _normalize_endpoint_category(endpoint_category)
 
         @classmethod

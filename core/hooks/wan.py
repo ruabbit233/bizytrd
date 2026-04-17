@@ -10,17 +10,22 @@ import json
 from typing import Any
 
 
-def _resolve_custom_size(
-    size: str,
-    model: str,
-    custom_width: int,
-    custom_height: int,
-    has_input_images: bool,
-    enable_sequential: bool,
-) -> str:
+def custom_size(
+    param: dict[str, Any],
+    value: Any,
+    kwargs: dict[str, Any],
+    media_context: dict[str, dict[str, Any]],
+) -> Any:
+    size = str(value)
+    resolved_model = kwargs.get("__resolved_model__") or ""
+    custom_width = int(kwargs.get("custom_width") or 0)
+    custom_height = int(kwargs.get("custom_height") or 0)
+    has_input_images = bool(media_context.get("images", {}).get("count", 0))
+    enable_sequential = bool(kwargs.get("enable_sequential", False))
+
     if size != "Custom":
         if size == "4K":
-            if model != "wan2.7-image-pro":
+            if resolved_model != "wan2.7-image-pro":
                 raise ValueError("wan2.7-image does not support 4K output")
             if has_input_images or enable_sequential:
                 raise ValueError(
@@ -36,14 +41,22 @@ def _resolve_custom_size(
         raise ValueError("Custom size total pixels must be at least 768*768")
 
     max_pixels = 2048 * 2048
-    if model == "wan2.7-image-pro" and not has_input_images and not enable_sequential:
+    if resolved_model == "wan2.7-image-pro" and not has_input_images and not enable_sequential:
         max_pixels = 4096 * 4096
     if total_pixels > max_pixels:
         raise ValueError(f"Custom size total pixels exceed the current scene limit: {max_pixels}")
     return f"{custom_width}*{custom_height}"
 
 
-def _parse_bbox_list(bbox_list_str: str, image_count: int) -> list[Any] | None:
+def bbox_list(
+    param: dict[str, Any],
+    value: Any,
+    kwargs: dict[str, Any],
+    media_context: dict[str, dict[str, Any]],
+) -> Any:
+    bbox_list_str = str(value or "")
+    image_count = int(media_context.get("images", {}).get("count", 0))
+
     if not bbox_list_str or not bbox_list_str.strip():
         return None
     try:
@@ -71,7 +84,15 @@ def _parse_bbox_list(bbox_list_str: str, image_count: int) -> list[Any] | None:
     return bbox_list
 
 
-def _parse_color_palette(color_palette_str: str, enable_sequential: bool) -> list[Any] | None:
+def color_palette(
+    param: dict[str, Any],
+    value: Any,
+    kwargs: dict[str, Any],
+    media_context: dict[str, dict[str, Any]],
+) -> Any:
+    color_palette_str = str(value or "")
+    enable_sequential = bool(kwargs.get("enable_sequential", False))
+
     if not color_palette_str or not color_palette_str.strip():
         return None
     if enable_sequential:
@@ -108,44 +129,3 @@ def _parse_color_palette(color_palette_str: str, enable_sequential: bool) -> lis
     if abs(ratio_sum - 100.0) > 0.05:
         raise ValueError("color_palette ratios must sum to 100.00%")
     return color_palette
-
-
-def custom_size(
-    param: dict[str, Any],
-    value: Any,
-    kwargs: dict[str, Any],
-    media_context: dict[str, dict[str, Any]],
-) -> Any:
-    resolved_model = kwargs.get("__resolved_model__") or ""
-    return _resolve_custom_size(
-        str(value),
-        str(resolved_model),
-        int(kwargs.get("custom_width") or 0),
-        int(kwargs.get("custom_height") or 0),
-        bool(media_context.get("images", {}).get("count", 0)),
-        bool(kwargs.get("enable_sequential", False)),
-    )
-
-
-def bbox_list(
-    param: dict[str, Any],
-    value: Any,
-    kwargs: dict[str, Any],
-    media_context: dict[str, dict[str, Any]],
-) -> Any:
-    return _parse_bbox_list(
-        str(value or ""),
-        int(media_context.get("images", {}).get("count", 0)),
-    )
-
-
-def color_palette(
-    param: dict[str, Any],
-    value: Any,
-    kwargs: dict[str, Any],
-    media_context: dict[str, dict[str, Any]],
-) -> Any:
-    return _parse_color_palette(
-        str(value or ""),
-        bool(kwargs.get("enable_sequential", False)),
-    )

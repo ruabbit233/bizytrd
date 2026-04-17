@@ -42,6 +42,139 @@ def test_input_types_adds_channel_and_auto_media_inputcount():
     assert "image_4" in input_types["optional"]
 
 
+def test_input_types_sorts_optional_inputs_with_media_then_channel_then_widgets():
+    model_def = {
+        "internal_name": "BizyTRD_TestSortedNode",
+        "class_name": "BizyTRDTestSortedNode",
+        "display_name": "BizyTRD Test Sorted Node",
+        "category": "BizyTRD/Test",
+        "model_name": "nano-banana-pro",
+        "endpoint_category": "Image To Image",
+        "params": [
+            {
+                "name": "style",
+                "fieldKey": "style",
+                "type": "LIST",
+                "required": False,
+                "defaultValue": "general",
+                "options": ["general", "anime"],
+            },
+            {
+                "name": "audio",
+                "fieldKey": "audioUrls",
+                "type": "AUDIO",
+                "required": False,
+                "multipleInputs": True,
+                "maxInputNum": 2,
+            },
+            {
+                "name": "negative_prompt",
+                "fieldKey": "negative_prompt",
+                "type": "STRING",
+                "required": False,
+            },
+            {
+                "name": "channel",
+                "fieldKey": "channel",
+                "type": "LIST",
+                "required": False,
+                "defaultValue": "",
+                "options": ["", "official"],
+            },
+            {
+                "name": "video",
+                "fieldKey": "videoUrls",
+                "type": "VIDEO",
+                "required": False,
+                "multipleInputs": True,
+                "maxInputNum": 2,
+            },
+            {
+                "name": "prompt",
+                "fieldKey": "prompt",
+                "type": "STRING",
+                "required": False,
+            },
+            {
+                "name": "images",
+                "fieldKey": "imageUrls",
+                "type": "IMAGE",
+                "required": False,
+                "multipleInputs": True,
+                "maxInputNum": 2,
+            },
+        ],
+    }
+
+    node_cls = create_node_class(model_def)
+    optional_keys = list(node_cls.INPUT_TYPES()["optional"].keys())
+
+    assert optional_keys == [
+        "image_inputcount",
+        "images",
+        "image_2",
+        "video_inputcount",
+        "video",
+        "video_2",
+        "audio_inputcount",
+        "audio",
+        "audio_2",
+        "channel",
+        "prompt",
+        "negative_prompt",
+        "style",
+    ]
+
+
+def test_input_types_keeps_required_media_before_required_channel_and_widgets():
+    model_def = {
+        "internal_name": "BizyTRD_TestRequiredOrderNode",
+        "class_name": "BizyTRDTestRequiredOrderNode",
+        "display_name": "BizyTRD Test Required Order Node",
+        "category": "BizyTRD/Test",
+        "model_name": "seedance-2-0-std",
+        "endpoint_category": "Multimodal To Video",
+        "params": [
+            {
+                "name": "prompt",
+                "fieldKey": "prompt",
+                "type": "STRING",
+                "required": True,
+            },
+            {
+                "name": "channel",
+                "fieldKey": "channel",
+                "type": "LIST",
+                "required": True,
+                "defaultValue": "",
+                "options": ["", "fast-lane"],
+            },
+            {
+                "name": "image",
+                "fieldKey": "imageUrl",
+                "type": "IMAGE",
+                "required": True,
+            },
+            {
+                "name": "negative_prompt",
+                "fieldKey": "negative_prompt",
+                "type": "STRING",
+                "required": True,
+            },
+        ],
+    }
+
+    node_cls = create_node_class(model_def)
+    required_keys = list(node_cls.INPUT_TYPES()["required"].keys())
+
+    assert required_keys == [
+        "image",
+        "channel",
+        "prompt",
+        "negative_prompt",
+    ]
+
+
 def test_resolve_endpoint_appends_normalized_channel_and_normalizes_category():
     model_def = {
         "internal_name": "BizyTRD_TestNode",

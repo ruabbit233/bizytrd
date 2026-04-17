@@ -10,6 +10,16 @@ from typing import Any
 from ..core.base import BizyTRDBaseNode
 
 
+_MEDIA_UI_ORDER = {
+    "IMAGE": 0,
+    "VIDEO": 1,
+    "AUDIO": 2,
+}
+
+_PROMPT_KEYS = {"prompt", "text"}
+_NEGATIVE_PROMPT_KEYS = {"negativeprompt", "negative_prompt"}
+
+
 def _registry_path() -> Path:
     return Path(__file__).resolve().parent.parent / "models_registry.json"
 
@@ -209,12 +219,54 @@ def _normalize_endpoint_category(value: str) -> str:
     return normalized.strip("-")
 
 
+def _widget_sort_group(param: dict[str, Any]) -> int:
+    name = str(param.get("name") or "").strip().lower()
+    field_key = str(_param_value(param, "fieldKey", "api_field", default=name) or "").strip().lower()
+
+    if name == "channel":
+        return 0
+    if name in _PROMPT_KEYS or field_key in _PROMPT_KEYS:
+        return 1
+    if name in _NEGATIVE_PROMPT_KEYS or field_key in _NEGATIVE_PROMPT_KEYS:
+        return 2
+    return 3
+
+
+def _sorted_params(model_def: dict[str, Any]) -> list[dict[str, Any]]:
+    params = list(model_def.get("params", []))
+    enumerated = list(enumerate(params))
+
+    media_params = []
+    widget_params = []
+    for index, param in enumerated:
+        if _param_value(param, "type") in {"IMAGE", "VIDEO", "AUDIO"}:
+            media_params.append((index, param))
+        else:
+            widget_params.append((index, param))
+
+    media_params.sort(
+        key=lambda item: (
+            _MEDIA_UI_ORDER.get(_param_value(item[1], "type"), len(_MEDIA_UI_ORDER)),
+            item[0],
+        )
+    )
+    widget_params.sort(
+        key=lambda item: (
+            _widget_sort_group(item[1]),
+            item[0],
+        )
+    )
+
+    return [param for _, param in media_params] + [param for _, param in widget_params]
+
+
 def create_node_class(model_def: dict[str, Any]) -> type:
     required: dict[str, Any] = {}
     optional: dict[str, Any] = {}
     params_by_name = {param["name"]: param for param in model_def.get("params", [])}
+    sorted_params = _sorted_params(model_def)
 
-    for param in model_def.get("params", []):
+    for param in sorted_params:
         for input_name, input_def, is_required in _iter_param_inputs(param, params_by_name):
             if is_required:
                 required[input_name] = input_def

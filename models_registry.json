@@ -999,26 +999,26 @@
     "class_name": "BizyTRDSeedance20MultimodalVideo",
     "display_name": "BizyTRD Seedance 2.0 Multimodal To Video",
     "category": "BizyTRD/Doubao",
-    "model_name": "seedance-2-0-std",
+    "model_name": "seedance-2-0",
     "endpoint_category": "Multimodal To Video",
     "output_type": "video",
     "params": [
       {
-        "name": "mode",
+        "name": "channel",
         "type": "LIST",
         "required": true,
         "options": [
-          "std",
-          "fast"
+          "official",
+          "base"
         ],
-        "description": "生成模式。`std` 质量更稳，`fast` 响应更快。",
-        "fieldKey": "mode",
-        "defaultValue": "std"
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "defaultValue": "official"
       },
       {
         "name": "prompt",
         "type": "STRING",
-        "required": false,
+        "required": true,
         "multiline": true,
         "description": "视频生成提示词。可为空，但建议与多模态素材一起描述目标效果。",
         "fieldKey": "prompt",

@@ -18,15 +18,7 @@ from .upload import (
 )
 
 
-def _param_value(param: dict[str, Any], *names: str, default: Any = None) -> Any:
-    for name in names:
-        if name in param:
-            return param[name]
-    return default
 
-
-def _param_truthy(param: dict[str, Any], *names: str) -> bool:
-    return bool(_param_value(param, *names, default=False))
 
 
 def _is_blank(value: Any) -> bool:
@@ -66,16 +58,16 @@ def _resolved_max_inputs(
     param: dict[str, Any],
     params_by_name: dict[str, dict[str, Any]],
 ) -> int:
-    max_inputs = _param_value(param, "maxInputNum")
+    max_inputs = param.get("maxInputNum")
     if max_inputs is not None:
         return int(max_inputs)
     return 1
 
 
 def _auto_inputcount_name(param: dict[str, Any]) -> str | None:
-    if _param_value(param, "type") not in {"IMAGE", "VIDEO", "AUDIO"}:
+    if param.get("type") not in {"IMAGE", "VIDEO", "AUDIO"}:
         return None
-    max_inputs = _param_value(param, "maxInputNum")
+    max_inputs = param.get("maxInputNum")
     if max_inputs is None or int(max_inputs) <= 1:
         return None
     name = str(param.get("name") or "")
@@ -115,7 +107,7 @@ def _upload_media_values(
     values: list[Any],
     config: dict[str, Any],
 ) -> list[str]:
-    media_type = _param_value(param, "type")
+    media_type = param.get("type")
     if media_type not in {"IMAGE", "VIDEO", "AUDIO"}:
         return []
 
@@ -161,7 +153,7 @@ def _build_media_context(
         param["name"]: param for param in model_def.get("params", [])
     }
     for param in model_def.get("params", []):
-        if _param_value(param, "type") not in {"IMAGE", "VIDEO", "AUDIO"}:
+        if param.get("type") not in {"IMAGE", "VIDEO", "AUDIO"}:
             continue
         values = _collect_media_values(param, kwargs)
         urls = _upload_media_values(param, values, config)
@@ -202,7 +194,7 @@ def _apply_value_hook(
     kwargs: dict[str, Any],
     media_context: dict[str, dict[str, Any]],
 ) -> Any:
-    hook_name = _param_value(param, "valueHook")
+    hook_name = param.get("valueHook")
     if not hook_name:
         return value
 
@@ -234,23 +226,23 @@ def _should_include_param(
     if isinstance(skip_values, list) and value in skip_values:
         return False
 
-    only_if_true_param = _param_value(param, "onlyIfTrueParam")
+    only_if_true_param = param.get("onlyIfTrueParam")
     if only_if_true_param and not bool(kwargs.get(only_if_true_param)):
         return False
 
-    only_if_false_param = _param_value(param, "onlyIfFalseParam")
+    only_if_false_param = param.get("onlyIfFalseParam")
     if only_if_false_param and bool(kwargs.get(only_if_false_param)):
         return False
 
-    only_if_media_absent = _param_value(param, "onlyIfMediaAbsent")
+    only_if_media_absent = param.get("onlyIfMediaAbsent")
     if only_if_media_absent and media_context.get(only_if_media_absent, {}).get("count", 0) > 0:
         return False
 
-    only_if_media_present = _param_value(param, "onlyIfMediaPresent")
+    only_if_media_present = param.get("onlyIfMediaPresent")
     if only_if_media_present and media_context.get(only_if_media_present, {}).get("count", 0) <= 0:
         return False
 
-    send_if = _param_value(param, "sendIf")
+    send_if = param.get("sendIf")
     if send_if == "non_empty":
         return not _is_blank(value)
     if send_if == "true":
@@ -260,11 +252,11 @@ def _should_include_param(
     if send_if == "nonzero":
         return value not in (0, "0")
     if send_if == "not_default":
-        return value != _param_value(param, "defaultValue")
+        return value != param.get("defaultValue")
     if send_if == "always":
         return True
 
-    if _is_blank(value) and _param_value(param, "type") == "STRING":
+    if _is_blank(value) and param.get("type") == "STRING":
         return False
     return True
 
@@ -290,7 +282,7 @@ def build_payload_for_model(
     hook_kwargs["__resolved_model__"] = payload["model"]
 
     for param in model_def.get("params", []):
-        param_type = _param_value(param, "type")
+        param_type = param.get("type")
         if param_type in {"IMAGE", "VIDEO", "AUDIO"}:
             if param.get("internal"):
                 continue
@@ -299,7 +291,7 @@ def build_payload_for_model(
             if not urls:
                 continue
 
-            payload[_param_value(param, "fieldKey", default=param["name"])] = urls
+            payload[param.get("fieldKey", param["name"])] = urls
             continue
 
         if param.get("internal"):
@@ -309,6 +301,6 @@ def build_payload_for_model(
         value = _apply_value_hook(param, raw_value, hook_kwargs, media_context)
         if not _should_include_param(param, value, hook_kwargs, media_context):
             continue
-        payload[_param_value(param, "fieldKey", default=param["name"])] = value
+        payload[param.get("fieldKey", param["name"])] = value
 
     return payload

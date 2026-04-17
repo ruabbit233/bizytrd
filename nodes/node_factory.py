@@ -132,7 +132,8 @@ def _multi_input_base_name(param_name: str) -> str:
 def _auto_inputcount_name(param: dict[str, Any]) -> str | None:
     if _param_value(param, "type") not in {"IMAGE", "VIDEO", "AUDIO"}:
         return None
-    if not _param_truthy(param, "multipleInputs", "multiple_inputs"):
+    max_inputs = _param_value(param, "maxInputNum", "maxInputCount", "max_inputs")
+    if max_inputs is None or int(max_inputs) <= 1:
         return None
     name = str(param.get("name") or "")
     if name not in {"image", "images", "video", "videos", "audio", "audios"}:
@@ -200,8 +201,6 @@ def _iter_param_inputs(
     entries.append((input_name, input_def, bool(_param_value(param, "required", default=False))))
 
     if _param_value(param, "type") not in {"IMAGE", "VIDEO", "AUDIO"}:
-        return entries
-    if not _param_truthy(param, "multipleInputs", "multiple_inputs"):
         return entries
 
     max_inputs = _resolved_max_inputs(param, params_by_name)

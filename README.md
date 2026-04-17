@@ -85,7 +85,7 @@ conda activate comfyenv
 推荐字段如下：
 
 - `description`：参数说明。当前项目只保留这一种说明字段
-- `multiple_inputs`：把一个媒体参数展开成 `images + image_2..image_N` 这种额外输入口
+- `maxInputNum`：媒体参数的最大输入数量。只要 `maxInputNum > 1`，运行时就会把它当作多输入媒体
 - `inputcount_param`：当媒体参数支持动态多输入时，读取哪个 `INT` 参数来控制实际使用的输入数量
 
 当前约定是：

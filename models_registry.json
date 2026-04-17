@@ -303,9 +303,7 @@
         "required": true,
         "description": "参考图输入。最多 9 张。",
         "fieldKey": "urls",
-        "flattenBatches": true,
-        "maxInputNum": 9,
-        "multipleInputs": true
+        "maxInputNum": 9
       },
       {
         "name": "enable_sequential",
@@ -431,9 +429,7 @@
         "required": true,
         "description": "参考图输入。最多 9 张。",
         "fieldKey": "urls",
-        "flattenBatches": true,
-        "maxInputNum": 9,
-        "multipleInputs": true
+        "maxInputNum": 9
       },
       {
         "name": "enable_sequential",
@@ -503,8 +499,7 @@
         "type": "VIDEO",
         "required": true,
         "description": "输入视频。时长需在 2-10 秒之间。",
-        "fieldKey": "media",
-        "mediaItemType": "video"
+        "fieldKey": "videoUrls"
       },
       {
         "name": "prompt",
@@ -529,32 +524,15 @@
         "type": "IMAGE",
         "required": false,
         "description": "可选首帧参考图，用于更精细地约束首帧表现。",
-        "fieldKey": "media",
-        "mediaItemType": "first_frame"
+        "fieldKey": "firstFrameImageUrls"
       },
       {
-        "name": "ref_image_1",
+        "name": "ref_images",
         "type": "IMAGE",
         "required": false,
-        "description": "可选参考图 1，用于约束角色、风格或主体。",
-        "fieldKey": "media",
-        "mediaItemType": "reference_image"
-      },
-      {
-        "name": "ref_image_2",
-        "type": "IMAGE",
-        "required": false,
-        "description": "可选参考图 2，用于约束角色、风格或主体。",
-        "fieldKey": "media",
-        "mediaItemType": "reference_image"
-      },
-      {
-        "name": "ref_image_3",
-        "type": "IMAGE",
-        "required": false,
-        "description": "可选参考图 3，用于约束角色、风格或主体。",
-        "fieldKey": "media",
-        "mediaItemType": "reference_image"
+        "description": "可选参考图输入，用于约束角色、风格或主体。最多 3 张。",
+        "fieldKey": "referenceImageUrls",
+        "maxInputNum": 3
       },
       {
         "name": "resolution",
@@ -944,8 +922,7 @@
         "required": true,
         "description": "输入参考图。最多 4 张，用于图像编辑。",
         "fieldKey": "images",
-        "maxInputNum": 4,
-        "multipleInputs": true
+        "maxInputNum": 4
       },
       {
         "name": "prompt",
@@ -1035,27 +1012,23 @@
         "required": false,
         "description": "参考图片输入。最多 9 张，会作为 `imageUrls` 传给后端。",
         "fieldKey": "imageUrls",
-        "flattenBatches": true,
-        "maxInputNum": 9,
-        "multipleInputs": true
+        "maxInputNum": 9
       },
       {
-        "name": "video",
+        "name": "videos",
         "type": "VIDEO",
         "required": false,
         "description": "参考视频输入。最多 3 个，会作为 `videoUrls` 传给后端。",
         "fieldKey": "videoUrls",
-        "maxInputNum": 3,
-        "multipleInputs": true
+        "maxInputNum": 3
       },
       {
-        "name": "audio",
+        "name": "audios",
         "type": "AUDIO",
         "required": false,
         "description": "参考音频输入。最多 3 个，会作为 `audioUrls` 传给后端。",
         "fieldKey": "audioUrls",
-        "maxInputNum": 3,
-        "multipleInputs": true
+        "maxInputNum": 3
       },
       {
         "name": "generate_audio",

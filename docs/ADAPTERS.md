@@ -17,11 +17,8 @@
 
 - 普通参数按 `fieldKey` 写入 payload
 - 媒体参数自动上传
-- `multipleInputs`
 - 自动或显式的 input count 控制
-- 图片批量输入展开 `flattenBatches`
-- 多媒体直接聚合成 URL 数组
-- 多个媒体参数按 `mediaItemType` 聚合成对象数组
+- 多媒体统一聚合成 URL 数组
 - 简单发送条件：
   - `sendIf: non_empty`
   - `sendIf: true`
@@ -54,16 +51,10 @@
 
 - `internal`
   - 节点输入存在，但不直接发给后端
-- `multipleInputs`
-  - 多输入媒体
 - `maxInputNum`
-  - 多输入媒体的最大数量
+  - 多输入媒体的最大数量。只要媒体参数的 `maxInputNum > 1`，运行时就会把它当作多输入媒体，并生成对应的额外输入口与自动 `inputcount`
 - `inputcountParam`
   - 可选，显式指定 count 参数名；没有时，`images` / `image` / `videos` / `video` / `audios` / `audio` 会自动生成 `<base>_inputcount`
-- `flattenBatches`
-  - 图片输入按 batch 展开
-- `mediaItemType`
-  - 把媒体拼成对象数组项
 - `sendIf`
 - `onlyIfTrueParam`
 - `onlyIfFalseParam`
@@ -117,8 +108,8 @@
 
 主要依赖：
 
-- 多个媒体参数共享 `fieldKey = media`
-- 每个媒体参数声明自己的 `mediaItemType`
+- 多个语义不同的媒体参数分别使用自己的 list 字段
+- 后端 template 决定如何把这些 list 字段转换成真正的后端请求结构
 
 ### Seedance 2.0 Multimodal
 
@@ -128,7 +119,26 @@
 - 三组媒体参数的自动 input count
 - 自动聚合成 `imageUrls` / `videoUrls` / `audioUrls`
 
-## 7. 新增节点建议
+## 7. 媒体字段约定
+
+当前前端节点层已经统一成下面的规则：
+
+- 只要是媒体参数，最终写进 payload 时一律是 URL list
+- 即使只有一个媒体输入，也发送单元素 list
+- 只要 `maxInputNum > 1`，就视为多输入媒体；不再需要 `multipleInputs`
+- 不再支持 `flattenBatches`
+- 不再支持 `forceList`
+- 不再支持 `mediaItemType`
+
+也就是说，前端节点层只负责：
+
+- 采集媒体输入
+- 上传得到 URL
+- 按 `fieldKey` 写成 URL list
+
+如果后端需要把多个媒体字段进一步转换成某种 template 结构，应当由后端 template 负责，而不是前端 registry 负责。
+
+## 8. 新增节点建议
 
 优先顺序：
 

@@ -52,26 +52,6 @@ def _coerce_int(value: Any, default: int) -> int:
         return default
 
 
-def _image_batches(images: Any) -> list[Any]:
-    if images is None:
-        return []
-    if hasattr(images, "shape"):
-        if len(images.shape) > 3:
-            return [images[i] for i in range(images.shape[0])]
-        return [images]
-    if isinstance(images, (list, tuple)):
-        batches: list[Any] = []
-        for item in images:
-            if item is None:
-                continue
-            if hasattr(item, "shape") and len(item.shape) > 3:
-                batches.extend(item[i] for i in range(item.shape[0]))
-            else:
-                batches.append(item)
-        return batches
-    return [images]
-
-
 def _multi_input_base_name(param_name: str) -> str:
     if param_name.endswith("s") and len(param_name) > 1:
         return param_name[:-1]
@@ -101,7 +81,8 @@ def _resolved_max_inputs(
 def _auto_inputcount_name(param: dict[str, Any]) -> str | None:
     if _param_value(param, "type") not in {"IMAGE", "VIDEO", "AUDIO"}:
         return None
-    if not (_param_truthy(param, "multipleInputs", "multiple_inputs", "multiple")):
+    max_inputs = _param_value(param, "maxInputNum", "maxInputCount", "max_inputs")
+    if max_inputs is None or int(max_inputs) <= 1:
         return None
     name = str(param.get("name") or "")
     if name not in {"image", "images", "video", "videos", "audio", "audios"}:
@@ -116,18 +97,14 @@ def _collect_media_values(param: dict[str, Any], kwargs: dict[str, Any]) -> list
     def _append(value: Any) -> None:
         if _is_blank(value):
             return
-        if _param_truthy(param, "flattenBatches", "flatten_batches"):
-            values.extend(_image_batches(value))
-        else:
-            values.append(value)
+        values.append(value)
 
     _append(kwargs.get(input_name))
 
-    if not (_param_truthy(param, "multipleInputs", "multiple_inputs", "multiple")):
-        return values
-
     params_by_name = kwargs.get("__params_by_name__", {})
     max_inputs = _resolved_max_inputs(param, params_by_name)
+    if max_inputs <= 1:
+        return values
     count_param = _param_value(param, "inputcountParam", "inputcount_param")
     if count_param:
         input_count = max(1, min(_coerce_int(kwargs.get(count_param), 1), max_inputs))
@@ -317,7 +294,6 @@ def build_payload_for_model(
     payload: dict[str, Any] = {"model": _resolve_model_value(model_def, kwargs)}
     hook_kwargs = dict(kwargs)
     hook_kwargs["__resolved_model__"] = payload["model"]
-    grouped_media: dict[str, list[Any]] = {}
 
     for param in model_def.get("params", []):
         param_type = _param_value(param, "type")
@@ -330,15 +306,7 @@ def build_payload_for_model(
                 continue
 
             api_field = _param_value(param, "fieldKey", "api_field", default=param["name"])
-            media_item_type = _param_value(param, "mediaItemType", "media_item_type")
-            if media_item_type:
-                grouped_media.setdefault(api_field, []).extend(
-                    {"type": media_item_type, "url": url} for url in urls
-                )
-            elif _param_truthy(param, "multipleInputs", "multiple_inputs", "multiple", "forceList", "force_list"):
-                payload[api_field] = urls
-            else:
-                payload[api_field] = urls[0]
+            payload[api_field] = urls
             continue
 
         if param.get("internal"):
@@ -349,9 +317,5 @@ def build_payload_for_model(
         if not _should_include_param(param, value, hook_kwargs, media_context):
             continue
         payload[_param_value(param, "fieldKey", "api_field", default=param["name"])] = value
-
-    for field_name, items in grouped_media.items():
-        if items:
-            payload[field_name] = items
 
     return payload

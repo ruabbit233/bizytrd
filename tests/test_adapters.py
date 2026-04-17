@@ -66,6 +66,47 @@ def test_build_payload_uses_model_name_without_request_model_overrides():
     assert payload["model"] == "seedance-2-0-std"
 
 
+def test_build_payload_always_sends_media_as_lists():
+    model_def = {
+        "model_name": "seedance-2-0-std",
+        "endpoint_category": "Multimodal To Video",
+        "params": [
+            {
+                "name": "image",
+                "fieldKey": "imageUrls",
+                "type": "IMAGE",
+                "required": False,
+            },
+            {
+                "name": "videos",
+                "fieldKey": "videoUrls",
+                "type": "VIDEO",
+                "required": False,
+                "maxInputNum": 2,
+            },
+        ],
+    }
+
+    from unittest.mock import patch
+
+    with patch("bizytrd.core.adapters._build_media_context") as build_media_context:
+        build_media_context.return_value = {
+            "image": {"values": ["image-input"], "urls": ["https://example.com/image"], "count": 1},
+            "videos": {
+                "values": ["video-a", "video-b"],
+                "urls": ["https://example.com/video-a", "https://example.com/video-b"],
+                "count": 2,
+            },
+        }
+        payload = build_payload_for_model(model_def, {}, {})
+
+    assert payload["imageUrls"] == ["https://example.com/image"]
+    assert payload["videoUrls"] == [
+        "https://example.com/video-a",
+        "https://example.com/video-b",
+    ]
+
+
 def test_registry_uses_script_path_value_hooks():
     import json
     from pathlib import Path
@@ -99,6 +140,30 @@ def test_registry_removes_hook_param_metadata():
         "hook_height_param",
         "hook_media_param",
         "hook_sequential_param",
+    }
+
+    for model_def in registry:
+        for param in model_def.get("params", []):
+            assert forbidden_fields.isdisjoint(param), (
+                model_def["internal_name"],
+                param["name"],
+            )
+
+
+def test_registry_removes_legacy_media_payload_metadata():
+    import json
+    from pathlib import Path
+
+    registry = json.loads(Path("models_registry.json").read_text(encoding="utf-8"))
+    forbidden_fields = {
+        "flattenBatches",
+        "forceList",
+        "multipleInputs",
+        "mediaItemType",
+        "flatten_batches",
+        "force_list",
+        "multiple_inputs",
+        "media_item_type",
     }
 
     for model_def in registry:

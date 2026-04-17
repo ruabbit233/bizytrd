@@ -26,7 +26,6 @@ def test_input_types_adds_channel_and_auto_media_inputcount():
                 "fieldKey": "images",
                 "type": "IMAGE",
                 "required": False,
-                "multipleInputs": True,
                 "maxInputNum": 4,
             },
         ],
@@ -64,7 +63,6 @@ def test_input_types_sorts_optional_inputs_with_media_then_channel_then_widgets(
                 "fieldKey": "audioUrls",
                 "type": "AUDIO",
                 "required": False,
-                "multipleInputs": True,
                 "maxInputNum": 2,
             },
             {
@@ -86,7 +84,6 @@ def test_input_types_sorts_optional_inputs_with_media_then_channel_then_widgets(
                 "fieldKey": "videoUrls",
                 "type": "VIDEO",
                 "required": False,
-                "multipleInputs": True,
                 "maxInputNum": 2,
             },
             {
@@ -100,7 +97,6 @@ def test_input_types_sorts_optional_inputs_with_media_then_channel_then_widgets(
                 "fieldKey": "imageUrls",
                 "type": "IMAGE",
                 "required": False,
-                "multipleInputs": True,
                 "maxInputNum": 2,
             },
         ],
@@ -221,7 +217,6 @@ def test_input_types_adds_auto_inputcount_for_singular_video_name():
                 "fieldKey": "videoUrls",
                 "type": "VIDEO",
                 "required": False,
-                "multipleInputs": True,
                 "maxInputNum": 3,
             }
         ],
@@ -293,7 +288,6 @@ def test_registry_uses_camel_case_param_metadata_keys():
         "hook_width_param",
         "maxInputCount",
         "media_item_type",
-        "multiple_inputs",
         "only_if_false_param",
         "only_if_media_absent",
         "send_if",

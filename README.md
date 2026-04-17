@@ -10,6 +10,22 @@
 
 这个仓库目前是第一版设计与脚手架落地，不是最终生产可用形态。
 
+## 开发环境
+
+当前项目默认使用 `conda` 的 `comfyenv` 环境进行开发和测试。
+
+推荐命令：
+
+```bash
+conda run -n comfyenv python -m pytest -v
+```
+
+如果需要进入交互式环境，也统一使用：
+
+```bash
+conda activate comfyenv
+```
+
 ## 为什么要做这个项目
 
 当前 BizyAir 的第三方节点虽然能用，但整体结构不利于继续扩展：
@@ -110,7 +126,6 @@ bizytrd/
 │   ├── base.py
 │   ├── config.py
 │   ├── upload.py
-│   ├── task.py
 │   └── result.py
 ├── nodes/
 │   ├── __init__.py

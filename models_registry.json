@@ -1542,11 +1542,11 @@
     ]
   },
   {
-    "internal_name": "Seedream4",
-    "class_name": "Seedream4",
-    "display_name": "Seedream4",
+    "internal_name": "Seedream4_0",
+    "class_name": "Seedream4_0",
+    "display_name": "Seedream 4.0",
     "category": "BizyTRD/Doubao",
-    "model_name": "seedream-4",
+    "model_name": "seedream-4-0",
     "endpoint_category": "Image To Image",
     "output_type": "image",
     "params": [
@@ -1576,7 +1576,7 @@
             "Custom"
         ],
         "default": "HD 16:9 (1920x1080)",
-        "valueHook": "doubao.custom_size"
+        "valueHook": "doubao.custom_size_sd40"
       },
       {
         "name": "custom_width",
@@ -1607,5 +1607,164 @@
         "maxInputNum": 10
       }
     ]
+  },
+  {
+    "internal_name": "Seedream4_5",
+    "class_name": "Seedream4_5",
+    "display_name": "Seedream 4.5",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedream-4-5",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description": "提示词。描述希望生成的图像内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "2K",
+          "4K",
+          "Custom"
+        ],
+        "default": "2K",
+        "valueHook": "doubao.custom_size_sd45"
+      },
+      {
+        "name": "custom_width",
+        "type": "INT",
+        "required": true,
+        "min": 1024,
+        "max": 4096,
+        "default": 2048,
+        "description": "总像素取值范围 [2560x1440=3686400, 4096x4096=16777216], 宽高比取值范围：[1/16, 16]",
+        "internal": true
+      },
+      {
+        "name": "custom_height",
+        "type": "INT",
+        "required": true,
+        "min": 1024,
+        "max": 4096,
+        "default": 2048,
+        "description": "自定义总像素取值范围 [2560x1440=3686400, 4096x4096=16777216], 宽高比取值范围：[1/16, 16]",
+        "internal": true
+      },
+      {
+        "name": "max_images",
+        "type": "INT",
+        "required": true,
+        "min": 1,
+        "max": 15,
+        "default": 1,
+        "description": "实际可生成的图片数量，除受到 max_images 影响外，还受到输入的参考图数量影响。输入的参考图数量+最终生成的图片数量≤15张。"
+      },
+      {
+        "name": "optimize_prompt",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "disabled",
+          "standard"
+        ],
+        "default": "disabled",
+        "description": "提示词优化功能的配置。standard：标准模式，生成内容的质量更高，耗时较长。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "description": "参考图，数量不超过14张。会影响组图生成数量",
+        "fieldKey": "imageUrls",
+        "maxInputNum": 14
+      }
+    ]
+  },
+  {
+    "internal_name": "Seedream5_0",
+    "class_name": "Seedream5_0",
+    "display_name": "Seedream 5.0",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedream-5-0",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description": "提示词。描述希望生成的图像内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "2K",
+          "4K",
+          "Custom"
+        ],
+        "default": "2K",
+        "valueHook": "doubao.custom_size_sd50"
+      },
+      {
+        "name": "custom_width",
+        "type": "INT",
+        "required": true,
+        "min": 480,
+        "max": 12800,
+        "default": 2048,
+        "description": "总像素取值范围 [2560x1440=3686400, 4096x4096=16777216], 宽高比取值范围：[1/16, 16]",
+        "internal": true
+      },
+      {
+        "name": "custom_height",
+        "type": "INT",
+        "required": true,
+        "min": 480,
+        "max": 12800,
+        "default": 2048,
+        "description": "自定义总像素取值范围 [2560x1440=3686400, 4096x4096=16777216], 宽高比取值范围：[1/16, 16]",
+        "internal": true
+      },
+      {
+        "name": "max_images",
+        "type": "INT",
+        "required": true,
+        "min": 1,
+        "max": 15,
+        "default": 1,
+        "description": "实际可生成的图片数量，除受到 max_images 影响外，还受到输入的参考图数量影响。输入的参考图数量+最终生成的图片数量≤15张。"
+      },
+      {
+        "name": "optimize_prompt",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "disabled",
+          "standard"
+        ],
+        "default": "disabled",
+        "description": "提示词优化功能的配置。standard：标准模式，生成内容的质量更高，耗时较长。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "description": "参考图，数量不超过14张。会影响组图生成数量",
+        "fieldKey": "imageUrls",
+        "maxInputNum": 14
+      }
+    ]
   }
+
 ]

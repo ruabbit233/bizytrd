@@ -6,7 +6,7 @@ from typing import Any
 from .base import HookContext
 
 
-def custom_size(
+def custom_size_sd40(
     value: Any,
     context: HookContext,
 ) -> Any:
@@ -53,3 +53,42 @@ def custom_size(
             raise ValueError(f"Invalid size: {size}")
         
     return f"{width}*{height}"
+
+
+def custom_size_sd45(
+    value: Any,
+    context: HookContext,
+) -> Any:
+    size = str(value)
+    custom_width = int(context.get("custom_width") or 0)
+    custom_height = int(context.get("custom_height") or 0)
+
+    if size == "Custom":
+        width = custom_width
+        height = custom_height
+        if width * height < 3686400 or width * height > 16777216:
+            raise ValueError("Total pixels must be between 3686400 and 16777216")
+        if width / height < 1 / 16 or width / height > 16:
+            raise ValueError("Width/height ratio must be between 1/16 and 16")
+        return f"{width}*{height}"
+    else:
+        return size
+    
+def custom_size_sd50(
+    value: Any,
+    context: HookContext,
+) -> Any:
+    size = str(value)
+    custom_width = int(context.get("custom_width") or 0)
+    custom_height = int(context.get("custom_height") or 0)
+
+    if size == "Custom":
+        width = custom_width
+        height = custom_height
+        if width * height < 3686400 or width * height > 10404496:
+            raise ValueError("Total pixels must be between 3686400 and 10404496")
+        if width / height < 1 / 16 or width / height > 16:
+            raise ValueError("Width/height ratio must be between 1/16 and 16")
+        return f"{width}*{height}"
+    else:
+        return size

@@ -18,7 +18,7 @@ def test_input_types_adds_channel_and_auto_media_inputcount():
                 "fieldKey": "channel",
                 "type": "LIST",
                 "required": False,
-                "defaultValue": "",
+                "default": "",
                 "options": ["", "official", "base"],
             },
             {
@@ -55,7 +55,7 @@ def test_input_types_sorts_optional_inputs_with_media_then_channel_then_widgets(
                 "fieldKey": "style",
                 "type": "LIST",
                 "required": False,
-                "defaultValue": "general",
+                "default": "general",
                 "options": ["general", "anime"],
             },
             {
@@ -76,7 +76,7 @@ def test_input_types_sorts_optional_inputs_with_media_then_channel_then_widgets(
                 "fieldKey": "channel",
                 "type": "LIST",
                 "required": False,
-                "defaultValue": "",
+                "default": "",
                 "options": ["", "official"],
             },
             {
@@ -142,7 +142,7 @@ def test_input_types_keeps_required_media_before_required_channel_and_widgets():
                 "fieldKey": "channel",
                 "type": "LIST",
                 "required": True,
-                "defaultValue": "",
+                "default": "",
                 "options": ["", "fast-lane"],
             },
             {
@@ -185,7 +185,7 @@ def test_resolve_endpoint_appends_normalized_channel_and_normalizes_category():
                 "fieldKey": "channel",
                 "type": "LIST",
                 "required": False,
-                "defaultValue": "",
+                "default": "",
                 "options": ["", "Official API", "base_v2"],
             }
         ],
@@ -280,7 +280,6 @@ def test_registry_uses_camel_case_param_metadata_keys():
 
     forbidden_param_fields = {
         "api_field",
-        "default",
         "flatten_batches",
         "hook_height_param",
         "hook_media_param",
@@ -298,6 +297,7 @@ def test_registry_uses_camel_case_param_metadata_keys():
         "send_if",
         "skip_values",
         "value_hook",
+        "defaultValue",
     }
 
     for model_def in registry:
@@ -306,3 +306,56 @@ def test_registry_uses_camel_case_param_metadata_keys():
                 model_def["internal_name"],
                 param["name"],
             )
+
+
+def test_registry_params_are_flat_objects_with_required_schema():
+    registry = json.loads(Path("models_registry.json").read_text(encoding="utf-8"))
+
+    for model_def in registry:
+        for index, param in enumerate(model_def.get("params", [])):
+            assert isinstance(param, dict), (model_def["internal_name"], index, param)
+            assert "name" in param, (model_def["internal_name"], index, param)
+            assert "type" in param, (model_def["internal_name"], param["name"])
+            assert isinstance(param["name"], str) and param["name"].strip(), (
+                model_def["internal_name"],
+                index,
+                param,
+            )
+
+
+def test_registry_uses_default_field_not_default_value():
+    registry = json.loads(Path("models_registry.json").read_text(encoding="utf-8"))
+
+    has_default = False
+    for model_def in registry:
+        for param in model_def.get("params", []):
+            assert "defaultValue" not in param, (model_def["internal_name"], param["name"])
+            has_default = has_default or "default" in param
+
+    assert has_default
+
+
+def test_create_node_class_reports_invalid_param_schema():
+    from bizytrd.nodes.node_factory import create_node_class
+
+    model_def = {
+        "internal_name": "InvalidNode",
+        "class_name": "InvalidNode",
+        "display_name": "Invalid Node",
+        "category": "BizyTRD/Test",
+        "model_name": "invalid-model",
+        "endpoint_category": "Text To Image",
+        "output_type": "image",
+        "params": [{"image": {"name": "image", "type": "IMAGE"}}],
+    }
+
+    try:
+        create_node_class(model_def)
+    except ValueError as exc:
+        message = str(exc)
+    else:
+        raise AssertionError("create_node_class should reject invalid param schema")
+
+    assert "InvalidNode" in message
+    assert "params[0]" in message
+    assert "missing required key 'name'" in message

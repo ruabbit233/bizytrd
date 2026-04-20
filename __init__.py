@@ -4,12 +4,20 @@ from __future__ import annotations
 
 import logging
 import shutil
+import sys
 from pathlib import Path
-
-from .nodes.node_factory import create_all_nodes
 
 __version__ = "0.1.0"
 _PACKAGE_ROOT = Path(__file__).resolve().parent
+
+# In ComfyUI/custom_nodes source layouts, only the parent of this package may be
+# on sys.path. Keep the local top-level bizytrd_sdk importable until it is
+# installed as an external package.
+_package_root_text = str(_PACKAGE_ROOT)
+if _package_root_text not in sys.path:
+    sys.path.insert(0, _package_root_text)
+
+from .nodes.node_factory import create_all_nodes
 
 
 def get_node_mappings() -> tuple[dict[str, type], dict[str, str]]:

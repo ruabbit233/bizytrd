@@ -88,6 +88,15 @@
 
 当前 [`core/adapters.py`](/Users/huhuhu/Desktop/refactor/bizytrd/core/adapters.py) 只负责 hook 调度，不再承载 provider 专属 hook 细节。
 
+hook 函数统一使用：
+
+```python
+def my_hook(value, context):
+    ...
+```
+
+`context` 是 `HookContext`，通过具名属性和方法暴露当前参数、节点输入、媒体输入和已解析 model，避免继续传递含义不直观的多位置参数。
+
 ## 6. 复杂节点如何落到通用规则
 
 ### Wan 2.7 Image

@@ -9,19 +9,20 @@ from __future__ import annotations
 import json
 from typing import Any
 
+from .base import HookContext
+
 
 def custom_size(
-    param: dict[str, Any],
     value: Any,
-    kwargs: dict[str, Any],
-    media_context: dict[str, dict[str, Any]],
+    context: HookContext,
 ) -> Any:
     size = str(value)
-    resolved_model = kwargs.get("__resolved_model__") or ""
-    custom_width = int(kwargs.get("custom_width") or 0)
-    custom_height = int(kwargs.get("custom_height") or 0)
-    has_input_images = bool(media_context.get("images", {}).get("count", 0))
-    enable_sequential = bool(kwargs.get("enable_sequential", False))
+    resolved_model = context.resolved_model or ""
+    custom_width = int(context.get("custom_width") or 0)
+    custom_height = int(context.get("custom_height") or 0)
+    image_media = context.get_media("images", {}) or {}
+    has_input_images = bool(image_media.get("count", 0))
+    enable_sequential = bool(context.get("enable_sequential", False))
 
     if size != "Custom":
         if size == "4K":
@@ -49,13 +50,12 @@ def custom_size(
 
 
 def bbox_list(
-    param: dict[str, Any],
     value: Any,
-    kwargs: dict[str, Any],
-    media_context: dict[str, dict[str, Any]],
+    context: HookContext,
 ) -> Any:
     bbox_list_str = str(value or "")
-    image_count = int(media_context.get("images", {}).get("count", 0))
+    image_media = context.get_media("images", {}) or {}
+    image_count = int(image_media.get("count", 0))
 
     if not bbox_list_str or not bbox_list_str.strip():
         return None
@@ -85,13 +85,11 @@ def bbox_list(
 
 
 def color_palette(
-    param: dict[str, Any],
     value: Any,
-    kwargs: dict[str, Any],
-    media_context: dict[str, dict[str, Any]],
+    context: HookContext,
 ) -> Any:
     color_palette_str = str(value or "")
-    enable_sequential = bool(kwargs.get("enable_sequential", False))
+    enable_sequential = bool(context.get("enable_sequential", False))
 
     if not color_palette_str or not color_palette_str.strip():
         return None

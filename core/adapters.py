@@ -16,6 +16,7 @@ from .upload import (
     upload_image_input,
     upload_video_input,
 )
+from .hooks.base import HookContext
 
 
 
@@ -199,7 +200,13 @@ def _apply_value_hook(
         return value
 
     hook = _resolve_value_hook(str(hook_name))
-    return hook(param, value, kwargs, media_context)
+    context = HookContext(
+        param=param,
+        inputs=kwargs,
+        media=media_context,
+        resolved_model=kwargs.get("__resolved_model__"),
+    )
+    return hook(value, context)
 
 
 def _normalize_channel_suffix(value: Any) -> str:
@@ -252,7 +259,7 @@ def _should_include_param(
     if send_if == "nonzero":
         return value not in (0, "0")
     if send_if == "not_default":
-        return value != param.get("defaultValue")
+        return value != param.get("default")
     if send_if == "always":
         return True
 

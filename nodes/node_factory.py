@@ -28,6 +28,35 @@ def _load_registry() -> list[dict[str, Any]]:
     return json.loads(_registry_path().read_text(encoding="utf-8"))
 
 
+def _model_label(model_def: dict[str, Any]) -> str:
+    return str(
+        model_def.get("internal_name")
+        or model_def.get("class_name")
+        or model_def.get("model_name")
+        or "<unknown model>"
+    )
+
+
+def _validate_param_schema(model_def: dict[str, Any]) -> list[dict[str, Any]]:
+    model_label = _model_label(model_def)
+    params = model_def.get("params", [])
+    if not isinstance(params, list):
+        raise ValueError(f"{model_label}: params must be a list")
+
+    for index, param in enumerate(params):
+        if not isinstance(param, dict):
+            raise ValueError(
+                f"{model_label}: params[{index}] must be an object, got {type(param).__name__}"
+            )
+        for key in ("name", "type"):
+            value = param.get(key)
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError(
+                    f"{model_label}: params[{index}] missing required key '{key}': {param}"
+                )
+    return params
+
+
 def _return_signature(output_type: str) -> tuple[tuple[str, ...], tuple[str, ...]]:
     mapping = {
         "image": (("IMAGE", "STRING"), ("image", "urls")),
@@ -58,7 +87,7 @@ def _param_truthy(param: dict[str, Any], *names: str) -> bool:
 
 def _build_input_def(param: dict[str, Any]):
     param_type = _param_value(param, "type", default="STRING")
-    default = _param_value(param, "defaultValue")
+    default = _param_value(param, "default")
     description = _param_description(param)
 
     if param_type == "STRING":
@@ -256,7 +285,8 @@ def _sorted_params(model_def: dict[str, Any]) -> list[dict[str, Any]]:
 def create_node_class(model_def: dict[str, Any]) -> type:
     required: dict[str, Any] = {}
     optional: dict[str, Any] = {}
-    params_by_name = {param["name"]: param for param in model_def.get("params", [])}
+    params = _validate_param_schema(model_def)
+    params_by_name = {param["name"]: param for param in params}
     sorted_params = _sorted_params(model_def)
 
     for param in sorted_params:
@@ -271,7 +301,7 @@ def create_node_class(model_def: dict[str, Any]) -> type:
     model_name = model_def["model_name"]
     endpoint_category = model_def.get("endpoint_category", "")
     category = model_def["category"]
-    params = list(model_def.get("params", []))
+    params = list(params)
     output_type = model_def.get("output_type", "string")
     node_definition = dict(model_def)
 

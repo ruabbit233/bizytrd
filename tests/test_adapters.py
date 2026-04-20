@@ -36,7 +36,7 @@ def test_build_payload_appends_normalized_channel_to_model_name():
                 "fieldKey": "channel",
                 "type": "LIST",
                 "required": False,
-                "defaultValue": "",
+                "default": "",
                 "options": ["", "Official API", "base_v2"],
             }
         ],
@@ -148,6 +148,86 @@ def test_build_payload_uses_auto_inputcount_to_limit_media_inputs():
     assert upload_image_input.call_count == 2
 
 
+def test_value_hook_receives_value_and_context():
+    model_def = {
+        "model_name": "test-model",
+        "endpoint_category": "Text To Image",
+        "params": [
+            {
+                "name": "payload_json",
+                "fieldKey": "payload_json",
+                "type": "STRING",
+                "valueHook": "common.inspect_context",
+                "required": False,
+            }
+        ],
+    }
+
+    from unittest.mock import patch
+
+    def inspect_context(value, context):
+        return {
+            "value": value,
+            "param_name": context.param["name"],
+            "prompt": context.get("prompt"),
+            "resolved_model": context.resolved_model,
+            "missing_media": context.get_media("images", {}),
+        }
+
+    with patch("bizytrd.core.hooks.common.inspect_context", inspect_context, create=True):
+        payload = build_payload_for_model(
+            model_def,
+            {},
+            {"payload_json": "raw", "prompt": "hello"},
+        )
+
+    assert payload["payload_json"] == {
+        "value": "raw",
+        "param_name": "payload_json",
+        "prompt": "hello",
+        "resolved_model": "test-model",
+        "missing_media": {},
+    }
+
+
+def test_hook_context_exposes_generic_getters_only():
+    from bizytrd.core.hooks.base import HookContext
+
+    context = HookContext(
+        param={"name": "size"},
+        inputs={"custom_width": 1024},
+        media={"images": {"count": 2, "urls": ["a", "b"]}},
+        resolved_model="model",
+    )
+
+    assert context.get("custom_width") == 1024
+    assert context.get("missing", "fallback") == "fallback"
+    assert context.get_media("images") == {"count": 2, "urls": ["a", "b"]}
+    assert context.get_media("videos", {}) == {}
+    assert not hasattr(context, "input")
+    assert not hasattr(context, "media_count")
+
+
+def test_not_default_send_condition_uses_default_field():
+    model_def = {
+        "model_name": "test-model",
+        "endpoint_category": "Text To Image",
+        "params": [
+            {
+                "name": "style",
+                "fieldKey": "style",
+                "type": "STRING",
+                "required": False,
+                "default": "default",
+                "sendIf": "not_default",
+            }
+        ],
+    }
+
+    assert "style" not in build_payload_for_model(model_def, {}, {"style": "default"})
+    assert build_payload_for_model(model_def, {}, {"style": "cinematic"})["style"] == "cinematic"
+
+
 def test_registry_uses_script_path_value_hooks():
     import json
     from pathlib import Path
@@ -222,7 +302,7 @@ def test_registry_removes_legacy_param_compatibility_fields():
     registry = json.loads(Path("models_registry.json").read_text(encoding="utf-8"))
     forbidden_fields = {
         "api_field",
-        "default",
+        "defaultValue",
         "inputcountParam",
         "inputcount_param",
         "maxInputCount",

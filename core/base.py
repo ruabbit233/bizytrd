@@ -140,6 +140,7 @@ class BizyTRDBaseNode(ABC):
         prompt_id = _get_prompt_id()
         payload = self.build_payload(config, **kwargs)
         endpoint = self.resolve_endpoint(**kwargs)
+        print(f"payload preview: {self._payload_preview(payload)}")
 
         e = None
         outputs = ([], [], [], [], "")

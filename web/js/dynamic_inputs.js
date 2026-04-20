@@ -255,7 +255,9 @@ function patchDynamicInputs(nodeType, nodeData) {
 app.registerExtension({
   name: "bizytrd.dynamic-inputs",
   beforeRegisterNodeDef(nodeType, nodeData) {
-    if (!String(nodeData?.name || "").startsWith("BizyTRD_")) {
+    const nodeName = String(nodeData?.name || "");
+    const category = String(nodeData?.category || "");
+    if (!nodeName.startsWith("BizyTRD_") && !category.startsWith("BizyTRD/")) {
       return;
     }
     patchDynamicInputs(nodeType, nodeData);

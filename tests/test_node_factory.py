@@ -359,3 +359,10 @@ def test_create_node_class_reports_invalid_param_schema():
     assert "InvalidNode" in message
     assert "params[0]" in message
     assert "missing required key 'name'" in message
+
+
+def test_dynamic_inputs_extension_matches_bizytrd_category_nodes():
+    source = Path("web/js/dynamic_inputs.js").read_text(encoding="utf-8")
+
+    assert 'nodeData?.category || ""' in source
+    assert 'startsWith("BizyTRD/")' in source

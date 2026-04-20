@@ -28,7 +28,7 @@
         ],
         "description": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。",
         "fieldKey": "size",
-        "defaultValue": "2K",
+        "default": "2K",
         "valueHook": "wan.custom_size"
       },
       {
@@ -40,7 +40,7 @@
         "max": 4096,
         "description": "自定义输出宽度。仅在 `size=Custom` 时生效。",
         "fieldKey": "custom_width",
-        "defaultValue": 2048
+        "default": 2048
       },
       {
         "name": "custom_height",
@@ -51,7 +51,7 @@
         "max": 4096,
         "description": "自定义输出高度。仅在 `size=Custom` 时生效。",
         "fieldKey": "custom_height",
-        "defaultValue": 2048
+        "default": 2048
       },
       {
         "name": "n",
@@ -61,7 +61,7 @@
         "max": 12,
         "description": "生成张数。",
         "fieldKey": "n",
-        "defaultValue": 4
+        "default": 4
       },
       {
         "name": "enable_sequential",
@@ -69,7 +69,7 @@
         "required": false,
         "description": "是否启用组图模式。开启后可生成一组保持主体一致性的图片。",
         "fieldKey": "enable_sequential",
-        "defaultValue": false,
+        "default": false,
         "sendIf": "true"
       },
       {
@@ -78,7 +78,7 @@
         "required": false,
         "description": "仅在未开启组图模式时生效。",
         "fieldKey": "thinking_mode",
-        "defaultValue": true,
+        "default": true,
         "onlyIfFalseParam": "enable_sequential",
         "onlyIfMediaAbsent": "images"
       },
@@ -98,7 +98,7 @@
         "required": false,
         "description": "是否添加 AI 生成水印。",
         "fieldKey": "watermark",
-        "defaultValue": false
+        "default": false
       },
       {
         "name": "seed",
@@ -108,7 +108,7 @@
         "max": 2147483647,
         "description": "随机种子。设为 -1 时不传此参数，由服务端随机。",
         "fieldKey": "seed",
-        "defaultValue": -1,
+        "default": -1,
         "sendIf": "gte_zero"
       }
     ],
@@ -145,7 +145,7 @@
         ],
         "description": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。",
         "fieldKey": "size",
-        "defaultValue": "2K",
+        "default": "2K",
         "valueHook": "wan.custom_size"
       },
       {
@@ -157,7 +157,7 @@
         "max": 4096,
         "description": "自定义输出宽度。仅在 `size=Custom` 时生效。",
         "fieldKey": "custom_width",
-        "defaultValue": 2048
+        "default": 2048
       },
       {
         "name": "custom_height",
@@ -168,7 +168,7 @@
         "max": 4096,
         "description": "自定义输出高度。仅在 `size=Custom` 时生效。",
         "fieldKey": "custom_height",
-        "defaultValue": 2048
+        "default": 2048
       },
       {
         "name": "n",
@@ -178,7 +178,7 @@
         "max": 12,
         "description": "生成张数。",
         "fieldKey": "n",
-        "defaultValue": 4
+        "default": 4
       },
       {
         "name": "enable_sequential",
@@ -186,7 +186,7 @@
         "required": false,
         "description": "是否启用组图模式。开启后可生成一组保持主体一致性的图片。",
         "fieldKey": "enable_sequential",
-        "defaultValue": false,
+        "default": false,
         "sendIf": "true"
       },
       {
@@ -195,7 +195,7 @@
         "required": false,
         "description": "仅在未开启组图模式时生效。",
         "fieldKey": "thinking_mode",
-        "defaultValue": true,
+        "default": true,
         "onlyIfFalseParam": "enable_sequential"
       },
       {
@@ -214,7 +214,7 @@
         "required": false,
         "description": "是否添加 AI 生成水印。",
         "fieldKey": "watermark",
-        "defaultValue": false
+        "default": false
       },
       {
         "name": "seed",
@@ -224,7 +224,7 @@
         "max": 2147483647,
         "description": "随机种子。设为 -1 时不传此参数，由服务端随机。",
         "fieldKey": "seed",
-        "defaultValue": -1,
+        "default": -1,
         "sendIf": "gte_zero"
       }
     ],
@@ -262,7 +262,7 @@
         ],
         "description": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。",
         "fieldKey": "size",
-        "defaultValue": "2K",
+        "default": "2K",
         "valueHook": "wan.custom_size"
       },
       {
@@ -274,7 +274,7 @@
         "max": 4096,
         "description": "自定义输出宽度。仅在 `size=Custom` 时生效。",
         "fieldKey": "custom_width",
-        "defaultValue": 2048
+        "default": 2048
       },
       {
         "name": "custom_height",
@@ -285,7 +285,7 @@
         "max": 4096,
         "description": "自定义输出高度。仅在 `size=Custom` 时生效。",
         "fieldKey": "custom_height",
-        "defaultValue": 2048
+        "default": 2048
       },
       {
         "name": "n",
@@ -295,7 +295,7 @@
         "max": 12,
         "description": "生成张数。",
         "fieldKey": "n",
-        "defaultValue": 4
+        "default": 4
       },
       {
         "name": "images",
@@ -311,7 +311,7 @@
         "required": false,
         "description": "是否启用组图模式。",
         "fieldKey": "enable_sequential",
-        "defaultValue": false,
+        "default": false,
         "sendIf": "true"
       },
       {
@@ -340,7 +340,7 @@
         "required": false,
         "description": "是否添加 AI 生成水印。",
         "fieldKey": "watermark",
-        "defaultValue": false
+        "default": false
       },
       {
         "name": "seed",
@@ -350,7 +350,7 @@
         "max": 2147483647,
         "description": "随机种子。设为 -1 时不传此参数，由服务端随机。",
         "fieldKey": "seed",
-        "defaultValue": -1,
+        "default": -1,
         "sendIf": "gte_zero"
       }
     ],
@@ -388,7 +388,7 @@
         ],
         "description": "输出尺寸档位。选择 `Custom` 时使用下方自定义宽高。",
         "fieldKey": "size",
-        "defaultValue": "2K",
+        "default": "2K",
         "valueHook": "wan.custom_size"
       },
       {
@@ -400,7 +400,7 @@
         "max": 4096,
         "description": "自定义输出宽度。仅在 `size=Custom` 时生效。",
         "fieldKey": "custom_width",
-        "defaultValue": 2048
+        "default": 2048
       },
       {
         "name": "custom_height",
@@ -411,7 +411,7 @@
         "max": 4096,
         "description": "自定义输出高度。仅在 `size=Custom` 时生效。",
         "fieldKey": "custom_height",
-        "defaultValue": 2048
+        "default": 2048
       },
       {
         "name": "n",
@@ -421,7 +421,7 @@
         "max": 12,
         "description": "生成张数。",
         "fieldKey": "n",
-        "defaultValue": 4
+        "default": 4
       },
       {
         "name": "images",
@@ -437,7 +437,7 @@
         "required": false,
         "description": "是否启用组图模式。",
         "fieldKey": "enable_sequential",
-        "defaultValue": false,
+        "default": false,
         "sendIf": "true"
       },
       {
@@ -466,7 +466,7 @@
         "required": false,
         "description": "是否添加 AI 生成水印。",
         "fieldKey": "watermark",
-        "defaultValue": false
+        "default": false
       },
       {
         "name": "seed",
@@ -476,7 +476,7 @@
         "max": 2147483647,
         "description": "随机种子。设为 -1 时不传此参数，由服务端随机。",
         "fieldKey": "seed",
-        "defaultValue": -1,
+        "default": -1,
         "sendIf": "gte_zero"
       }
     ],
@@ -544,7 +544,7 @@
         ],
         "description": "输出分辨率。",
         "fieldKey": "resolution",
-        "defaultValue": "1080P"
+        "default": "1080P"
       },
       {
         "name": "ratio",
@@ -560,7 +560,7 @@
         ],
         "description": "输出画幅比例。`default` 表示跟随输入视频比例。",
         "fieldKey": "ratio",
-        "defaultValue": "default",
+        "default": "default",
         "sendIf": "not_default"
       },
       {
@@ -571,7 +571,7 @@
         "max": 10,
         "description": "输出时长。0 表示保持输入视频时长，2-10 表示截断到指定秒数。",
         "fieldKey": "duration",
-        "defaultValue": 0,
+        "default": 0,
         "sendIf": "nonzero"
       },
       {
@@ -584,7 +584,7 @@
         ],
         "description": "音频处理方式。`auto` 自动判断，`origin` 尽量保留输入原声。",
         "fieldKey": "audio_setting",
-        "defaultValue": "auto"
+        "default": "auto"
       },
       {
         "name": "prompt_extend",
@@ -592,7 +592,7 @@
         "required": false,
         "description": "是否启用提示词智能改写。",
         "fieldKey": "prompt_extend",
-        "defaultValue": true
+        "default": true
       },
       {
         "name": "watermark",
@@ -600,7 +600,7 @@
         "required": false,
         "description": "是否添加 AI 生成水印。",
         "fieldKey": "watermark",
-        "defaultValue": false
+        "default": false
       },
       {
         "name": "seed",
@@ -610,7 +610,7 @@
         "max": 2147483647,
         "description": "随机种子。设为 -1 时不传此参数，由服务端随机。",
         "fieldKey": "seed",
-        "defaultValue": -1,
+        "default": -1,
         "sendIf": "gte_zero"
       }
     ],
@@ -665,7 +665,7 @@
         ],
         "description": "输出分辨率与画幅。",
         "fieldKey": "size",
-        "defaultValue": "1920*1080"
+        "default": "1920*1080"
       },
       {
         "name": "duration",
@@ -677,7 +677,7 @@
         ],
         "description": "输出时长，单位秒。",
         "fieldKey": "duration",
-        "defaultValue": 5
+        "default": 5
       },
       {
         "name": "prompt_extend",
@@ -685,7 +685,7 @@
         "required": false,
         "description": "是否启用提示词智能改写。",
         "fieldKey": "prompt_extend",
-        "defaultValue": true
+        "default": true
       }
     ],
     "migration_source": {
@@ -735,7 +735,7 @@
         ],
         "description": "输出分辨率。",
         "fieldKey": "resolution",
-        "defaultValue": "1080P"
+        "default": "1080P"
       },
       {
         "name": "duration",
@@ -747,7 +747,7 @@
         ],
         "description": "输出时长，单位秒。",
         "fieldKey": "duration",
-        "defaultValue": 5
+        "default": 5
       }
     ],
     "migration_source": {
@@ -780,7 +780,7 @@
         "max": 2147483647,
         "description": "随机种子。相同参数下可用于复现结果。",
         "fieldKey": "seed",
-        "defaultValue": 0
+        "default": 0
       },
       {
         "name": "style",
@@ -792,7 +792,7 @@
         ],
         "description": "风格类型。",
         "fieldKey": "style",
-        "defaultValue": "general"
+        "default": "general"
       },
       {
         "name": "duration",
@@ -803,7 +803,7 @@
         ],
         "description": "输出时长。当前模型固定为 5 秒。",
         "fieldKey": "duration",
-        "defaultValue": 5
+        "default": 5
       }
     ],
     "migration_source": {
@@ -850,7 +850,7 @@
         "max": 2147483647,
         "description": "随机种子。相同参数下可用于复现结果。",
         "fieldKey": "seed",
-        "defaultValue": 0
+        "default": 0
       }
     ],
     "migration_source": {
@@ -886,7 +886,7 @@
         ],
         "description": "输出画幅比例。",
         "fieldKey": "size",
-        "defaultValue": "1:1"
+        "default": "1:1"
       },
       {
         "name": "variants",
@@ -899,7 +899,7 @@
         ],
         "description": "生成张数。",
         "fieldKey": "variants",
-        "defaultValue": 1
+        "default": 1
       }
     ],
     "migration_source": {
@@ -943,7 +943,7 @@
         ],
         "description": "输出画幅比例。",
         "fieldKey": "size",
-        "defaultValue": "1:1"
+        "default": "1:1"
       }
     ],
     "migration_source": {
@@ -952,9 +952,9 @@
     }
   },
   {
-    "internal_name": "BizyTRD_Seedance20MultimodalVideo",
-    "class_name": "BizyTRDSeedance20MultimodalVideo",
-    "display_name": "BizyTRD Seedance 2.0 Multimodal To Video",
+    "internal_name": "BizyTRD_Seedance_2_0_Multimodal_API",
+    "class_name": "BizyTRD_Seedance_2_0_Multimodal_API",
+    "display_name": "Seedance 2.0 Multimodal To Video",
     "category": "BizyTRD/Doubao",
     "model_name": "seedance-2-0",
     "endpoint_category": "Multimodal To Video",
@@ -970,7 +970,7 @@
         ],
         "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
         "fieldKey": "channel",
-        "defaultValue": "official"
+        "default": "official"
       },
       {
         "name": "prompt",
@@ -994,7 +994,7 @@
         ],
         "description": "输出分辨率。",
         "fieldKey": "resolution",
-        "defaultValue": "720p"
+        "default": "720p"
       },
       {
         "name": "duration",
@@ -1004,7 +1004,7 @@
         "max": 15,
         "description": "视频时长，单位秒。",
         "fieldKey": "duration",
-        "defaultValue": 5
+        "default": 5
       },
       {
         "name": "images",
@@ -1036,7 +1036,7 @@
         "required": false,
         "description": "是否为输出视频生成音频。",
         "fieldKey": "generateAudio",
-        "defaultValue": true
+        "default": true
       },
       {
         "name": "ratio",
@@ -1053,12 +1053,559 @@
         ],
         "description": "视频宽高比。`adaptive` 表示自动匹配。",
         "fieldKey": "ratio",
-        "defaultValue": "adaptive"
+        "default": "adaptive"
       }
     ],
     "migration_source": {
       "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
       "class": "Seedance_2_0_Multimodal_API"
     }
+  },
+  {
+    "internal_name": "BizyTRD_Seedance_2_0_Fast_Multimodal_API",
+    "class_name": "BizyTRD_Seedance_2_0_Fast_Multimodal_API",
+    "display_name": "Seedance 2.0 Fast Multimodal To Video",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedance-2-0-fast",
+    "endpoint_category": "Multimodal To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "official",
+          "base"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description": "视频生成提示词。可为空，但建议与多模态素材一起描述目标效果。",
+        "fieldKey": "prompt",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "480p",
+          "720p",
+          "1080p",
+          "2k",
+          "4k"
+        ],
+        "description": "输出分辨率。",
+        "fieldKey": "resolution",
+        "default": "720p"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "min": 4,
+        "max": 15,
+        "description": "视频时长，单位秒。",
+        "fieldKey": "duration",
+        "default": 5
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "description": "参考图片输入。最多 9 张，会作为 `imageUrls` 传给后端。",
+        "fieldKey": "imageUrls",
+        "maxInputNum": 9
+      },
+      {
+        "name": "videos",
+        "type": "VIDEO",
+        "required": false,
+        "description": "参考视频输入。最多 3 个，会作为 `videoUrls` 传给后端。",
+        "fieldKey": "videoUrls",
+        "maxInputNum": 3
+      },
+      {
+        "name": "audios",
+        "type": "AUDIO",
+        "required": false,
+        "description": "参考音频输入。最多 3 个，会作为 `audioUrls` 传给后端。",
+        "fieldKey": "audioUrls",
+        "maxInputNum": 3
+      },
+      {
+        "name": "generate_audio",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "是否为输出视频生成音频。",
+        "fieldKey": "generateAudio",
+        "default": true
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "adaptive",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "21:9"
+        ],
+        "description": "视频宽高比。`adaptive` 表示自动匹配。",
+        "fieldKey": "ratio",
+        "default": "adaptive"
+      }
+    ],
+    "migration_source": {
+      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
+      "class": "Seedance_2_0_Multimodal_API"
+    }
+  },
+  {
+    "internal_name": "Seedance_2_0_T2V_API",
+    "class_name": "Seedance_2_0_T2V_API",
+    "display_name": "Seedance 2.0 Text To Video",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedance-2-0",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "official",
+          "base"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description": "视频生成提示词。描述希望生成的视频内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "480p",
+          "720p",
+          "1080p",
+          "2k",
+          "4k"
+        ],
+        "description": "输出分辨率。",
+        "fieldKey": "resolution",
+        "default": "720p"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "min": 4,
+        "max": 15,
+        "description": "视频时长，单位秒。",
+        "fieldKey": "duration",
+        "default": 5
+      },
+      {
+        "name": "generate_audio",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "是否为输出视频生成音频。",
+        "fieldKey": "generateAudio",
+        "default": true
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "adaptive",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "21:9"
+        ],
+        "description": "视频宽高比。`adaptive` 表示自动匹配。",
+        "fieldKey": "ratio",
+        "default": "adaptive"
+      },
+      {
+        "name": "web_search",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "启用联网搜索增强",
+        "fieldKey": "web_search",
+        "default": false
+      }
+    ]
+  },
+  {
+    "internal_name": "Seedance_2_0_Fast_T2V_API",
+    "class_name": "Seedance_2_0_Fast_T2V_API",
+    "display_name": "Seedance 2.0 Fast Text To Video",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedance-2-0-fast",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "official",
+          "base"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description": "视频生成提示词。描述希望生成的视频内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "480p",
+          "720p",
+          "1080p",
+          "2k",
+          "4k"
+        ],
+        "description": "输出分辨率。",
+        "fieldKey": "resolution",
+        "default": "720p"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "min": 4,
+        "max": 15,
+        "description": "视频时长，单位秒。",
+        "fieldKey": "duration",
+        "default": 5
+      },
+      {
+        "name": "generate_audio",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "是否为输出视频生成音频。",
+        "fieldKey": "generateAudio",
+        "default": true
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "adaptive",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "21:9"
+        ],
+        "description": "视频宽高比。`adaptive` 表示自动匹配。",
+        "fieldKey": "ratio",
+        "default": "adaptive"
+      },
+      {
+        "name": "web_search",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "启用联网搜索增强",
+        "fieldKey": "web_search",
+        "default": false
+      }
+    ]
+  },
+  {
+    "internal_name": "Seedance_2_0_I2V_API",
+    "class_name": "Seedance_2_0_I2V_API",
+    "display_name": "Seedance 2.0 Image To Video",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedance-2-0",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "official",
+          "base"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "description": "输入首帧图片。",
+        "fieldKey": "firstFrameImage"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "480p",
+          "720p",
+          "1080p",
+          "2k",
+          "4k"
+        ],
+        "description": "输出分辨率。",
+        "fieldKey": "resolution",
+        "default": "720p"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "min": 4,
+        "max": 15,
+        "description": "视频时长，单位秒。",
+        "fieldKey": "duration",
+        "default": 5
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description": "视频生成提示词。描述希望生成的视频内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "description": "尾帧图片",
+        "fieldKey": "lastFrameImage",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "generate_audio",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "是否为输出视频生成音频。",
+        "fieldKey": "generateAudio",
+        "default": true
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "adaptive",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "21:9"
+        ],
+        "description": "视频宽高比。`adaptive` 表示自动匹配。",
+        "fieldKey": "ratio",
+        "default": "adaptive"
+      }
+    ]
+  },
+  {
+    "internal_name": "Seedance_2_0_Fast_I2V_API",
+    "class_name": "Seedance_2_0_Fast_I2V_API",
+    "display_name": "Seedance 2.0 Fast Image To Video",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedance-2-0-fast",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "official",
+          "base"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "description": "输入首帧图片。",
+        "fieldKey": "firstFrameImage"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "480p",
+          "720p",
+          "1080p",
+          "2k",
+          "4k"
+        ],
+        "description": "输出分辨率。",
+        "fieldKey": "resolution",
+        "default": "720p"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "min": 4,
+        "max": 15,
+        "description": "视频时长，单位秒。",
+        "fieldKey": "duration",
+        "default": 5
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "description": "视频生成提示词。描述希望生成的视频内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "description": "尾帧图片",
+        "fieldKey": "lastFrameImage",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "generate_audio",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "是否为输出视频生成音频。",
+        "fieldKey": "generateAudio",
+        "default": true
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "adaptive",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "21:9"
+        ],
+        "description": "视频宽高比。`adaptive` 表示自动匹配。",
+        "fieldKey": "ratio",
+        "default": "adaptive"
+      }
+    ]
+  },
+  {
+    "internal_name": "Seedream4",
+    "class_name": "Seedream4",
+    "display_name": "Seedream4",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedream-4",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description": "提示词。描述希望生成的图像内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": true,
+        "options": [
+            "1K Square (1024x1024)",
+            "2K Square (2048x2048)",
+            "4K Square (4096x4096)",
+            "HD 16:9 (1920x1080)",
+            "2K 16:9 (2560x1440)",
+            "4K 16:9 (3840x2160)",
+            "Portrait 9:16 (1080x1920)",
+            "Portrait 3:4 (1536x2048)",
+            "Landscape 4:3 (2048x1536)",
+            "Ultra-wide 21:9 (3440x1440)",
+            "Custom"
+        ],
+        "default": "HD 16:9 (1920x1080)",
+        "valueHook": "doubao.custom_size"
+      },
+      {
+        "name": "custom_width",
+        "type": "INT",
+        "required": true,
+        "min": 1024,
+        "max": 4096,
+        "default": 1920,
+        "description": "自定义宽度",
+        "internal": true
+      },
+      {
+        "name": "custom_height",
+        "type": "INT",
+        "required": true,
+        "min": 1024,
+        "max": 4096,
+        "default": 1080,
+        "description": "自定义高度",
+        "internal": true
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "description": "输入参考图。最多 10 张，用于图像生成。",
+        "fieldKey": "imageUrls",
+        "maxInputNum": 10
+      }
+    ]
   }
 ]

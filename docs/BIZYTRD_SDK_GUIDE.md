@@ -1,17 +1,11 @@
 # BizyTRD SDK 使用指南
 
-`bizytrd` 当前仓库内包含一个可复用的 SDK，当前包路径为 `bizytrd.bizytrd_sdk`。
+`bizytrd` 当前仓库内包含一个可复用的 SDK，当前包路径为顶层包 `bizytrd_sdk`。
 
-如果后续把 SDK 拆成与 `bizytrd` 平行的独立包，推荐对外导入形式是：
+后续把 SDK 拆成与 `bizytrd` 平行的独立包时，对外导入形式保持不变：
 
 ```python
 from bizytrd_sdk import AsyncBizyTRD, BizyTRD
-```
-
-当前仓库内的实际导入路径仍然是：
-
-```python
-from bizytrd.bizytrd_sdk import AsyncBizyTRD, BizyTRD
 ```
 
 这个 SDK 的目标是把 BizyAir 第三方节点中的网络请求、任务轮询、上传逻辑抽离出来，供：
@@ -35,13 +29,13 @@ SDK 的同步/异步边界与 `bizyengine/bizyair_extras/third_party_api` 保持
 ## 导入方式
 
 ```python
-from bizytrd.bizytrd_sdk import AsyncBizyTRD, BizyTRD, SDKConfig, get_config
+from bizytrd_sdk import AsyncBizyTRD, BizyTRD, SDKConfig, get_config
 ```
 
-如果你在 `bizytrd` 包内部调用，优先使用相对导入：
+如果你在 `bizytrd` 包内部调用，也使用同一个顶层导入：
 
 ```python
-from ..bizytrd_sdk import AsyncBizyTRD, BizyTRD
+from bizytrd_sdk import AsyncBizyTRD, BizyTRD
 ```
 
 ## 配置方式
@@ -49,7 +43,7 @@ from ..bizytrd_sdk import AsyncBizyTRD, BizyTRD
 推荐方式是显式构造配置，并在创建 client 时传入：
 
 ```python
-from bizytrd.bizytrd_sdk import AsyncBizyTRD, SDKConfig
+from bizytrd_sdk import AsyncBizyTRD, SDKConfig
 
 config = SDKConfig(
     api_key="your-api-key",
@@ -73,7 +67,7 @@ client = AsyncBizyTRD(
 同步上传客户端同理：
 
 ```python
-from bizytrd.bizytrd_sdk import BizyTRD, SDKConfig
+from bizytrd_sdk import BizyTRD, SDKConfig
 
 config = SDKConfig(
     api_key="your-api-key",
@@ -98,25 +92,33 @@ client = BizyTRD(
 - `BIZYTRD_BASE_URL`
 - `BIZYAIR_API_KEY`
 - `BIZYAIR_TEST_TRD_BASE_URL`
+- `BIZYTRD_BASE_URL`
 - `BIZYTRD_API_BASE_URL`
 - `BIZYTRD_SERVER_URL`
+- `BIZYAIR_API_BASE_URL`
+- `BIZYAIR_X_SERVER`
+- `BIZYAIR_DOMAIN`
 - `BIZYTRD_UPLOAD_BASE_URL`
 - `BIZYTRD_UPLOAD_URL`
 - `BIZYTRD_API_KEY_PATH`
+- `BIZYAIR_COMFYUI_PATH`
 - `BIZYTRD_TIMEOUT`
 - `BIZYTRD_POLLING_INTERVAL`
 - `BIZYTRD_MAX_POLLING_TIME`
 
 本地文件兜底只保留：
 
+- `BIZYTRD_API_KEY_PATH` 指向的 `api_key.ini`
+- `BIZYAIR_COMFYUI_PATH` 下的 `api_key.ini`
 - 当前工作目录下的 `api_key.ini`
+- 兼容旧 BizyAir/ComfyUI 布局中的 `api_key.ini`
 - `~/.config/bizytrd/api_key.ini`
 - `~/.bizytrd/api_key.ini`
 
 快速查看当前解析结果：
 
 ```python
-from bizytrd.bizytrd_sdk import get_config
+from bizytrd_sdk import get_config
 
 config = get_config()
 print(config)
@@ -135,7 +137,7 @@ print(config)
 ```python
 import asyncio
 
-from bizytrd.bizytrd_sdk import AsyncBizyTRD, SDKConfig
+from bizytrd_sdk import AsyncBizyTRD, SDKConfig
 
 
 async def main():
@@ -182,7 +184,7 @@ SDK 也提供了一个更贴近通用 client 风格的入口：
 ```python
 import asyncio
 
-from bizytrd.bizytrd_sdk import AsyncBizyTRD, SDKConfig
+from bizytrd_sdk import AsyncBizyTRD, SDKConfig
 
 
 async def main():
@@ -224,7 +226,7 @@ asyncio.run(main())
 ```python
 import asyncio
 
-from bizytrd.bizytrd_sdk import AsyncBizyTRD, SDKConfig
+from bizytrd_sdk import AsyncBizyTRD, SDKConfig
 
 
 async def main():
@@ -257,7 +259,7 @@ asyncio.run(main())
 上传链路使用同步客户端 `BizyTRD`：
 
 ```python
-from bizytrd.bizytrd_sdk import BizyTRD, SDKConfig
+from bizytrd_sdk import BizyTRD, SDKConfig
 
 config = SDKConfig(
     api_key="your-api-key",
@@ -279,7 +281,7 @@ print(url)
 ```python
 import io
 
-from bizytrd.bizytrd_sdk import BizyTRD, SDKConfig
+from bizytrd_sdk import BizyTRD, SDKConfig
 
 config = SDKConfig(
     api_key="your-api-key",
@@ -298,10 +300,17 @@ url = client.upload_bytes(bio, "example.bin")
 print(url)
 ```
 
+音频上传可以使用语义化包装，底层仍复用同一套 SDK 上传逻辑：
+
+```python
+url = client.upload_audio_file("/path/to/example.mp3")
+url = client.upload_audio_bytes(bio, "example.mp3")
+```
+
 只获取上传凭证：
 
 ```python
-from bizytrd.bizytrd_sdk import BizyTRD, SDKConfig
+from bizytrd_sdk import BizyTRD, SDKConfig
 
 config = SDKConfig(
     api_key="your-api-key",
@@ -364,6 +373,7 @@ result = await client.wait_for_task(
 
 - `videos`：`list[bytes]`
 - `images`：`list[bytes]`
+- `audios`：`list[bytes]`
 - `texts`：`list[str]`
 - `urls`：`list[str]`
 
@@ -371,6 +381,7 @@ result = await client.wait_for_task(
 
 - `VideoFromFile`
 - 图片 tensor
+- 音频对象
 - 其他业务需要的对象
 
 ## 7. 在 bizytrd 项目中的推荐用法
@@ -401,7 +412,7 @@ SDK 暴露的主要异常：
 ```python
 import asyncio
 
-from bizytrd.bizytrd_sdk import AsyncBizyTRD, BizyTRDTimeoutError, SDKConfig
+from bizytrd_sdk import AsyncBizyTRD, BizyTRDTimeoutError, SDKConfig
 
 
 async def main():
@@ -434,7 +445,7 @@ asyncio.run(main())
 ## 9. 注意事项
 
 - `AsyncBizyTRD.download_outputs()` 返回的是原始字节，不是 ComfyUI 对象。
-- 在当前 monorepo 内部引用 SDK，不要写顶层 `from bizytrd_sdk import ...`，应使用包内相对导入。
+- 当前仓库在 SDK 尚未独立发布前，会把本地 `bizytrd_sdk/` 作为顶层包随 `bizytrd` 一起发布；SDK 独立发布后，`bizytrd` 只需要改为依赖外部 `bizytrd-sdk` 包。
 - `sync_web_assets()` 属于节点前端资源同步逻辑，不属于 SDK 范围。
 - 上传接口默认 `file_type="inputs"`，当前与 BizyAir 第三方节点实现保持一致。
 

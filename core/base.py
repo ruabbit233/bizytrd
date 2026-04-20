@@ -10,7 +10,7 @@ import os
 from abc import ABC
 from typing import Any
 
-from ..bizytrd_sdk import AsyncBizyTRD
+from bizytrd_sdk import AsyncBizyTRD
 
 from .adapters import build_payload_for_model
 from .config import get_config
@@ -142,7 +142,7 @@ class BizyTRDBaseNode(ABC):
         endpoint = self.resolve_endpoint(**kwargs)
 
         e = None
-        outputs = ([], [], [], "")
+        outputs = ([], [], [], [], "")
 
         try:
             await _trd_api_counter.increment(1)
@@ -172,6 +172,7 @@ class BizyTRDBaseNode(ABC):
                     outputs = [
                         [_placeholder_video] if _placeholder_video else [],
                         [_placeholder_img] if _placeholder_img else [],
+                        [],
                         [str(e)],
                         urls_str,
                     ]
@@ -194,7 +195,7 @@ class BizyTRDBaseNode(ABC):
         config: dict[str, Any],
         *,
         prompt_id: str | None = None,
-    ) -> tuple[list, list, list[str], str]:
+    ) -> tuple[list, list, list, list[str], str]:
         """Create a task and wait for completion, matching bizyengine's flow."""
         async with AsyncBizyTRD(
             api_key=config.get("api_key"),
@@ -216,21 +217,21 @@ class BizyTRDBaseNode(ABC):
             )
 
             # Download actual media content, matching bizyengine's download loop.
-            videos, images, texts, urls_str = await download_outputs(
+            videos, images, audios, texts, urls_str = await download_outputs(
                 client,
                 result.outputs,
             )
-            return (videos, images, texts, urls_str)
+            return (videos, images, audios, texts, urls_str)
 
     def handle_outputs(
         self,
-        outputs: tuple[list, list, list[str], str],
+        outputs: tuple[list, list, list, list[str], str],
     ) -> dict[str, Any]:
         """Transform raw outputs into ComfyUI node return format.
 
-        outputs = (videos, images, texts, urls_str)
+        outputs = (videos, images, audios, texts, urls_str)
         """
-        videos, images, texts, urls_str = outputs
+        videos, images, audios, texts, urls_str = outputs
 
         if self.OUTPUT_TYPE == "video":
             primary = videos[0] if videos else ""
@@ -245,8 +246,7 @@ class BizyTRDBaseNode(ABC):
                 "result": (primary, urls_str),
             }
         elif self.OUTPUT_TYPE == "audio":
-            # audio output as URL or bytes
-            primary = texts[0] if texts else urls_str
+            primary = audios[0] if audios else (texts[0] if texts else urls_str)
             return {
                 "ui": {"text": [urls_str]},
                 "result": (primary, urls_str),

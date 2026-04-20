@@ -6,14 +6,14 @@ import io
 import json
 from typing import Any
 
-from ..bizytrd_sdk import AsyncBizyTRD
+from bizytrd_sdk import AsyncBizyTRD
 
 
 async def download_outputs(
     client: AsyncBizyTRD,
     outputs: dict[str, Any],
-) -> tuple[list, list, list[str], str]:
-    """Download videos, images, and texts from task outputs.
+) -> tuple[list, list, list, list[str], str]:
+    """Download videos, images, audios, and texts from task outputs.
 
     Matches bizyengine's create_task_and_wait_for_completion output download loop:
     - Videos: download and wrap in VideoFromFile
@@ -23,6 +23,7 @@ async def download_outputs(
     """
     videos: list[Any] = []
     images: list[Any] = []
+    audios: list[Any] = []
     texts: list[str] = []
     downloaded = await client.download_outputs(outputs)
 
@@ -42,10 +43,11 @@ async def download_outputs(
         except ImportError:
             images.append(io.BytesIO(image_content))
 
+    audios.extend(io.BytesIO(audio_content) for audio_content in downloaded.audios)
     texts.extend(downloaded.texts)
 
     urls_str = json.dumps(downloaded.urls)
-    return videos, images, texts, urls_str
+    return videos, images, audios, texts, urls_str
 
 
 def normalize_result(
@@ -69,6 +71,8 @@ def normalize_result(
             urls.extend(outputs["videos"])
         if "images" in outputs:
             urls.extend(outputs["images"])
+        if "audios" in outputs:
+            urls.extend(outputs["audios"])
         urls_str = json.dumps(urls)
         primary = urls[0] if urls else ""
         return primary, urls_str
@@ -80,6 +84,8 @@ def normalize_result(
         urls.extend(outputs["videos"])
     if "images" in outputs:
         urls.extend(outputs["images"])
+    if "audios" in outputs:
+        urls.extend(outputs["audios"])
     urls_str = json.dumps(urls)
     primary = "\n".join(texts) if texts else ""
     return primary, urls_str

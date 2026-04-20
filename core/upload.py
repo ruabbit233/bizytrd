@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
-from ..bizytrd_sdk import BizyTRD
+from bizytrd_sdk import BizyTRD
 
 
 def _is_remote_reference(text: str) -> bool:

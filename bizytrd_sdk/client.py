@@ -370,6 +370,8 @@ class AsyncBizyTRD:
                         original_urls.add(str(video_url))
                     for image_url in outputs.get("images") or []:
                         original_urls.add(str(image_url))
+                    for audio_url in outputs.get("audios") or []:
+                        original_urls.add(str(audio_url))
                 continue
 
             outputs = data.get("outputs")
@@ -437,6 +439,32 @@ class AsyncBizyTRD:
         return await self.upload_bytes(
             file_bytes,
             file_name or target_path.name,
+            file_type=file_type,
+        )
+
+    async def upload_audio_bytes(
+        self,
+        file_content: bytes | bytearray | io.BytesIO,
+        file_name: str,
+        *,
+        file_type: str = "inputs",
+    ) -> str:
+        return await self.upload_bytes(
+            file_content,
+            file_name,
+            file_type=file_type,
+        )
+
+    async def upload_audio_file(
+        self,
+        path: str | Path,
+        *,
+        file_name: str | None = None,
+        file_type: str = "inputs",
+    ) -> str:
+        return await self.upload_file(
+            path,
+            file_name=file_name,
             file_type=file_type,
         )
 
@@ -508,6 +536,12 @@ class AsyncBizyTRD:
                 response.raise_for_status()
                 downloaded.images.append(await response.read())
                 downloaded.urls.append(str(image_url))
+
+        for audio_url in outputs.get("audios") or []:
+            async with session.get(str(audio_url), timeout=3600) as response:
+                response.raise_for_status()
+                downloaded.audios.append(await response.read())
+                downloaded.urls.append(str(audio_url))
 
         for text in outputs.get("texts") or []:
             downloaded.texts.append(str(text))
@@ -665,6 +699,32 @@ class BizyTRD:
         return self.upload_bytes(
             target_path.read_bytes(),
             file_name or target_path.name,
+            file_type=file_type,
+        )
+
+    def upload_audio_bytes(
+        self,
+        file_content: bytes | bytearray | io.BytesIO,
+        file_name: str,
+        *,
+        file_type: str = "inputs",
+    ) -> str:
+        return self.upload_bytes(
+            file_content,
+            file_name,
+            file_type=file_type,
+        )
+
+    def upload_audio_file(
+        self,
+        path: str | Path,
+        *,
+        file_name: str | None = None,
+        file_type: str = "inputs",
+    ) -> str:
+        return self.upload_file(
+            path,
+            file_name=file_name,
             file_type=file_type,
         )
 

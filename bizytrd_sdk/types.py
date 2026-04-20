@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 class DownloadedOutputs:
     videos: list[bytes] = field(default_factory=list)
     images: list[bytes] = field(default_factory=list)
+    audios: list[bytes] = field(default_factory=list)
     texts: list[str] = field(default_factory=list)
     urls: list[str] = field(default_factory=list)
 
@@ -30,8 +31,10 @@ class TaskResult:
         urls: list[str] = []
         videos = self.outputs.get("videos") or []
         images = self.outputs.get("images") or []
+        audios = self.outputs.get("audios") or []
         urls.extend(str(item) for item in videos)
         urls.extend(str(item) for item in images)
+        urls.extend(str(item) for item in audios)
         return urls
 
     @property

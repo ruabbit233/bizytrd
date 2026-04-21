@@ -6,6 +6,29 @@ from typing import Any
 from .base import HookContext
 
 
+def video_duration(
+    value: Any,
+    context: HookContext,
+) -> Any:
+    if value is not None:
+        return value
+
+    video_context = context.get_media("video", {}) or {}
+    values = video_context.get("values") or []
+    video = values[0] if values else context.get("video")
+    if video is None:
+        return None
+
+    get_duration = getattr(video, "get_duration", None)
+    if not callable(get_duration):
+        raise ValueError("Video input does not expose get_duration().")
+
+    duration = get_duration()
+    if duration is None:
+        raise ValueError("Cannot get video duration, please check your video input.")
+    return duration
+
+
 def custom_size_sd40(
     value: Any,
     context: HookContext,

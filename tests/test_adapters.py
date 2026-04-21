@@ -320,6 +320,49 @@ def test_hidden_param_can_still_use_value_hook_and_send_condition():
     assert payload["metadata"] == {"source": "bizytrd"}
 
 
+def test_hidden_duration_param_can_read_video_duration_with_hook():
+    class VideoInput:
+        def get_duration(self):
+            return 12.5
+
+    model_def = {
+        "model_name": "dreamactor-2-0",
+        "endpoint_category": "Dream Actor",
+        "params": [
+            {
+                "name": "video",
+                "fieldKey": "video",
+                "type": "VIDEO",
+                "required": True,
+            },
+            {
+                "name": "duration",
+                "fieldKey": "duration",
+                "type": "FLOAT",
+                "required": False,
+                "hidden": True,
+                "valueHook": "doubao.video_duration",
+            },
+        ],
+    }
+
+    from unittest.mock import patch
+
+    video = VideoInput()
+    with patch("bizytrd.core.adapters._build_media_context") as build_media_context:
+        build_media_context.return_value = {
+            "video": {
+                "values": [video],
+                "urls": ["https://example.com/video.mp4"],
+                "count": 1,
+            }
+        }
+        payload = build_payload_for_model(model_def, {}, {"video": video})
+
+    assert payload["video"] == ["https://example.com/video.mp4"]
+    assert payload["duration"] == 12.5
+
+
 def test_internal_param_remains_visible_but_is_not_sent_to_payload():
     model_def = {
         "model_name": "test-model",

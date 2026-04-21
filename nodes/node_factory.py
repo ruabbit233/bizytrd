@@ -49,12 +49,19 @@ def _validate_param_schema(model_def: dict[str, Any]) -> list[dict[str, Any]]:
             raise ValueError(
                 f"{model_label}: params[{index}] must be an object, got {type(param).__name__}"
             )
-        for key in ("name", "type"):
-            value = param.get(key)
-            if not isinstance(value, str) or not value.strip():
-                raise ValueError(
-                    f"{model_label}: params[{index}] missing required key '{key}': {param}"
-                )
+        name = param.get("name")
+        if not isinstance(name, str) or not name.strip():
+            raise ValueError(
+                f"{model_label}: params[{index}] missing required key 'name': {param}"
+            )
+        param_type = param.get("type")
+        if (
+            not param.get("hidden")
+            and (not isinstance(param_type, str) or not param_type.strip())
+        ):
+            raise ValueError(
+                f"{model_label}: params[{index}] missing required key 'type': {param}"
+            )
     return params
 
 

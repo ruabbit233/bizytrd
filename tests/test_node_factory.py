@@ -299,6 +299,29 @@ def test_hidden_params_are_not_exposed_in_input_types():
     assert "watermark" not in input_types["optional"]
 
 
+def test_hidden_params_can_omit_widget_type():
+    model_def = {
+        "internal_name": "BizyTRD_HiddenTypelessParamNode",
+        "class_name": "BizyTRDHiddenTypelessParamNode",
+        "display_name": "BizyTRD Hidden Typeless Param Node",
+        "category": "BizyTRD/Test",
+        "model_name": "hidden-typeless-param-model",
+        "endpoint_category": "Text To Image",
+        "params": [
+            {
+                "name": "watermark",
+                "fieldKey": "watermark",
+                "hidden": True,
+                "default": False,
+            },
+        ],
+    }
+
+    node_cls = create_node_class(model_def)
+
+    assert node_cls.INPUT_TYPES() == {"required": {}, "optional": {}}
+
+
 def test_resolve_endpoint_falls_back_to_legacy_api_node_without_endpoint_category():
     model_def = {
         "internal_name": "BizyTRD_LegacyNode",
@@ -384,7 +407,10 @@ def test_registry_params_are_flat_objects_with_required_schema():
         for index, param in enumerate(model_def.get("params", [])):
             assert isinstance(param, dict), (model_def["internal_name"], index, param)
             assert "name" in param, (model_def["internal_name"], index, param)
-            assert "type" in param, (model_def["internal_name"], param["name"])
+            assert "type" in param or param.get("hidden") is True, (
+                model_def["internal_name"],
+                param["name"],
+            )
             assert isinstance(param["name"], str) and param["name"].strip(), (
                 model_def["internal_name"],
                 index,

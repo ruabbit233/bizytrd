@@ -1605,6 +1605,18 @@
         "description": "输入参考图。最多 10 张，用于图像生成。",
         "fieldKey": "imageUrls",
         "maxInputNum": 10
+      },
+      {
+        "name": "watermark",
+        "hidden": true,
+        "default": "False",
+        "fieldKey": "watermark"
+      },
+      {
+        "name": "response_format",
+        "hidden": true,
+        "default": "url",
+        "fieldKey": "responseFormat"
       }
     ]
   },
@@ -1737,6 +1749,16 @@
         "internal": true
       },
       {
+        "name": "tools",
+        "fieldKey": "tools",
+        "type": "STRING",
+        "required": true,
+        "forceInput": true,
+        "default": "[]",
+        "description": "豆包模型支持的工具选项，请使用BizyAir Doubao Tool Config节点配置",
+        "valueHook": "common.json_loads"
+      },
+      {
         "name": "max_images",
         "type": "INT",
         "required": true,
@@ -1765,6 +1787,782 @@
         "maxInputNum": 14
       }
     ]
+  },
+  {
+    "internal_name": "Seededit_3_0",
+    "class_name": "Seededit_3_0",
+    "display_name": "Seededit 3.0",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seededit-3-0",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description": "提示词。描述希望生成的图像内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": true,
+        "description": "输入参考图。",
+        "fieldKey": "image"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": -1,
+        "max": 2147483647,
+        "default": -1,
+        "description": "随机种子。相同参数下可用于复现结果。",
+        "fieldKey": "seed"
+      },
+      {
+        "name": "guidance_scale",
+        "type": "FLOAT",
+        "required": true,
+        "min": 1.0,
+        "max": 10.0,
+        "default": 5.5,
+        "fieldKey": "guidanceScale"
+      },
+      {
+        "name": "size",
+        "hidden": true,
+        "default": "adaptive",
+        "fieldKey": "size"
+      },
+      {
+        "name": "response_format",
+        "hidden": true,
+        "default": "url",
+        "fieldKey": "responseFormat"
+      },
+      {
+        "name": "watermark",
+        "hidden": true,
+        "default": "False",
+        "fieldKey": "watermark"
+      }
+    ]
+  },
+  {
+    "internal_name": "Seedance_1_0_T2V_API",
+    "class_name": "Seedance_1_0_T2V_API",
+    "display_name": "Seedance 1.0 Text To Video",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedance-1-0",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "视频生成提示词。描述希望生成的视频内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "480p",
+          "720p",
+          "1080p"
+        ],
+        "description": "分辨率+比例共同决定视频尺寸，具体尺寸请参考官方文档说明",
+        "fieldKey": "resolution",
+        "default": "1080p"
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "21:9",
+          "adaptive"
+        ],
+        "description": "分辨率+比例共同决定视频尺寸，具体尺寸请参考官方文档说明",
+        "fieldKey": "ratio",
+        "default": "adaptive"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "min": 2,
+        "max": 12,
+        "description": "视频时长，单位秒。",
+        "fieldKey": "duration",
+        "default": 12
+      },
+      {
+        "name": "fps",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          24
+        ],
+        "description": "帧率固定24",
+        "fieldKey": "fps",
+        "default": 24 
+      },
+      {
+        "name": "camerafixed",
+        "type": "BOOLEAN",
+        "required": true,
+        "description": "平台可能在提示词中追加固定摄像机指令（效果不保证）",
+        "fieldKey": "camerafixed",
+        "default": false
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": -1,
+        "max": 2147483647,
+        "default": -1,
+        "fieldKey": "seed"
+      },
+      {
+        "name": "watermark",
+        "hidden": true,
+        "default": "False",
+        "fieldKey": "watermark"
+      }
+    ]
+  },
+  {
+    "internal_name": "Seedance_1_0_Fast_T2V_API",
+    "class_name": "Seedance_1_0_Fast_T2V_API",
+    "display_name": "Seedance 1.0 Fast Text To Video",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedance-1-0-fast",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "视频生成提示词。描述希望生成的视频内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "480p",
+          "720p",
+          "1080p"
+        ],
+        "description": "分辨率+比例共同决定视频尺寸，具体尺寸请参考官方文档说明",
+        "fieldKey": "resolution",
+        "default": "1080p"
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "21:9",
+          "adaptive"
+        ],
+        "description": "分辨率+比例共同决定视频尺寸，具体尺寸请参考官方文档说明",
+        "fieldKey": "ratio",
+        "default": "adaptive"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "min": 2,
+        "max": 12,
+        "description": "视频时长，单位秒。",
+        "fieldKey": "duration",
+        "default": 12
+      },
+      {
+        "name": "fps",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          24
+        ],
+        "description": "帧率固定24",
+        "fieldKey": "fps",
+        "default": 24 
+      },
+      {
+        "name": "camerafixed",
+        "type": "BOOLEAN",
+        "required": true,
+        "description": "平台可能在提示词中追加固定摄像机指令（效果不保证）",
+        "fieldKey": "camerafixed",
+        "default": false
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": -1,
+        "max": 2147483647,
+        "default": -1,
+        "fieldKey": "seed"
+      },
+      {
+        "name": "watermark",
+        "hidden": true,
+        "default": "False",
+        "fieldKey": "watermark"
+      }
+    ]
+  },
+  {
+    "internal_name": "Seedance_1_0_I2V_API",
+    "class_name": "Seedance_1_0_I2V_API",
+    "display_name": "Seedance 1.0 Image To Video",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedance-1-0",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "description": "输入首帧图片。",
+        "fieldKey": "firstFrameImage"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description": "视频生成提示词。描述希望生成的视频内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "480p",
+          "720p",
+          "1080p"
+        ],
+        "description": "分辨率+比例共同决定视频尺寸，具体尺寸请参考官方文档说明",
+        "fieldKey": "resolution",
+        "default": "1080p"
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "21:9",
+          "adaptive"
+        ],
+        "description": "分辨率+比例共同决定视频尺寸，具体尺寸请参考官方文档说明",
+        "fieldKey": "ratio",
+        "default": "adaptive"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "min": 2,
+        "max": 12,
+        "description": "视频时长，单位秒。",
+        "fieldKey": "duration",
+        "default": 12
+      },
+      {
+        "name": "fps",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          24
+        ],
+        "description": "帧率固定24",
+        "fieldKey": "fps",
+        "default": 24
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": -1,
+        "max": 2147483647,
+        "default": -1,
+        "fieldKey": "seed"
+      },
+      {
+        "name": "camerafixed",
+        "type": "BOOLEAN",
+        "required": true,
+        "description": "平台可能在提示词中追加固定摄像机指令（效果不保证）",
+        "fieldKey": "camerafixed",
+        "default": false
+      },
+      {
+        "name": "watermark",
+        "hidden": true,
+        "default": false,
+        "fieldKey": "waterMark"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "description": "尾帧图片",
+        "fieldKey": "lastFrameImage",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "Seedance_1_0_Fast_I2V_API",
+    "class_name": "Seedance_1_0_Fast_I2V_API",
+    "display_name": "Seedance 1.0 Fast Image To Video",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedance-1-0-fast",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "description": "输入首帧图片。",
+        "fieldKey": "firstFrameImage"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description": "视频生成提示词。描述希望生成的视频内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "480p",
+          "720p",
+          "1080p"
+        ],
+        "description": "分辨率+比例共同决定视频尺寸，具体尺寸请参考官方文档说明",
+        "fieldKey": "resolution",
+        "default": "1080p"
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "21:9",
+          "adaptive"
+        ],
+        "description": "分辨率+比例共同决定视频尺寸，具体尺寸请参考官方文档说明",
+        "fieldKey": "ratio",
+        "default": "adaptive"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "min": 2,
+        "max": 12,
+        "description": "视频时长，单位秒。",
+        "fieldKey": "duration",
+        "default": 12
+      },
+      {
+        "name": "fps",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          24
+        ],
+        "description": "帧率固定24",
+        "fieldKey": "fps",
+        "default": 24
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": -1,
+        "max": 2147483647,
+        "default": -1,
+        "fieldKey": "seed"
+      },
+      {
+        "name": "camerafixed",
+        "type": "BOOLEAN",
+        "required": true,
+        "description": "平台可能在提示词中追加固定摄像机指令（效果不保证）",
+        "fieldKey": "camerafixed",
+        "default": false
+      },
+      {
+        "name": "watermark",
+        "hidden": true,
+        "default": false,
+        "fieldKey": "waterMark"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "description": "尾帧图片",
+        "fieldKey": "lastFrameImage",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "Seedance_1_5_T2V_API",
+    "class_name": "Seedance_1_5_T2V_API",
+    "display_name": "Seedance 1.5 Text To Video",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedance-1-5",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "视频生成提示词。描述希望生成的视频内容。Seedance 1.5 Pro 支持生成与画面同步的声音，建议将对话部分置于双引号内。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "480p",
+          "720p",
+          "1080p"
+        ],
+        "description": "分辨率+比例共同决定视频尺寸，具体尺寸请参考官方文档说明。",
+        "fieldKey": "resolution",
+        "default": "1080p"
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "21:9",
+          "adaptive"
+        ],
+        "description": "视频宽高比。`adaptive` 表示自动匹配。",
+        "fieldKey": "ratio",
+        "default": "adaptive"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "min": 4,
+        "max": 12,
+        "description": "视频时长，单位秒。",
+        "fieldKey": "duration",
+        "default": 12
+      },
+      {
+        "name": "fps",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          24
+        ],
+        "description": "帧率固定为 24。",
+        "fieldKey": "fps",
+        "default": 24
+      },
+      {
+        "name": "camerafixed",
+        "type": "BOOLEAN",
+        "required": true,
+        "description": "平台可能在提示词中追加固定摄像机指令，效果不保证。",
+        "fieldKey": "camerafixed",
+        "default": false
+      },
+      {
+        "name": "generate_audio",
+        "type": "BOOLEAN",
+        "required": true,
+        "description": "是否生成与画面同步的声音。开启后可能影响计费。",
+        "fieldKey": "generateAudio",
+        "default": false
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": -1,
+        "max": 2147483647,
+        "default": -1,
+        "description": "随机种子。-1 表示随机。",
+        "fieldKey": "seed"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "hidden": true,
+        "default": false,
+        "fieldKey": "watermark"
+      }
+    ]
+  },
+  {
+    "internal_name": "Seedance_1_5_I2V_API",
+    "class_name": "Seedance_1_5_I2V_API",
+    "display_name": "Seedance 1.5 Image To Video",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedance-1-5",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "firstFrameImage"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "视频生成提示词。描述希望生成的视频内容。Seedance 1.5 Pro 支持生成与画面同步的声音，建议将对话部分置于双引号内。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "480p",
+          "720p",
+          "1080p"
+        ],
+        "description": "分辨率+比例共同决定视频尺寸，具体尺寸请参考官方文档说明。",
+        "fieldKey": "resolution",
+        "default": "1080p"
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16",
+          "21:9",
+          "adaptive"
+        ],
+        "description": "视频宽高比。`adaptive` 表示自动匹配。",
+        "fieldKey": "ratio",
+        "default": "adaptive"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "min": 4,
+        "max": 12,
+        "description": "视频时长，单位秒。",
+        "fieldKey": "duration",
+        "default": 12
+      },
+      {
+        "name": "fps",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          24
+        ],
+        "description": "帧率固定为 24。",
+        "fieldKey": "fps",
+        "default": 24
+      },
+      {
+        "name": "camerafixed",
+        "type": "BOOLEAN",
+        "required": true,
+        "description": "平台可能在提示词中追加固定摄像机指令，效果不保证。",
+        "fieldKey": "camerafixed",
+        "default": false
+      },
+      {
+        "name": "generate_audio",
+        "type": "BOOLEAN",
+        "required": true,
+        "description": "是否生成与画面同步的声音。开启后可能影响计费。",
+        "fieldKey": "generateAudio",
+        "default": false
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": -1,
+        "max": 2147483647,
+        "default": -1,
+        "description": "随机种子。-1 表示随机。",
+        "fieldKey": "seed"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "hidden": true,
+        "default": false,
+        "fieldKey": "watermark"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "description": "尾帧图片。旧节点校验宽高比范围为 0.4 到 2.5。",
+        "fieldKey": "lastFrameImage",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "Seedance_2_0_REF_API",
+    "class_name": "Seedance_2_0_REF_API",
+    "display_name": "Seedance 2.0 References To Video",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedance-2-0",
+    "endpoint_category": "Reference To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "视频生成提示词。描述希望生成的视频内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "16:9",
+          "4:3",
+          "3:4",
+          "9:16"
+        ],
+        "description": "视频宽高比。",
+        "fieldKey": "ratio",
+        "default": "16:9"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          5,
+          10,
+          15
+        ],
+        "description": "视频时长，单位秒。",
+        "fieldKey": "duration",
+        "default": 5
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "description": "参考图，最多 4 张。旧节点对单张图片限制为 10MB。",
+        "fieldKey": "images",
+        "maxInputNum": 4
+      }
+    ]
+  },
+  {
+    "internal_name": "Seedance_2_0_JIMENG_DREAMACTOR_API",
+    "class_name": "Seedance_2_0_JIMENG_DREAMACTOR_API",
+    "display_name": "Jimeng DreamActor M20",
+    "category": "BizyTRD/Doubao",
+    "model_name": "dreamactor-2-0",
+    "endpoint_category": "Multimodal To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": true,
+        "description": "人物参考图。旧节点限制压缩后图片小于 4.7MB。",
+        "fieldKey": "image"
+      },
+      {
+        "name": "video",
+        "type": "VIDEO",
+        "required": true,
+        "description": "动作参考视频。旧节点校验视频不超过 30 秒，分辨率范围为 200x200 到 2048x1440。",
+        "fieldKey": "video"
+      },
+      {
+        "name": "duration",
+        "type": "FLOAT",
+        "hidden": true,
+        "description": "动作参考视频时长，单位秒。通过 doubao.video_duration 从 video 输入对象读取。",
+        "fieldKey": "duration",
+        "valueHook": "doubao.video_duration"
+      }
+    ]
   }
-
 ]

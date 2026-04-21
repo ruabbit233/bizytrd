@@ -2564,5 +2564,287 @@
         "valueHook": "doubao.video_duration"
       }
     ]
+  },
+  {
+    "internal_name": "Flux_Kontext_Pro_API",
+    "class_name": "Flux_Kontext_Pro_API",
+    "display_name": "Flux Kontext Pro API",
+    "category": "BizyTRD/Flux",
+    "model_name": "flux-kontext-pro",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像生成或编辑提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "21:9",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16"
+        ],
+        "description": "输出图像宽高比。",
+        "fieldKey": "aspect_ratio",
+        "default": "16:9"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 2147483647,
+        "default": 0,
+        "description": "随机种子。",
+        "fieldKey": "seed"
+      },
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": false,
+        "description": "可选输入参考图。",
+        "fieldKey": "image"
+      }
+    ]
+  },
+  {
+    "internal_name": "Flux_Kontext_Max_API",
+    "class_name": "Flux_Kontext_Max_API",
+    "display_name": "Flux Kontext Max API",
+    "category": "BizyTRD/Flux",
+    "model_name": "flux-kontext-max",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像生成或编辑提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "21:9",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16"
+        ],
+        "description": "输出图像宽高比。",
+        "fieldKey": "aspect_ratio",
+        "default": "16:9"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 2147483647,
+        "default": 0,
+        "description": "随机种子。",
+        "fieldKey": "seed"
+      },
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": false,
+        "description": "可选输入参考图。",
+        "fieldKey": "image"
+      }
+    ]
+  },
+  {
+    "internal_name": "Flux_2_Pro_API",
+    "class_name": "Flux_2_Pro_API",
+    "display_name": "Flux 2 Pro API",
+    "category": "BizyTRD/Flux",
+    "model_name": "flux-2-pro",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像生成或编辑提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 2147483647,
+        "default": 0,
+        "description": "随机种子。",
+        "fieldKey": "seed"
+      },
+      {
+        "name": "width",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "default": 1024,
+        "description": "输出宽度。必须为 16 的倍数；0 表示使用输入图片宽度。",
+        "fieldKey": "width",
+        "sendIf": "nonzero"
+      },
+      {
+        "name": "height",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "default": 1024,
+        "description": "输出高度。必须为 16 的倍数；0 表示使用输入图片高度。",
+        "fieldKey": "height",
+        "sendIf": "nonzero"
+      },
+      {
+        "name": "safety_tolerance",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 5,
+        "default": 2,
+        "description": "安全容忍度，值越大越宽松。",
+        "fieldKey": "safety_tolerance"
+      },
+      {
+        "name": "guidance",
+        "type": "FLOAT",
+        "required": true,
+        "min": 1.5,
+        "max": 10,
+        "default": 4.5,
+        "description": "引导强度，仅 flux-2-flex 支持。",
+        "fieldKey": "guidance"
+      },
+      {
+        "name": "steps",
+        "type": "INT",
+        "required": true,
+        "min": 1,
+        "max": 50,
+        "default": 50,
+        "description": "采样步数，仅 flux-2-flex 支持。",
+        "fieldKey": "steps"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "description": "可选输入参考图。flux-2-pro 最多 8 张，flux-2-flex 最多 10 张。",
+        "fieldKey": "imageUrls",
+        "maxInputNum": 8
+      }
+    ]
+  },
+  {
+    "internal_name": "Flux_2_Flex_API",
+    "class_name": "Flux_2_Flex_API",
+    "display_name": "Flux 2 Flex API",
+    "category": "BizyTRD/Flux",
+    "model_name": "flux-2-flex",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像生成或编辑提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 2147483647,
+        "default": 0,
+        "description": "随机种子。",
+        "fieldKey": "seed"
+      },
+      {
+        "name": "width",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "default": 1024,
+        "description": "输出宽度。必须为 16 的倍数；0 表示使用输入图片宽度。",
+        "fieldKey": "width",
+        "sendIf": "nonzero"
+      },
+      {
+        "name": "height",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "default": 1024,
+        "description": "输出高度。必须为 16 的倍数；0 表示使用输入图片高度。",
+        "fieldKey": "height",
+        "sendIf": "nonzero"
+      },
+      {
+        "name": "safety_tolerance",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 5,
+        "default": 2,
+        "description": "安全容忍度，值越大越宽松。",
+        "fieldKey": "safety_tolerance"
+      },
+      {
+        "name": "guidance",
+        "type": "FLOAT",
+        "required": true,
+        "min": 1.5,
+        "max": 10,
+        "default": 4.5,
+        "description": "引导强度，仅 flux-2-flex 支持。",
+        "fieldKey": "guidance"
+      },
+      {
+        "name": "steps",
+        "type": "INT",
+        "required": true,
+        "min": 1,
+        "max": 50,
+        "default": 50,
+        "description": "采样步数，仅 flux-2-flex 支持。",
+        "fieldKey": "steps"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "description": "可选输入参考图。flux-2-pro 最多 8 张，flux-2-flex 最多 10 张。",
+        "fieldKey": "imageUrls",
+        "maxInputNum": 10
+      }
+    ]
   }
 ]

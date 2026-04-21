@@ -51,6 +51,9 @@
 
 - `internal`
   - 节点输入存在，但不直接发给后端
+- `hidden`
+  - 节点输入不展示在 UI 中，但仍按普通字段参与 payload 构建
+  - 运行时未传同名值时使用 `default`
 - `maxInputNum`
   - 多输入媒体的最大数量。只要媒体参数的 `maxInputNum > 1`，运行时就会把它当作多输入媒体，并生成对应的额外输入口与自动 `inputcount`
 - `sendIf`

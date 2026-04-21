@@ -166,6 +166,22 @@ def _build_media_context(
     return context
 
 
+def _kwargs_with_hidden_defaults(
+    model_def: dict[str, Any],
+    kwargs: dict[str, Any],
+) -> dict[str, Any]:
+    resolved = dict(kwargs)
+    for param in model_def.get("params", []):
+        if not param.get("hidden"):
+            continue
+        if param.get("type") in {"IMAGE", "VIDEO", "AUDIO"}:
+            continue
+        name = param["name"]
+        if name not in resolved and "default" in param:
+            resolved[name] = param["default"]
+    return resolved
+
+
 def _resolve_value_hook(hook_name: str):
     parts = str(hook_name).split(".")
     if len(parts) != 2 or not all(parts):
@@ -283,9 +299,10 @@ def build_payload_for_model(
     config: dict[str, Any],
     kwargs: dict[str, Any],
 ) -> dict[str, Any]:
-    media_context = _build_media_context(model_def, config, kwargs)
+    input_values = _kwargs_with_hidden_defaults(model_def, kwargs)
+    media_context = _build_media_context(model_def, config, input_values)
     payload: dict[str, Any] = {"model": _resolve_model_value(model_def, kwargs)}
-    hook_kwargs = dict(kwargs)
+    hook_kwargs = dict(input_values)
     hook_kwargs["__resolved_model__"] = payload["model"]
 
     for param in model_def.get("params", []):
@@ -304,7 +321,7 @@ def build_payload_for_model(
         if param.get("internal"):
             continue
 
-        raw_value = kwargs.get(param["name"])
+        raw_value = input_values.get(param["name"])
         value = _apply_value_hook(param, raw_value, hook_kwargs, media_context)
         if not _should_include_param(param, value, hook_kwargs, media_context):
             continue

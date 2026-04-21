@@ -265,6 +265,40 @@ def test_string_input_can_be_forced_to_socket_for_config_consumers():
     )
 
 
+def test_hidden_params_are_not_exposed_in_input_types():
+    model_def = {
+        "internal_name": "BizyTRD_HiddenParamNode",
+        "class_name": "BizyTRDHiddenParamNode",
+        "display_name": "BizyTRD Hidden Param Node",
+        "category": "BizyTRD/Test",
+        "model_name": "hidden-param-model",
+        "endpoint_category": "Text To Image",
+        "params": [
+            {
+                "name": "prompt",
+                "fieldKey": "prompt",
+                "type": "STRING",
+                "required": True,
+            },
+            {
+                "name": "watermark",
+                "fieldKey": "watermark",
+                "type": "BOOLEAN",
+                "required": False,
+                "default": False,
+                "hidden": True,
+            },
+        ],
+    }
+
+    node_cls = create_node_class(model_def)
+    input_types = node_cls.INPUT_TYPES()
+
+    assert "prompt" in input_types["required"]
+    assert "watermark" not in input_types["required"]
+    assert "watermark" not in input_types["optional"]
+
+
 def test_resolve_endpoint_falls_back_to_legacy_api_node_without_endpoint_category():
     model_def = {
         "internal_name": "BizyTRD_LegacyNode",

@@ -276,6 +276,71 @@ def test_not_default_send_condition_uses_default_field():
     assert build_payload_for_model(model_def, {}, {"style": "cinematic"})["style"] == "cinematic"
 
 
+def test_hidden_param_uses_default_value_in_payload():
+    model_def = {
+        "model_name": "test-model",
+        "endpoint_category": "Text To Image",
+        "params": [
+            {
+                "name": "watermark",
+                "fieldKey": "watermark",
+                "type": "BOOLEAN",
+                "required": False,
+                "default": False,
+                "hidden": True,
+            }
+        ],
+    }
+
+    payload = build_payload_for_model(model_def, {}, {})
+
+    assert payload["watermark"] is False
+
+
+def test_hidden_param_can_still_use_value_hook_and_send_condition():
+    model_def = {
+        "model_name": "test-model",
+        "endpoint_category": "Text To Image",
+        "params": [
+            {
+                "name": "metadata",
+                "fieldKey": "metadata",
+                "type": "STRING",
+                "required": False,
+                "default": '{"source": "bizytrd"}',
+                "hidden": True,
+                "valueHook": "common.json_loads",
+                "sendIf": "non_empty",
+            }
+        ],
+    }
+
+    payload = build_payload_for_model(model_def, {}, {})
+
+    assert payload["metadata"] == {"source": "bizytrd"}
+
+
+def test_internal_param_remains_visible_but_is_not_sent_to_payload():
+    model_def = {
+        "model_name": "test-model",
+        "endpoint_category": "Text To Image",
+        "params": [
+            {
+                "name": "custom_width",
+                "fieldKey": "custom_width",
+                "type": "INT",
+                "required": False,
+                "default": 1024,
+                "internal": True,
+            }
+        ],
+    }
+
+    payload = build_payload_for_model(model_def, {}, {"custom_width": 2048})
+
+    assert "custom_width" not in payload
+
+
 def test_registry_uses_script_path_value_hooks():
     import json
     from pathlib import Path

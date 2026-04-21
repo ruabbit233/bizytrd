@@ -214,6 +214,9 @@ def _iter_param_inputs(
     param: dict[str, Any],
     params_by_name: dict[str, dict[str, Any]],
 ) -> list[tuple[str, tuple[Any, ...], bool]]:
+    if _param_truthy(param, "hidden"):
+        return []
+
     input_name = param["name"]
     input_def = _build_input_def(param)
     entries: list[tuple[str, tuple[Any, ...], bool]] = []

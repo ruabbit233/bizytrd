@@ -113,6 +113,8 @@ def _build_input_def(param: dict[str, Any]):
             options["min"] = int(param["min"])
         if "max" in param:
             options["max"] = int(param["max"])
+        if "step" in param:
+            options["step"] = int(param["step"])
         if description:
             options["description"] = description
         return ("INT", options)
@@ -122,6 +124,8 @@ def _build_input_def(param: dict[str, Any]):
             options["min"] = float(param["min"])
         if "max" in param:
             options["max"] = float(param["max"])
+        if "step" in param:
+            options["step"] = float(param["step"])
         if description:
             options["description"] = description
         return ("FLOAT", options)

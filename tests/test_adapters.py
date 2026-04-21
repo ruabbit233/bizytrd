@@ -363,6 +363,93 @@ def test_hidden_duration_param_can_read_video_duration_with_hook():
     assert payload["duration"] == 12.5
 
 
+def test_gemini_operation_prompt_hook_uses_media_and_internal_controls():
+    model_def = {
+        "model_name": "gemini-2.5-flash-image",
+        "endpoint_category": "",
+        "params": [
+            {
+                "name": "images",
+                "fieldKey": "urls",
+                "type": "IMAGE",
+                "required": False,
+                "maxInputNum": 2,
+            },
+            {
+                "name": "prompt",
+                "fieldKey": "prompt",
+                "type": "STRING",
+                "required": True,
+                "valueHook": "gemini.operation_prompt",
+            },
+            {
+                "name": "operation",
+                "fieldKey": "operation",
+                "type": "LIST",
+                "required": False,
+                "default": "style_transfer",
+                "internal": True,
+            },
+            {
+                "name": "aspect_ratio",
+                "fieldKey": "aspect_ratio",
+                "type": "LIST",
+                "required": False,
+                "default": "16:9",
+            },
+            {
+                "name": "character_consistency",
+                "fieldKey": "character_consistency",
+                "type": "BOOLEAN",
+                "required": False,
+                "default": True,
+                "internal": True,
+            },
+            {
+                "name": "quality",
+                "fieldKey": "quality",
+                "type": "LIST",
+                "required": False,
+                "default": "high",
+                "internal": True,
+            },
+        ],
+    }
+
+    from unittest.mock import patch
+
+    with patch("bizytrd.core.adapters._build_media_context") as build_media_context:
+        build_media_context.return_value = {
+            "images": {
+                "values": ["image-a"],
+                "urls": ["https://example.com/image-a.webp"],
+                "count": 1,
+            }
+        }
+        payload = build_payload_for_model(
+            model_def,
+            {},
+            {
+                "images": "image-a",
+                "prompt": "watercolor portrait",
+                "operation": "style_transfer",
+                "aspect_ratio": "16:9",
+                "character_consistency": True,
+                "quality": "high",
+            },
+        )
+
+    assert payload["urls"] == ["https://example.com/image-a.webp"]
+    assert payload["prompt"] == (
+        "Apply the style from the reference images to create: watercolor portrait. "
+        "Blend the stylistic elements naturally. in widescreen landscape format. "
+        "Maintain character consistency and visual identity from the reference images. "
+        "Use the highest quality settings available."
+    )
+    assert "operation" not in payload
+    assert "quality" not in payload
+
+
 def test_internal_param_remains_visible_but_is_not_sent_to_payload():
     model_def = {
         "model_name": "test-model",

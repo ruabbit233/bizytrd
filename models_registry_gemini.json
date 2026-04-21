@@ -1,0 +1,421 @@
+[
+  {
+    "internal_name": "NanoBanana",
+    "class_name": "NanoBanana",
+    "display_name": "NanoBanana",
+    "category": "BizyTRD/Gemini",
+    "model_name": "gemini-2.5-flash-image",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "description": "可选参考图，最多 5 张。",
+        "fieldKey": "urls",
+        "maxInputNum": 5
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "基础提示词。发送前会根据 operation、参考图和质量选项组装为实际提示词。",
+        "fieldKey": "prompt",
+        "valueHook": "gemini.operation_prompt"
+      },
+      {
+        "name": "operation",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "generate",
+          "edit",
+          "style_transfer",
+          "object_insertion"
+        ],
+        "description": "图像操作类型。仅用于组装实际提示词，不直接发送。",
+        "fieldKey": "operation",
+        "default": "generate",
+        "internal": true
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.05,
+        "default": 1.0,
+        "description": "采样温度。",
+        "fieldKey": "temperature"
+      },
+      {
+        "name": "top_p",
+        "type": "FLOAT",
+        "required": true,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.05,
+        "default": 1.0,
+        "description": "Top-p 采样参数。",
+        "fieldKey": "top_p"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 2147483647,
+        "default": 0,
+        "description": "随机种子。",
+        "fieldKey": "seed"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "min": 1,
+        "max": 8192,
+        "default": 8192,
+        "description": "最大输出 token 数。",
+        "fieldKey": "max_tokens"
+      },
+      {
+        "name": "quality",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "standard",
+          "high"
+        ],
+        "description": "图像生成质量。仅用于组装实际提示词，不直接发送。",
+        "fieldKey": "quality",
+        "default": "high",
+        "internal": true
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "1:1",
+          "16:9",
+          "9:16",
+          "4:3",
+          "3:4",
+          "auto"
+        ],
+        "description": "输出图像宽高比。`auto` 不直接发送。",
+        "fieldKey": "aspect_ratio",
+        "default": "auto",
+        "sendIf": "not_default"
+      },
+      {
+        "name": "character_consistency",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "使用参考图时保持角色一致性。仅用于组装实际提示词，不直接发送。",
+        "fieldKey": "character_consistency",
+        "default": true,
+        "internal": true
+      }
+    ]
+  },
+  {
+    "internal_name": "NanoBananaPro",
+    "class_name": "NanoBananaPro",
+    "display_name": "NanoBananaPro",
+    "category": "BizyTRD/Gemini",
+    "model_name": "gemini-3-pro-image-preview",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "description": "可选参考图，最多 14 张。",
+        "fieldKey": "urls",
+        "maxInputNum": 14
+      },
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official",
+        "internal": true
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "基础提示词。发送前会根据 operation、参考图和质量选项组装为实际提示词。",
+        "fieldKey": "prompt",
+        "valueHook": "gemini.operation_prompt"
+      },
+      {
+        "name": "operation",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "generate",
+          "edit",
+          "style_transfer",
+          "object_insertion"
+        ],
+        "description": "图像操作类型。仅用于组装实际提示词，不直接发送。",
+        "fieldKey": "operation",
+        "default": "generate",
+        "internal": true
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.05,
+        "default": 1.0,
+        "description": "采样温度。",
+        "fieldKey": "temperature"
+      },
+      {
+        "name": "top_p",
+        "type": "FLOAT",
+        "required": true,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.05,
+        "default": 0.95,
+        "description": "Top-p 采样参数。",
+        "fieldKey": "top_p"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 2147483647,
+        "default": 0,
+        "description": "随机种子。",
+        "fieldKey": "seed"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "min": 1,
+        "max": 32768,
+        "default": 32768,
+        "description": "最大输出 token 数。",
+        "fieldKey": "max_tokens"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1:1",
+          "2:3",
+          "3:2",
+          "3:4",
+          "4:3",
+          "4:5",
+          "5:4",
+          "9:16",
+          "16:9",
+          "21:9",
+          "auto"
+        ],
+        "description": "输出图像宽高比。`auto` 不直接发送。",
+        "fieldKey": "aspect_ratio",
+        "default": "auto",
+        "sendIf": "not_default"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1K",
+          "2K",
+          "4K",
+          "auto"
+        ],
+        "description": "输出分辨率。`auto` 不直接发送。",
+        "fieldKey": "resolution",
+        "default": "auto",
+        "sendIf": "not_default"
+      },
+      {
+        "name": "quality",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "standard",
+          "high"
+        ],
+        "description": "图像生成质量。仅用于组装实际提示词，不直接发送。",
+        "fieldKey": "quality",
+        "default": "high",
+        "internal": true
+      },
+      {
+        "name": "character_consistency",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "使用参考图时保持角色一致性。仅用于组装实际提示词，不直接发送。",
+        "fieldKey": "character_consistency",
+        "default": true,
+        "internal": true
+      }
+    ]
+  },
+  {
+    "internal_name": "NanoBanana2",
+    "class_name": "NanoBanana2",
+    "display_name": "NanoBanana 2",
+    "category": "BizyTRD/Gemini",
+    "model_name": "gemini-3.1-flash-image-preview",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "description": "可选参考图，最多 14 张。",
+        "fieldKey": "urls",
+        "maxInputNum": 14
+      },
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official 表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official",
+        "internal": true
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.05,
+        "default": 1.0,
+        "description": "采样温度。",
+        "fieldKey": "temperature"
+      },
+      {
+        "name": "top_p",
+        "type": "FLOAT",
+        "required": true,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.05,
+        "default": 0.95,
+        "description": "Top-p 采样参数。",
+        "fieldKey": "top_p"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 2147483647,
+        "default": 0,
+        "description": "随机种子。",
+        "fieldKey": "seed"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "min": 1,
+        "max": 32768,
+        "default": 32768,
+        "description": "最大输出 token 数。",
+        "fieldKey": "max_tokens"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1:1",
+          "1:4",
+          "4:1",
+          "1:8",
+          "8:1",
+          "2:3",
+          "3:2",
+          "3:4",
+          "4:3",
+          "4:5",
+          "5:4",
+          "9:16",
+          "16:9",
+          "21:9",
+          "auto"
+        ],
+        "description": "输出图像宽高比。`auto` 不直接发送。",
+        "fieldKey": "aspect_ratio",
+        "default": "auto",
+        "sendIf": "not_default"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1K",
+          "2K",
+          "4K",
+          "auto"
+        ],
+        "description": "输出分辨率。`auto` 不直接发送。",
+        "fieldKey": "resolution",
+        "default": "auto",
+        "sendIf": "not_default"
+      },
+      {
+        "name": "thinking_level",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "disabled"
+        ],
+        "description": "思考等级。当前旧节点仅暴露 disabled，因此默认不发送。",
+        "fieldKey": "thinking_level",
+        "default": "disabled",
+        "sendIf": "not_default"
+      }
+    ]
+  }
+]

@@ -265,6 +265,45 @@ def test_string_input_can_be_forced_to_socket_for_config_consumers():
     )
 
 
+def test_numeric_inputs_preserve_step_metadata():
+    model_def = {
+        "internal_name": "BizyTRD_StepNode",
+        "class_name": "BizyTRDStepNode",
+        "display_name": "BizyTRD Step Node",
+        "category": "BizyTRD/Test",
+        "model_name": "step-model",
+        "endpoint_category": "Text To Image",
+        "params": [
+            {
+                "name": "temperature",
+                "fieldKey": "temperature",
+                "type": "FLOAT",
+                "required": False,
+                "default": 1.0,
+                "min": 0.0,
+                "max": 2.0,
+                "step": 0.05,
+            },
+            {
+                "name": "steps",
+                "fieldKey": "steps",
+                "type": "INT",
+                "required": False,
+                "default": 50,
+                "min": 1,
+                "max": 100,
+                "step": 5,
+            },
+        ],
+    }
+
+    node_cls = create_node_class(model_def)
+    input_types = node_cls.INPUT_TYPES()
+
+    assert input_types["optional"]["temperature"][1]["step"] == 0.05
+    assert input_types["optional"]["steps"][1]["step"] == 5
+
+
 def test_hidden_params_are_not_exposed_in_input_types():
     model_def = {
         "internal_name": "BizyTRD_HiddenParamNode",

@@ -24,4 +24,6 @@ def json_loads(
 ) -> Any:
     if _is_blank(value):
         return None
+    if isinstance(value, (list, dict)):
+        return value
     return json.loads(str(value))

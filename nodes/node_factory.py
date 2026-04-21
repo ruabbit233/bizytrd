@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from ..core.base import BizyTRDBaseNode
+from .manual import get_manual_node_mappings
 
 
 _MEDIA_UI_ORDER = {
@@ -91,14 +92,14 @@ def _build_input_def(param: dict[str, Any]):
     description = _param_description(param)
 
     if param_type == "STRING":
-        return (
-            "STRING",
-            {
-                "default": default or "",
-                "multiline": bool(_param_value(param, "multiline", default=False)),
-                "description": description,
-            },
-        )
+        options = {
+            "default": default or "",
+            "multiline": bool(_param_value(param, "multiline", default=False)),
+            "description": description,
+        }
+        if _param_truthy(param, "forceInput"):
+            options["forceInput"] = True
+        return ("STRING", options)
     if param_type == "INT":
         options = {"default": int(default or 0)}
         if "min" in param:
@@ -334,5 +335,16 @@ def create_all_nodes():
         node_class = create_node_class(model_def)
         class_mappings[model_def["internal_name"]] = node_class
         display_mappings[model_def["internal_name"]] = model_def["display_name"]
+
+    manual_classes, manual_displays = get_manual_node_mappings()
+    duplicate_names = sorted(set(class_mappings) & set(manual_classes))
+    if duplicate_names:
+        raise ValueError(
+            "Manual bizytrd node registration conflicts with registry nodes: "
+            + ", ".join(duplicate_names)
+        )
+
+    class_mappings.update(manual_classes)
+    display_mappings.update(manual_displays)
 
     return class_mappings, display_mappings

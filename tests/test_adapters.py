@@ -26,6 +26,54 @@ def test_build_payload_uses_value_hook_instead_of_transform():
     assert payload["payload_json"] == {"a": 1}
 
 
+def test_config_consumer_can_decode_json_config_value():
+    model_def = {
+        "model_name": "kling-o3-t2v",
+        "endpoint_category": "Text To Video",
+        "params": [
+            {
+                "name": "multi_prompt",
+                "fieldKey": "multi_prompt",
+                "type": "STRING",
+                "valueHook": "common.json_loads",
+                "required": False,
+            }
+        ],
+    }
+
+    payload = build_payload_for_model(
+        model_def,
+        {},
+        {"multi_prompt": '[{"prompt": "first", "duration": 3}]'},
+    )
+
+    assert payload["multi_prompt"] == [{"prompt": "first", "duration": 3}]
+
+
+def test_config_json_hook_passes_through_structured_config_values():
+    model_def = {
+        "model_name": "doubao-seedream-5-0-260128",
+        "endpoint_category": "",
+        "params": [
+            {
+                "name": "tools",
+                "fieldKey": "tools",
+                "type": "STRING",
+                "valueHook": "common.json_loads",
+                "required": False,
+            }
+        ],
+    }
+
+    payload = build_payload_for_model(
+        model_def,
+        {},
+        {"tools": ["web_search"]},
+    )
+
+    assert payload["tools"] == ["web_search"]
+
+
 def test_build_payload_appends_normalized_channel_to_model_name():
     model_def = {
         "model_name": "nano-banana-pro",

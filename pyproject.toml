@@ -11,8 +11,8 @@ requires-python = ">=3.10"
 dependencies = ["requests", "aiohttp"]
 
 [tool.setuptools]
-packages = ["bizytrd", "bizytrd.core", "bizytrd.nodes", "bizytrd_sdk"]
-package-dir = { "bizytrd" = ".", "bizytrd.core" = "core", "bizytrd.nodes" = "nodes", "bizytrd_sdk" = "bizytrd_sdk" }
+packages = ["bizytrd", "bizytrd.core", "bizytrd.nodes", "bizytrd.nodes.manual", "bizytrd_sdk"]
+package-dir = { "bizytrd" = ".", "bizytrd.core" = "core", "bizytrd.nodes" = "nodes", "bizytrd.nodes.manual" = "nodes/manual", "bizytrd_sdk" = "bizytrd_sdk" }
 include-package-data = true
 
 [tool.setuptools.package-data]

@@ -230,6 +230,41 @@ def test_input_types_adds_auto_inputcount_for_singular_video_name():
     assert "video_3" in input_types["optional"]
 
 
+def test_string_input_can_be_forced_to_socket_for_config_consumers():
+    model_def = {
+        "internal_name": "BizyTRD_ConfigConsumer",
+        "class_name": "BizyTRDConfigConsumer",
+        "display_name": "BizyTRD Config Consumer",
+        "category": "BizyTRD/Test",
+        "model_name": "config-consumer",
+        "endpoint_category": "Chat",
+        "params": [
+            {
+                "name": "tools",
+                "fieldKey": "tools",
+                "type": "STRING",
+                "required": False,
+                "default": "[]",
+                "forceInput": True,
+                "description": "Config JSON from a manual config node.",
+            }
+        ],
+    }
+
+    node_cls = create_node_class(model_def)
+    input_def = node_cls.INPUT_TYPES()["optional"]["tools"]
+
+    assert input_def == (
+        "STRING",
+        {
+            "default": "[]",
+            "multiline": False,
+            "description": "Config JSON from a manual config node.",
+            "forceInput": True,
+        },
+    )
+
+
 def test_resolve_endpoint_falls_back_to_legacy_api_node_without_endpoint_category():
     model_def = {
         "internal_name": "BizyTRD_LegacyNode",

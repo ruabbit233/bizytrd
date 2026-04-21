@@ -1,0 +1,126 @@
+[
+  {
+    "internal_name": "Grok_Imagine_Video__API",
+    "class_name": "Grok_Imagine_Video_API",
+    "display_name": "Grok Imagine Video",
+    "category": "BizyTRD/Grok",
+    "model_name": "grok-imagine-video",
+    "endpoint_category": "Image To Image",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "chennel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "视频生成提示词。旧节点校验长度为 5 到 20000 字符。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "min": 6,
+        "max": 30,
+        "default": 6,
+        "description": "视频时长，单位秒。",
+        "fieldKey": "duration"
+      },
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": false,
+        "description": "可选参考图。",
+        "fieldKey": "imageUrls",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "9:16",
+          "16:9",
+          "1:1",
+          "2:3",
+          "3:2"
+        ],
+        "description": "视频宽高比。",
+        "fieldKey": "aspectRatio",
+        "default": "16:9"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "480p",
+          "720p"
+        ],
+        "description": "输出分辨率。",
+        "fieldKey": "resolution",
+        "default": "720p"
+      }
+    ]
+  },
+  {
+    "internal_name": "Grok_Imagine_Video_Edit_API",
+    "class_name": "Grok_Imagine_Video_Edit_API",
+    "display_name": "Grok Imagine Video Edit",
+    "category": "BizyTRD/Grok",
+    "model_name": "grok-imagine-video-edit",
+    "endpoint_category": "Video To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "video",
+        "type": "VIDEO",
+        "required": false,
+        "description": "输入待编辑视频。旧节点校验时长为 1 到 8 秒、大小小于 50MB。",
+        "fieldKey": "videoUrls"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "视频编辑提示词。旧节点校验长度为 5 到 800 字符。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "480p",
+          "720p"
+        ],
+        "description": "输出分辨率。",
+        "fieldKey": "resolution",
+        "default": "720p"
+      },
+      {
+        "name": "duration",
+        "type": "FLOAT",
+        "hidden": true,
+        "description": "输入视频时长，单位秒。从 video 输入对象读取。",
+        "fieldKey": "duration",
+        "valueHook": "common.video_duration"
+      }
+    ]
+  }
+]

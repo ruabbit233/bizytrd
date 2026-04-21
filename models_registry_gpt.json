@@ -1,0 +1,102 @@
+[
+  {
+    "internal_name": "GPT_IMAGE_1_T2I_API",
+    "class_name": "GPT_IMAGE_1_T2I_API",
+    "display_name": "GPT Image 1 Text To Image",
+    "category": "BizyTRD/OpenAI",
+    "model_name": "gpt-image-1",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像生成提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1:1",
+          "2:3",
+          "3:2"
+        ],
+        "description": "输出图像比例。",
+        "fieldKey": "size",
+        "default": "1:1"
+      },
+      {
+        "name": "variants",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          1,
+          2,
+          4
+        ],
+        "description": "生成图片数量。旧节点在 variants=4 时会设置 provider=KieAI；当前草稿未表达该条件字段。",
+        "fieldKey": "variants",
+        "default": 1
+      }
+    ]
+  },
+  {
+    "internal_name": "GPT_IMAGE_EDIT_API",
+    "class_name": "GPT_IMAGE_EDIT_API",
+    "display_name": "GPT Image Edit",
+    "category": "BizyTRD/OpenAI",
+    "model_name": "gpt-image-1",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "description": "输入参考图。(当前数量只是示例，实际支持数量请参考模型说明)",
+        "fieldKey": "urls",
+        "maxInputNum": 8
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像编辑提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1:1",
+          "2:3",
+          "3:2"
+        ],
+        "description": "输出图像比例。",
+        "fieldKey": "size",
+        "default": "1:1"
+      },
+      {
+        "name": "variants",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          1,
+          2,
+          4
+        ],
+        "description": "生成图片数量。旧节点在 variants=4 时会设置 provider=KieAI；当前草稿未表达该条件字段。",
+        "fieldKey": "variants",
+        "default": 1
+      }
+    ]
+  }
+]

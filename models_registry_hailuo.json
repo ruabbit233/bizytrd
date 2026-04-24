@@ -1,0 +1,148 @@
+[
+  {
+    "internal_name": "Hailuo_2_3_T2V",
+    "class_name": "Hailuo_2_3_T2V",
+    "display_name": "Hailuo 2.3 Text To Video",
+    "category": "BizyTRD/Hailuo",
+    "model_name": "MiniMax-Hailuo-2-3",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "视频生成提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          6,
+          10
+        ],
+        "description": "视频时长，单位秒。旧节点不支持 1080P + 10s 组合。",
+        "fieldKey": "duration",
+        "default": 6
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "768P",
+          "1080P"
+        ],
+        "description": "输出分辨率。旧节点不支持 1080P + 10s 组合。",
+        "fieldKey": "resolution",
+        "default": "1080P"
+      }
+    ]
+  },
+  {
+    "internal_name": "Hailuo_2_3_I2V",
+    "class_name": "Hailuo_2_3_I2V",
+    "display_name": "Hailuo 2.3 Image To Video",
+    "category": "BizyTRD/Hailuo",
+    "model_name": "MiniMax-Hailuo-2-3",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "description": "输入首帧图片。",
+        "fieldKey": "first_frame_image"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "视频生成提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          6,
+          10
+        ],
+        "description": "视频时长，单位秒。旧节点不支持 1080P + 10s 组合。",
+        "fieldKey": "duration",
+        "default": 6
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "768P",
+          "1080P"
+        ],
+        "description": "输出分辨率。旧节点不支持 1080P + 10s 组合。",
+        "fieldKey": "resolution",
+        "default": "1080P"
+      }
+    ]
+  },
+  {
+    "internal_name": "Hailuo_2_3_Fast_I2V",
+    "class_name": "Hailuo_2_3_Fast_I2V",
+    "display_name": "Hailuo 2.3 Fast Image To Video",
+    "category": "BizyTRD/Hailuo",
+    "model_name": "MiniMax-Hailuo-2-3-fast",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "description": "输入首帧图片。",
+        "fieldKey": "first_frame_image"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "视频生成提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          6,
+          10
+        ],
+        "description": "视频时长，单位秒。旧节点不支持 1080P + 10s 组合。",
+        "fieldKey": "duration",
+        "default": 6
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "768P",
+          "1080P"
+        ],
+        "description": "输出分辨率。旧节点不支持 1080P + 10s 组合。",
+        "fieldKey": "resolution",
+        "default": "1080P"
+      }
+    ]
+  }
+]

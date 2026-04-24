@@ -8,7 +8,10 @@ import json
 import logging
 import os
 from abc import ABC
+from fractions import Fraction
 from typing import Any
+import torch
+import numpy as np
 
 from bizytrd_sdk import AsyncBizyTRD
 
@@ -57,6 +60,88 @@ def _load_placeholder_image():
                 _placeholder_img = None
     return _placeholder_img
 
+def _make_placeholder_image(error_msg: str) -> torch.Tensor:
+    """Generate a 512x512 red-tinted image with error text burned in.
+    Returns a ComfyUI IMAGE tensor (1, H, W, 3) float32 in [0,1].
+    """
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+        img = _render_placeholder_canvas(error_msg, Image, ImageDraw, ImageFont)
+        arr = np.array(img).astype(np.float32) / 255.0
+        return torch.from_numpy(arr).unsqueeze(0)
+    except Exception:
+        arr = np.zeros((512, 512, 3), dtype=np.float32)
+        arr[:, :, 0] = 0.3
+        return torch.from_numpy(arr).unsqueeze(0)
+
+
+def _render_placeholder_canvas(error_msg: str, Image, ImageDraw, ImageFont):
+    width, height = 512, 512
+    img = Image.new("RGB", (width, height), (80, 10, 10))
+    draw = ImageDraw.Draw(img)
+    try:
+        font = ImageFont.truetype("arial.ttf", 18)
+        title_font = ImageFont.truetype("arial.ttf", 28)
+    except Exception:
+        font = ImageFont.load_default()
+        title_font = font
+
+    draw.rectangle((0, 0, width - 1, height - 1), outline=(210, 60, 60), width=6)
+    draw.text((20, 18), "BizyTRD Error", fill=(255, 220, 220), font=title_font)
+
+    margin = 20
+    content_top = 70
+    max_width = width - 2 * margin
+    lines = []
+    normalized_msg = str(error_msg).strip() or "Unknown BizyTRD error"
+    for paragraph in normalized_msg.split("\n"):
+        words = paragraph.split() or [""]
+        cur = ""
+        for word in words:
+            test = f"{cur} {word}".strip()
+            bbox = draw.textbbox((0, 0), test, font=font)
+            if bbox[2] - bbox[0] > max_width and cur:
+                lines.append(cur)
+                cur = word
+            else:
+                cur = test
+        if cur:
+            lines.append(cur)
+
+    y = content_top
+    for line in lines:
+        draw.text((margin, y), line, fill=(255, 200, 200), font=font)
+        y += 22
+        if y > height - 24:
+            break
+
+    return img
+
+
+def _make_placeholder_video(error_msg: str):
+    """Generate a short placeholder video that Save Video can round-trip."""
+    try:
+        from comfy_api.latest import InputImpl, Types
+
+        # Prefer ComfyUI's native video type so Save Video can re-encode it
+        # through the same H264/MP4 path used by built-in nodes.
+        placeholder_frame = _make_placeholder_image(error_msg)
+        placeholder_frames = placeholder_frame.repeat(24, 1, 1, 1)
+        return InputImpl.VideoFromComponents(
+            Types.VideoComponents(
+                images=placeholder_frames,
+                frame_rate=Fraction(12, 1),
+            )
+        )
+    except Exception as exc:
+        logging.warning(
+            "Failed to build dynamic placeholder video from components: %s",
+            exc,
+        )
+        fallback = _load_placeholder_video()
+        if fallback is not None:
+            return fallback
+        return None
 
 def _load_placeholder_video():
     global _placeholder_video
@@ -154,39 +239,47 @@ class BizyTRDBaseNode(ABC):
             e = api_err
         finally:
             await _trd_api_counter.increment(-1)
+            skip_error = kwargs.get("skip_error", False)
             if e is not None:
                 # If other concurrent tasks are still running, return placeholders silently
-                if await _trd_api_counter.value() > 0:
+                # if await _trd_api_counter.value() > 0:
+                # 新版改为只要当前任务的参数里设置了 skip_error 为 true 就返回占位符，不管是否有其他并发任务了
+                if skip_error:
                     logging.error(
                         f"BizyTRD task failed (silently because of other tasks executing in parallel), error: {str(e)}"
                     )
-                    global _placeholder_img, _placeholder_video
-                    _placeholder_img = _load_placeholder_image()
-                    _placeholder_video = _load_placeholder_video()
-
+                    error_msg = str(e)
                     urls_str = ""
                     if len(self.original_urls) > 0:
-                        urls_str = json.dumps(list(self.original_urls))
+                        urls_str = json.dumps(sorted(self.original_urls))
                         logging.error(
-                            f"原始输出下载地址: {urls_str}，请手动下载。\n错误信息: {str(e)}"
+                            f"原始输出下载地址: {urls_str}，请手动下载。\n错误信息: {error_msg}"
                         )
+                    placeholder_video = []
+                    placeholder_image = []
+                    if self.OUTPUT_TYPE == "video":
+                        video = _make_placeholder_video(error_msg)
+                        if video is not None:
+                            placeholder_video = [video]
+                    elif self.OUTPUT_TYPE == "image":
+                        placeholder_image = [_make_placeholder_image(error_msg)]
                     outputs = [
-                        [_placeholder_video] if _placeholder_video else [],
-                        [_placeholder_img] if _placeholder_img else [],
+                        placeholder_video,
+                        placeholder_image,
                         [],
-                        [str(e)],
+                        [error_msg],
                         urls_str,
                     ]
                 else:
                     # No concurrent tasks, raise normally
+                    # 如果 skip_error 没有设置为 true，直接抛出错误，不返回占位符了
                     if len(self.original_urls) > 0:
-                        urls_str = json.dumps(list(self.original_urls))
+                        urls_str = json.dumps(sorted(self.original_urls))
                         raise RuntimeError(
                             f"原始输出下载地址: {urls_str}，请手动下载。\n错误信息: {str(e)}"
                         ) from e
                     else:
                         raise e
-
         return self.handle_outputs(outputs)
 
     async def _create_task_and_wait(

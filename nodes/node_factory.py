@@ -311,6 +311,15 @@ def create_node_class(model_def: dict[str, Any]) -> type:
             else:
                 optional[input_name] = input_def
 
+    # 所有节点加入skip_error字段，开启后遇到错误不中断工作流，输出对应类型的错误占位符
+    optional["skip_error"] = (
+        "BOOLEAN",
+        {
+            "default": False,
+            "description": "开启后遇到错误不中断工作流，输出对应类型的错误占位符",
+        },
+    )
+
     return_types, return_names = _return_signature(model_def.get("output_type", "string"))
     class_name = model_def["class_name"]
     model_name = model_def["model_name"]

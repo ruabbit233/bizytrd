@@ -252,7 +252,7 @@ class AsyncBizyTRD:
         *,
         prompt_id: str | None = None,
     ) -> TaskHandle:
-        url = f"{self.config.base_url.rstrip('/')}/trd_api/{api_node}"
+        url = f"{self.config.base_url.rstrip('/')}/modelzoo/tasks/{api_node}"
         headers = self._build_headers(prompt_id=prompt_id)
         json_payload = json.dumps(payload).encode("utf-8")
 
@@ -293,7 +293,7 @@ class AsyncBizyTRD:
         *,
         prompt_id: str | None = None,
     ) -> dict[str, Any]:
-        url = f"{self.config.base_url.rstrip('/')}/trd_api/{request_id}"
+        url = f"{self.config.base_url.rstrip('/')}/modelzoo/tasks/{request_id}"
         headers = self._build_headers(prompt_id=prompt_id)
         return await self._request(method="GET", url=url, headers=headers)
 

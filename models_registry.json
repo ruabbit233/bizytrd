@@ -499,7 +499,7 @@
         "type": "VIDEO",
         "required": true,
         "description": "输入视频。时长需在 2-10 秒之间。",
-        "fieldKey": "videoUrls"
+        "fieldKey": "video_urls"
       },
       {
         "name": "prompt",
@@ -524,14 +524,14 @@
         "type": "IMAGE",
         "required": false,
         "description": "可选首帧参考图，用于更精细地约束首帧表现。",
-        "fieldKey": "firstFrameImageUrls"
+        "fieldKey": "first_frame_image_urls"
       },
       {
         "name": "ref_images",
         "type": "IMAGE",
         "required": false,
         "description": "可选参考图输入，用于约束角色、风格或主体。最多 3 张。",
-        "fieldKey": "referenceImageUrls",
+        "fieldKey": "referenceimage_urls",
         "maxInputNum": 3
       },
       {
@@ -952,12 +952,12 @@
     }
   },
   {
-    "internal_name": "BizyTRD_Seedance_2_0_Multimodal_API",
-    "class_name": "BizyTRD_Seedance_2_0_Multimodal_API",
-    "display_name": "Seedance 2.0 Multimodal To Video",
+    "internal_name": "BizyTRD_Seedance_2_0_R2V_API",
+    "class_name": "BizyTRD_Seedance_2_0_R2V_API",
+    "display_name": "Seedance 2.0 Reference To Video",
     "category": "BizyTRD/Doubao",
     "model_name": "seedance-2-0",
-    "endpoint_category": "Multimodal To Video",
+    "endpoint_category": "Reference To Video",
     "output_type": "video",
     "params": [
       {
@@ -1010,24 +1010,24 @@
         "name": "images",
         "type": "IMAGE",
         "required": false,
-        "description": "参考图片输入。最多 9 张，会作为 `imageUrls` 传给后端。",
-        "fieldKey": "imageUrls",
+        "description": "参考图片输入。最多 9 张，会作为 `image_urls` 传给后端。",
+        "fieldKey": "image_urls",
         "maxInputNum": 9
       },
       {
         "name": "videos",
         "type": "VIDEO",
         "required": false,
-        "description": "参考视频输入。最多 3 个，会作为 `videoUrls` 传给后端。",
-        "fieldKey": "videoUrls",
+        "description": "参考视频输入。最多 3 个，会作为 `video_urls` 传给后端。",
+        "fieldKey": "video_urls",
         "maxInputNum": 3
       },
       {
         "name": "audios",
         "type": "AUDIO",
         "required": false,
-        "description": "参考音频输入。最多 3 个，会作为 `audioUrls` 传给后端。",
-        "fieldKey": "audioUrls",
+        "description": "参考音频输入。最多 3 个，会作为 `audio_urls` 传给后端。",
+        "fieldKey": "audio_urls",
         "maxInputNum": 3
       },
       {
@@ -1035,7 +1035,7 @@
         "type": "BOOLEAN",
         "required": false,
         "description": "是否为输出视频生成音频。",
-        "fieldKey": "generateAudio",
+        "fieldKey": "generate_audio",
         "default": true
       },
       {
@@ -1055,19 +1055,15 @@
         "fieldKey": "ratio",
         "default": "adaptive"
       }
-    ],
-    "migration_source": {
-      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
-      "class": "Seedance_2_0_Multimodal_API"
-    }
+    ]
   },
   {
-    "internal_name": "BizyTRD_Seedance_2_0_Fast_Multimodal_API",
-    "class_name": "BizyTRD_Seedance_2_0_Fast_Multimodal_API",
-    "display_name": "Seedance 2.0 Fast Multimodal To Video",
+    "internal_name": "BizyTRD_Seedance_2_0_Fast_R2V_API",
+    "class_name": "BizyTRD_Seedance_2_0_Fast_R2V_API",
+    "display_name": "Seedance 2.0 Fast Reference To Video",
     "category": "BizyTRD/Doubao",
     "model_name": "seedance-2-0-fast",
-    "endpoint_category": "Multimodal To Video",
+    "endpoint_category": "Reference To Video",
     "output_type": "video",
     "params": [
       {
@@ -1120,24 +1116,24 @@
         "name": "images",
         "type": "IMAGE",
         "required": false,
-        "description": "参考图片输入。最多 9 张，会作为 `imageUrls` 传给后端。",
-        "fieldKey": "imageUrls",
+        "description": "参考图片输入。最多 9 张，会作为 `image_urls` 传给后端。",
+        "fieldKey": "image_urls",
         "maxInputNum": 9
       },
       {
         "name": "videos",
         "type": "VIDEO",
         "required": false,
-        "description": "参考视频输入。最多 3 个，会作为 `videoUrls` 传给后端。",
-        "fieldKey": "videoUrls",
+        "description": "参考视频输入。最多 3 个，会作为 `video_urls` 传给后端。",
+        "fieldKey": "video_urls",
         "maxInputNum": 3
       },
       {
         "name": "audios",
         "type": "AUDIO",
         "required": false,
-        "description": "参考音频输入。最多 3 个，会作为 `audioUrls` 传给后端。",
-        "fieldKey": "audioUrls",
+        "description": "参考音频输入。最多 3 个，会作为 `audio_urls` 传给后端。",
+        "fieldKey": "audio_urls",
         "maxInputNum": 3
       },
       {
@@ -1145,7 +1141,7 @@
         "type": "BOOLEAN",
         "required": false,
         "description": "是否为输出视频生成音频。",
-        "fieldKey": "generateAudio",
+        "fieldKey": "generate_audio",
         "default": true
       },
       {
@@ -1165,11 +1161,7 @@
         "fieldKey": "ratio",
         "default": "adaptive"
       }
-    ],
-    "migration_source": {
-      "file": "bizyengine/bizyengine/bizyair_extras/third_party_api/nodes_doubao.py",
-      "class": "Seedance_2_0_Multimodal_API"
-    }
+    ]
   },
   {
     "internal_name": "Seedance_2_0_T2V_API",
@@ -1230,7 +1222,7 @@
         "type": "BOOLEAN",
         "required": false,
         "description": "是否为输出视频生成音频。",
-        "fieldKey": "generateAudio",
+        "fieldKey": "generate_audio",
         "default": true
       },
       {
@@ -1319,7 +1311,7 @@
         "type": "BOOLEAN",
         "required": false,
         "description": "是否为输出视频生成音频。",
-        "fieldKey": "generateAudio",
+        "fieldKey": "generate_audio",
         "default": true
       },
       {
@@ -1375,7 +1367,7 @@
         "type": "IMAGE",
         "required": true,
         "description": "输入首帧图片。",
-        "fieldKey": "firstFrameImage"
+        "fieldKey": "first_frame_image"
       },
       {
         "name": "resolution",
@@ -1415,7 +1407,7 @@
         "type": "IMAGE",
         "required": false,
         "description": "尾帧图片",
-        "fieldKey": "lastFrameImage",
+        "fieldKey": "last_frame_image",
         "sendIf": "non_empty"
       },
       {
@@ -1423,7 +1415,7 @@
         "type": "BOOLEAN",
         "required": false,
         "description": "是否为输出视频生成音频。",
-        "fieldKey": "generateAudio",
+        "fieldKey": "generate_audio",
         "default": true
       },
       {
@@ -1471,7 +1463,7 @@
         "type": "IMAGE",
         "required": true,
         "description": "输入首帧图片。",
-        "fieldKey": "firstFrameImage"
+        "fieldKey": "first_frame_image"
       },
       {
         "name": "resolution",
@@ -1511,7 +1503,7 @@
         "type": "IMAGE",
         "required": false,
         "description": "尾帧图片",
-        "fieldKey": "lastFrameImage",
+        "fieldKey": "last_frame_image",
         "sendIf": "non_empty"
       },
       {
@@ -1519,7 +1511,7 @@
         "type": "BOOLEAN",
         "required": false,
         "description": "是否为输出视频生成音频。",
-        "fieldKey": "generateAudio",
+        "fieldKey": "generate_audio",
         "default": true
       },
       {
@@ -1541,10 +1533,81 @@
       }
     ]
   },
+{
+    "internal_name": "Seedream_4_0_T2I_API",
+    "class_name": "Seedream_4_0_T2I_API",
+    "display_name": "Seedream 4.0 Text To Image",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedream-4-0",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description": "提示词。描述希望生成的图像内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": true,
+        "options": [
+            "1K Square (1024x1024)",
+            "2K Square (2048x2048)",
+            "4K Square (4096x4096)",
+            "HD 16:9 (1920x1080)",
+            "2K 16:9 (2560x1440)",
+            "4K 16:9 (3840x2160)",
+            "Portrait 9:16 (1080x1920)",
+            "Portrait 3:4 (1536x2048)",
+            "Landscape 4:3 (2048x1536)",
+            "Ultra-wide 21:9 (3440x1440)",
+            "Custom"
+        ],
+        "default": "HD 16:9 (1920x1080)",
+        "valueHook": "doubao.custom_size_sd40"
+      },
+      {
+        "name": "custom_width",
+        "type": "INT",
+        "required": true,
+        "min": 1024,
+        "max": 4096,
+        "default": 1920,
+        "description": "自定义宽度",
+        "internal": true
+      },
+      {
+        "name": "custom_height",
+        "type": "INT",
+        "required": true,
+        "min": 1024,
+        "max": 4096,
+        "default": 1080,
+        "description": "自定义高度",
+        "internal": true
+      },
+      {
+        "name": "watermark",
+        "hidden": true,
+        "default": "False",
+        "fieldKey": "watermark"
+      },
+      {
+        "name": "response_format",
+        "hidden": true,
+        "default": "url",
+        "fieldKey": "response_format"
+      }
+    ]
+  },
   {
-    "internal_name": "Seedream4_0",
-    "class_name": "Seedream4_0",
-    "display_name": "Seedream 4.0",
+    "internal_name": "Seedream_4_0_I2I_API",
+    "class_name": "Seedream_4_0_I2I_API",
+    "display_name": "Seedream 4.0 Image To Image",
     "category": "BizyTRD/Doubao",
     "model_name": "seedream-4-0",
     "endpoint_category": "Image To Image",
@@ -1602,9 +1665,9 @@
         "name": "images",
         "type": "IMAGE",
         "required": false,
-        "description": "输入参考图。最多 10 张，用于图像生成。",
-        "fieldKey": "imageUrls",
-        "maxInputNum": 10
+        "description": "输入参考图。最多 14 张，用于图像生成。",
+        "fieldKey": "image_urls",
+        "maxInputNum": 14
       },
       {
         "name": "watermark",
@@ -1616,14 +1679,85 @@
         "name": "response_format",
         "hidden": true,
         "default": "url",
-        "fieldKey": "responseFormat"
+        "fieldKey": "response_format"
+      }
+    ]
+  },
+{
+    "internal_name": "Seedream_4_5_T2I_API",
+    "class_name": "Seedream_4_5_T2I_API",
+    "display_name": "Seedream 4.5 Text To Image",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedream-4-5",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description": "提示词。描述希望生成的图像内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "2K",
+          "4K",
+          "Custom"
+        ],
+        "default": "2K",
+        "valueHook": "doubao.custom_size_sd45"
+      },
+      {
+        "name": "custom_width",
+        "type": "INT",
+        "required": true,
+        "min": 1024,
+        "max": 4096,
+        "default": 2048,
+        "description": "总像素取值范围 [2560x1440=3686400, 4096x4096=16777216], 宽高比取值范围：[1/16, 16]",
+        "internal": true
+      },
+      {
+        "name": "custom_height",
+        "type": "INT",
+        "required": true,
+        "min": 1024,
+        "max": 4096,
+        "default": 2048,
+        "description": "自定义总像素取值范围 [2560x1440=3686400, 4096x4096=16777216], 宽高比取值范围：[1/16, 16]",
+        "internal": true
+      },
+      {
+        "name": "max_images",
+        "type": "INT",
+        "required": true,
+        "min": 1,
+        "max": 15,
+        "default": 1,
+        "description": "实际可生成的图片数量，除受到 max_images 影响外，还受到输入的参考图数量影响。输入的参考图数量+最终生成的图片数量≤15张。"
+      },
+      {
+        "name": "optimize_prompt",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "disabled",
+          "standard"
+        ],
+        "default": "disabled",
+        "description": "提示词优化功能的配置。standard：标准模式，生成内容的质量更高，耗时较长。"
       }
     ]
   },
   {
-    "internal_name": "Seedream4_5",
-    "class_name": "Seedream4_5",
-    "display_name": "Seedream 4.5",
+    "internal_name": "Seedream_4_5_I2I_API",
+    "class_name": "Seedream_4_5_I2I_API",
+    "display_name": "Seedream 4.5 Image to Image",
     "category": "BizyTRD/Doubao",
     "model_name": "seedream-4-5",
     "endpoint_category": "Image To Image",
@@ -1694,15 +1828,96 @@
         "type": "IMAGE",
         "required": false,
         "description": "参考图，数量不超过14张。会影响组图生成数量",
-        "fieldKey": "imageUrls",
+        "fieldKey": "image_urls",
         "maxInputNum": 14
       }
     ]
   },
+{
+    "internal_name": "Seedream_5_0_T2I_API",
+    "class_name": "Seedream_5_0_T2I_API",
+    "display_name": "Seedream 5.0 Text To Image",
+    "category": "BizyTRD/Doubao",
+    "model_name": "seedream-5-0",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "description": "提示词。描述希望生成的图像内容。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "2K",
+          "4K",
+          "Custom"
+        ],
+        "default": "2K",
+        "valueHook": "doubao.custom_size_sd50"
+      },
+      {
+        "name": "custom_width",
+        "type": "INT",
+        "required": true,
+        "min": 480,
+        "max": 12800,
+        "default": 2048,
+        "description": "总像素取值范围 [2560x1440=3686400, 4096x4096=16777216], 宽高比取值范围：[1/16, 16]",
+        "internal": true
+      },
+      {
+        "name": "custom_height",
+        "type": "INT",
+        "required": true,
+        "min": 480,
+        "max": 12800,
+        "default": 2048,
+        "description": "自定义总像素取值范围 [2560x1440=3686400, 4096x4096=16777216], 宽高比取值范围：[1/16, 16]",
+        "internal": true
+      },
+      {
+        "name": "tools",
+        "fieldKey": "tools",
+        "type": "STRING",
+        "required": true,
+        "forceInput": true,
+        "default": "[]",
+        "description": "豆包模型支持的工具选项，请使用BizyAir Doubao Tool Config节点配置",
+        "valueHook": "common.json_loads"
+      },
+      {
+        "name": "max_images",
+        "type": "INT",
+        "required": true,
+        "min": 1,
+        "max": 15,
+        "default": 1,
+        "description": "实际可生成的图片数量，除受到 max_images 影响外，还受到输入的参考图数量影响。输入的参考图数量+最终生成的图片数量≤15张。"
+      },
+      {
+        "name": "optimize_prompt",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "disabled",
+          "standard"
+        ],
+        "default": "disabled",
+        "description": "提示词优化功能的配置。standard：标准模式，生成内容的质量更高，耗时较长。"
+      }
+    ]
+  },
   {
-    "internal_name": "Seedream5_0",
-    "class_name": "Seedream5_0",
-    "display_name": "Seedream 5.0",
+    "internal_name": "Seedream_5_0_I2I_API",
+    "class_name": "Seedream_5_0_I2I_API",
+    "display_name": "Seedream 5.0 Image To Image",
     "category": "BizyTRD/Doubao",
     "model_name": "seedream-5-0",
     "endpoint_category": "Image To Image",
@@ -1783,71 +1998,8 @@
         "type": "IMAGE",
         "required": false,
         "description": "参考图，数量不超过14张。会影响组图生成数量",
-        "fieldKey": "imageUrls",
+        "fieldKey": "image_urls",
         "maxInputNum": 14
-      }
-    ]
-  },
-  {
-    "internal_name": "Seededit_3_0",
-    "class_name": "Seededit_3_0",
-    "display_name": "Seededit 3.0",
-    "category": "BizyTRD/Doubao",
-    "model_name": "seededit-3-0",
-    "endpoint_category": "Image To Image",
-    "output_type": "image",
-    "params": [
-      {
-        "name": "prompt",
-        "type": "STRING",
-        "required": true,
-        "multiline": true,
-        "description": "提示词。描述希望生成的图像内容。",
-        "fieldKey": "prompt"
-      },
-      {
-        "name": "image",
-        "type": "IMAGE",
-        "required": true,
-        "description": "输入参考图。",
-        "fieldKey": "image"
-      },
-      {
-        "name": "seed",
-        "type": "INT",
-        "required": true,
-        "min": -1,
-        "max": 2147483647,
-        "default": -1,
-        "description": "随机种子。相同参数下可用于复现结果。",
-        "fieldKey": "seed"
-      },
-      {
-        "name": "guidance_scale",
-        "type": "FLOAT",
-        "required": true,
-        "min": 1.0,
-        "max": 10.0,
-        "default": 5.5,
-        "fieldKey": "guidanceScale"
-      },
-      {
-        "name": "size",
-        "hidden": true,
-        "default": "adaptive",
-        "fieldKey": "size"
-      },
-      {
-        "name": "response_format",
-        "hidden": true,
-        "default": "url",
-        "fieldKey": "responseFormat"
-      },
-      {
-        "name": "watermark",
-        "hidden": true,
-        "default": "False",
-        "fieldKey": "watermark"
       }
     ]
   },
@@ -2053,7 +2205,7 @@
         "type": "IMAGE",
         "required": true,
         "description": "输入首帧图片。",
-        "fieldKey": "firstFrameImage"
+        "fieldKey": "first_frame_image"
       },
       {
         "name": "prompt",
@@ -2135,14 +2287,14 @@
         "name": "watermark",
         "hidden": true,
         "default": false,
-        "fieldKey": "waterMark"
+        "fieldKey": "watermark"
       },
       {
         "name": "last_frame_image",
         "type": "IMAGE",
         "required": false,
         "description": "尾帧图片",
-        "fieldKey": "lastFrameImage",
+        "fieldKey": "last_frame_image",
         "sendIf": "non_empty"
       }
     ]
@@ -2161,7 +2313,7 @@
         "type": "IMAGE",
         "required": true,
         "description": "输入首帧图片。",
-        "fieldKey": "firstFrameImage"
+        "fieldKey": "first_frame_image"
       },
       {
         "name": "prompt",
@@ -2243,14 +2395,14 @@
         "name": "watermark",
         "hidden": true,
         "default": false,
-        "fieldKey": "waterMark"
+        "fieldKey": "watermark"
       },
       {
         "name": "last_frame_image",
         "type": "IMAGE",
         "required": false,
         "description": "尾帧图片",
-        "fieldKey": "lastFrameImage",
+        "fieldKey": "last_frame_image",
         "sendIf": "non_empty"
       }
     ]
@@ -2337,7 +2489,7 @@
         "type": "BOOLEAN",
         "required": true,
         "description": "是否生成与画面同步的声音。开启后可能影响计费。",
-        "fieldKey": "generateAudio",
+        "fieldKey": "generate_audio",
         "default": false
       },
       {
@@ -2372,7 +2524,7 @@
         "name": "first_frame_image",
         "type": "IMAGE",
         "required": true,
-        "fieldKey": "firstFrameImage"
+        "fieldKey": "first_frame_image"
       },
       {
         "name": "prompt",
@@ -2447,7 +2599,7 @@
         "type": "BOOLEAN",
         "required": true,
         "description": "是否生成与画面同步的声音。开启后可能影响计费。",
-        "fieldKey": "generateAudio",
+        "fieldKey": "generate_audio",
         "default": false
       },
       {
@@ -2472,73 +2624,18 @@
         "type": "IMAGE",
         "required": false,
         "description": "尾帧图片。旧节点校验宽高比范围为 0.4 到 2.5。",
-        "fieldKey": "lastFrameImage",
+        "fieldKey": "last_frame_image",
         "sendIf": "non_empty"
       }
     ]
   },
   {
-    "internal_name": "Seedance_2_0_REF_API",
-    "class_name": "Seedance_2_0_REF_API",
-    "display_name": "Seedance 2.0 References To Video",
-    "category": "BizyTRD/Doubao",
-    "model_name": "seedance-2-0",
-    "endpoint_category": "Reference To Video",
-    "output_type": "video",
-    "params": [
-      {
-        "name": "prompt",
-        "type": "STRING",
-        "required": true,
-        "multiline": true,
-        "default": "",
-        "description": "视频生成提示词。描述希望生成的视频内容。",
-        "fieldKey": "prompt"
-      },
-      {
-        "name": "ratio",
-        "type": "LIST",
-        "required": true,
-        "options": [
-          "16:9",
-          "4:3",
-          "3:4",
-          "9:16"
-        ],
-        "description": "视频宽高比。",
-        "fieldKey": "ratio",
-        "default": "16:9"
-      },
-      {
-        "name": "duration",
-        "type": "LIST",
-        "required": true,
-        "options": [
-          5,
-          10,
-          15
-        ],
-        "description": "视频时长，单位秒。",
-        "fieldKey": "duration",
-        "default": 5
-      },
-      {
-        "name": "images",
-        "type": "IMAGE",
-        "required": false,
-        "description": "参考图，最多 4 张。旧节点对单张图片限制为 10MB。",
-        "fieldKey": "images",
-        "maxInputNum": 4
-      }
-    ]
-  },
-  {
-    "internal_name": "Seedance_2_0_JIMENG_DREAMACTOR_API",
-    "class_name": "Seedance_2_0_JIMENG_DREAMACTOR_API",
+    "internal_name": "JIMENG_DREAMACTOR_API",
+    "class_name": "JIMENG_DREAMACTOR_API",
     "display_name": "Jimeng DreamActor M20",
     "category": "BizyTRD/Doubao",
     "model_name": "dreamactor-2-0",
-    "endpoint_category": "Multimodal To Video",
+    "endpoint_category": "Reference To Video",
     "output_type": "video",
     "params": [
       {
@@ -2565,10 +2662,56 @@
       }
     ]
   },
+{
+    "internal_name": "Flux_Kontext_Pro_T2I_API",
+    "class_name": "Flux_Kontext_Pro_T2I_API",
+    "display_name": "Flux Kontext Pro Text to Image",
+    "category": "BizyTRD/Flux",
+    "model_name": "flux-kontext-pro",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像生成或编辑提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "21:9",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16"
+        ],
+        "description": "输出图像宽高比。",
+        "fieldKey": "aspect_ratio",
+        "default": "16:9"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 2147483647,
+        "default": 0,
+        "description": "随机种子。",
+        "fieldKey": "seed"
+      }
+    ]
+  },
   {
-    "internal_name": "Flux_Kontext_Pro_API",
-    "class_name": "Flux_Kontext_Pro_API",
-    "display_name": "Flux Kontext Pro API",
+    "internal_name": "Flux_Kontext_Pro_I2I_API",
+    "class_name": "Flux_Kontext_Pro_I2I_API",
+    "display_name": "Flux Kontext Pro Image to Image",
     "category": "BizyTRD/Flux",
     "model_name": "flux-kontext-pro",
     "endpoint_category": "Image To Image",
@@ -2618,10 +2761,56 @@
       }
     ]
   },
+{
+    "internal_name": "Flux_Kontext_Max_T2I_API",
+    "class_name": "Flux_Kontext_Max_T2I_API",
+    "display_name": "Flux Kontext Max Text to Image",
+    "category": "BizyTRD/Flux",
+    "model_name": "flux-kontext-max",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像生成或编辑提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "21:9",
+          "16:9",
+          "4:3",
+          "1:1",
+          "3:4",
+          "9:16"
+        ],
+        "description": "输出图像宽高比。",
+        "fieldKey": "aspect_ratio",
+        "default": "16:9"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 2147483647,
+        "default": 0,
+        "description": "随机种子。",
+        "fieldKey": "seed"
+      }
+    ]
+  },
   {
-    "internal_name": "Flux_Kontext_Max_API",
-    "class_name": "Flux_Kontext_Max_API",
-    "display_name": "Flux Kontext Max API",
+    "internal_name": "Flux_Kontext_Max_I2I_API",
+    "class_name": "Flux_Kontext_Max_I2I_API",
+    "display_name": "Flux Kontext Max Image to Image",
     "category": "BizyTRD/Flux",
     "model_name": "flux-kontext-max",
     "endpoint_category": "Image To Image",
@@ -2671,10 +2860,90 @@
       }
     ]
   },
+{
+    "internal_name": "Flux_2_Pro_T2I_API",
+    "class_name": "Flux_2_Pro_T2I_API",
+    "display_name": "Flux 2 Pro Text to Image",
+    "category": "BizyTRD/Flux",
+    "model_name": "flux-2-pro",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像生成或编辑提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 2147483647,
+        "default": 0,
+        "description": "随机种子。",
+        "fieldKey": "seed"
+      },
+      {
+        "name": "width",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "default": 1024,
+        "description": "输出宽度。必须为 16 的倍数；0 表示使用输入图片宽度。",
+        "fieldKey": "width",
+        "sendIf": "nonzero"
+      },
+      {
+        "name": "height",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "default": 1024,
+        "description": "输出高度。必须为 16 的倍数；0 表示使用输入图片高度。",
+        "fieldKey": "height",
+        "sendIf": "nonzero"
+      },
+      {
+        "name": "safety_tolerance",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 5,
+        "default": 2,
+        "description": "安全容忍度，值越大越宽松。",
+        "fieldKey": "safety_tolerance"
+      },
+      {
+        "name": "guidance",
+        "type": "FLOAT",
+        "required": true,
+        "min": 1.5,
+        "max": 10,
+        "default": 4.5,
+        "description": "引导强度，仅 flux-2-flex 支持。",
+        "fieldKey": "guidance"
+      },
+      {
+        "name": "steps",
+        "type": "INT",
+        "required": true,
+        "min": 1,
+        "max": 50,
+        "default": 50,
+        "description": "采样步数，仅 flux-2-flex 支持。",
+        "fieldKey": "steps"
+      }
+    ]
+  },
   {
-    "internal_name": "Flux_2_Pro_API",
-    "class_name": "Flux_2_Pro_API",
-    "display_name": "Flux 2 Pro API",
+    "internal_name": "Flux_2_Pro_I2I_API",
+    "class_name": "Flux_2_Pro_I2I_API",
+    "display_name": "Flux 2 Pro Image to Image",
     "category": "BizyTRD/Flux",
     "model_name": "flux-2-pro",
     "endpoint_category": "Image To Image",
@@ -2754,15 +3023,95 @@
         "type": "IMAGE",
         "required": false,
         "description": "可选输入参考图。flux-2-pro 最多 8 张，flux-2-flex 最多 10 张。",
-        "fieldKey": "imageUrls",
+        "fieldKey": "image_urls",
         "maxInputNum": 8
       }
     ]
   },
+{
+    "internal_name": "Flux_2_Flex_T2I_API",
+    "class_name": "Flux_2_Flex_T2I_API",
+    "display_name": "Flux 2 Flex Text to Image",
+    "category": "BizyTRD/Flux",
+    "model_name": "flux-2-flex",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像生成或编辑提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 2147483647,
+        "default": 0,
+        "description": "随机种子。",
+        "fieldKey": "seed"
+      },
+      {
+        "name": "width",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "default": 1024,
+        "description": "输出宽度。必须为 16 的倍数；0 表示使用输入图片宽度。",
+        "fieldKey": "width",
+        "sendIf": "nonzero"
+      },
+      {
+        "name": "height",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "default": 1024,
+        "description": "输出高度。必须为 16 的倍数；0 表示使用输入图片高度。",
+        "fieldKey": "height",
+        "sendIf": "nonzero"
+      },
+      {
+        "name": "safety_tolerance",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 5,
+        "default": 2,
+        "description": "安全容忍度，值越大越宽松。",
+        "fieldKey": "safety_tolerance"
+      },
+      {
+        "name": "guidance",
+        "type": "FLOAT",
+        "required": true,
+        "min": 1.5,
+        "max": 10,
+        "default": 4.5,
+        "description": "引导强度，仅 flux-2-flex 支持。",
+        "fieldKey": "guidance"
+      },
+      {
+        "name": "steps",
+        "type": "INT",
+        "required": true,
+        "min": 1,
+        "max": 50,
+        "default": 50,
+        "description": "采样步数，仅 flux-2-flex 支持。",
+        "fieldKey": "steps"
+      }
+    ]
+  },
   {
-    "internal_name": "Flux_2_Flex_API",
-    "class_name": "Flux_2_Flex_API",
-    "display_name": "Flux 2 Flex API",
+    "internal_name": "Flux_2_Flex_I2I_API",
+    "class_name": "Flux_2_Flex_I2I_API",
+    "display_name": "Flux 2 Flex Image to Image",
     "category": "BizyTRD/Flux",
     "model_name": "flux-2-flex",
     "endpoint_category": "Image To Image",
@@ -2842,15 +3191,132 @@
         "type": "IMAGE",
         "required": false,
         "description": "可选输入参考图。flux-2-pro 最多 8 张，flux-2-flex 最多 10 张。",
-        "fieldKey": "imageUrls",
+        "fieldKey": "image_urls",
         "maxInputNum": 10
       }
     ]
   },
+{
+    "internal_name": "NanoBanana_T2I_API",
+    "class_name": "NanoBanana_T2I_API",
+    "display_name": "NanoBanana Text to Image",
+    "category": "BizyTRD/Gemini",
+    "model_name": "gemini-2.5-flash-image",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "基础提示词。发送前会根据 operation、参考图和质量选项组装为实际提示词。",
+        "fieldKey": "prompt",
+        "valueHook": "gemini.operation_prompt"
+      },
+      {
+        "name": "operation",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "generate",
+          "edit",
+          "style_transfer",
+          "object_insertion"
+        ],
+        "description": "图像操作类型。仅用于组装实际提示词，不直接发送。",
+        "fieldKey": "operation",
+        "default": "generate",
+        "internal": true
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.05,
+        "default": 1.0,
+        "description": "采样温度。",
+        "fieldKey": "temperature"
+      },
+      {
+        "name": "top_p",
+        "type": "FLOAT",
+        "required": true,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.05,
+        "default": 1.0,
+        "description": "Top-p 采样参数。",
+        "fieldKey": "top_p"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 2147483647,
+        "default": 0,
+        "description": "随机种子。",
+        "fieldKey": "seed"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "min": 1,
+        "max": 8192,
+        "default": 8192,
+        "description": "最大输出 token 数。",
+        "fieldKey": "max_tokens"
+      },
+      {
+        "name": "quality",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "standard",
+          "high"
+        ],
+        "description": "图像生成质量。仅用于组装实际提示词，不直接发送。",
+        "fieldKey": "quality",
+        "default": "high",
+        "internal": true
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "1:1",
+          "16:9",
+          "9:16",
+          "4:3",
+          "3:4",
+          "auto"
+        ],
+        "description": "输出图像宽高比。`auto` 不直接发送。",
+        "fieldKey": "aspect_ratio",
+        "default": "auto",
+        "sendIf": "not_default"
+      },
+      {
+        "name": "character_consistency",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "使用参考图时保持角色一致性。仅用于组装实际提示词，不直接发送。",
+        "fieldKey": "character_consistency",
+        "default": true,
+        "internal": true
+      }
+    ]
+  },
   {
-    "internal_name": "NanoBanana",
-    "class_name": "NanoBanana",
-    "display_name": "NanoBanana",
+    "internal_name": "NanoBanana_I2I_API",
+    "class_name": "NanoBanana_I2I_API",
+    "display_name": "NanoBanana Image to Image",
     "category": "BizyTRD/Gemini",
     "model_name": "gemini-2.5-flash-image",
     "endpoint_category": "Image To Image",
@@ -2972,10 +3438,160 @@
       }
     ]
   },
+{
+    "internal_name": "NanoBananaPro_T2I_API",
+    "class_name": "NanoBananaPro_T2I_API",
+    "display_name": "NanoBananaPro Text to Image",
+    "category": "BizyTRD/Gemini",
+    "model_name": "gemini-3-pro-image-preview",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official",
+        "internal": true
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "基础提示词。发送前会根据 operation、参考图和质量选项组装为实际提示词。",
+        "fieldKey": "prompt",
+        "valueHook": "gemini.operation_prompt"
+      },
+      {
+        "name": "operation",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "generate",
+          "edit",
+          "style_transfer",
+          "object_insertion"
+        ],
+        "description": "图像操作类型。仅用于组装实际提示词，不直接发送。",
+        "fieldKey": "operation",
+        "default": "generate",
+        "internal": true
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.05,
+        "default": 1.0,
+        "description": "采样温度。",
+        "fieldKey": "temperature"
+      },
+      {
+        "name": "top_p",
+        "type": "FLOAT",
+        "required": true,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.05,
+        "default": 0.95,
+        "description": "Top-p 采样参数。",
+        "fieldKey": "top_p"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 2147483647,
+        "default": 0,
+        "description": "随机种子。",
+        "fieldKey": "seed"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "min": 1,
+        "max": 32768,
+        "default": 32768,
+        "description": "最大输出 token 数。",
+        "fieldKey": "max_tokens"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1:1",
+          "2:3",
+          "3:2",
+          "3:4",
+          "4:3",
+          "4:5",
+          "5:4",
+          "9:16",
+          "16:9",
+          "21:9",
+          "auto"
+        ],
+        "description": "输出图像宽高比。`auto` 不直接发送。",
+        "fieldKey": "aspect_ratio",
+        "default": "auto",
+        "sendIf": "not_default"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1K",
+          "2K",
+          "4K",
+          "auto"
+        ],
+        "description": "输出分辨率。`auto` 不直接发送。",
+        "fieldKey": "resolution",
+        "default": "auto",
+        "sendIf": "not_default"
+      },
+      {
+        "name": "quality",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "standard",
+          "high"
+        ],
+        "description": "图像生成质量。仅用于组装实际提示词，不直接发送。",
+        "fieldKey": "quality",
+        "default": "high",
+        "internal": true
+      },
+      {
+        "name": "character_consistency",
+        "type": "BOOLEAN",
+        "required": false,
+        "description": "使用参考图时保持角色一致性。仅用于组装实际提示词，不直接发送。",
+        "fieldKey": "character_consistency",
+        "default": true,
+        "internal": true
+      }
+    ]
+  },
   {
-    "internal_name": "NanoBananaPro",
-    "class_name": "NanoBananaPro",
-    "display_name": "NanoBananaPro",
+    "internal_name": "NanoBananaPro_I2I_API",
+    "class_name": "NanoBananaPro_I2I_API",
+    "display_name": "NanoBananaPro Image to Image",
     "category": "BizyTRD/Gemini",
     "model_name": "gemini-3-pro-image-preview",
     "endpoint_category": "Image To Image",
@@ -3130,10 +3746,138 @@
       }
     ]
   },
+{
+    "internal_name": "NanoBanana2_T2I_API",
+    "class_name": "NanoBanana2_T2I_API",
+    "display_name": "NanoBanana 2 Text to Image",
+    "category": "BizyTRD/Gemini",
+    "model_name": "gemini-3.1-flash-image-preview",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official 表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official",
+        "internal": true
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.05,
+        "default": 1.0,
+        "description": "采样温度。",
+        "fieldKey": "temperature"
+      },
+      {
+        "name": "top_p",
+        "type": "FLOAT",
+        "required": true,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.05,
+        "default": 0.95,
+        "description": "Top-p 采样参数。",
+        "fieldKey": "top_p"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "min": 0,
+        "max": 2147483647,
+        "default": 0,
+        "description": "随机种子。",
+        "fieldKey": "seed"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "min": 1,
+        "max": 32768,
+        "default": 32768,
+        "description": "最大输出 token 数。",
+        "fieldKey": "max_tokens"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1:1",
+          "1:4",
+          "4:1",
+          "1:8",
+          "8:1",
+          "2:3",
+          "3:2",
+          "3:4",
+          "4:3",
+          "4:5",
+          "5:4",
+          "9:16",
+          "16:9",
+          "21:9",
+          "auto"
+        ],
+        "description": "输出图像宽高比。`auto` 不直接发送。",
+        "fieldKey": "aspect_ratio",
+        "default": "auto",
+        "sendIf": "not_default"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1K",
+          "2K",
+          "4K",
+          "auto"
+        ],
+        "description": "输出分辨率。`auto` 不直接发送。",
+        "fieldKey": "resolution",
+        "default": "auto",
+        "sendIf": "not_default"
+      },
+      {
+        "name": "thinking_level",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "disabled"
+        ],
+        "description": "思考等级。当前旧节点仅暴露 disabled，因此默认不发送。",
+        "fieldKey": "thinking_level",
+        "default": "disabled",
+        "sendIf": "not_default"
+      }
+    ]
+  },
   {
-    "internal_name": "NanoBanana2",
-    "class_name": "NanoBanana2",
-    "display_name": "NanoBanana 2",
+    "internal_name": "NanoBanana2_I2I_API",
+    "class_name": "NanoBanana2_I2I_API",
+    "display_name": "NanoBanana 2 Image to Image",
     "category": "BizyTRD/Gemini",
     "model_name": "gemini-3.1-flash-image-preview",
     "endpoint_category": "Image To Image",
@@ -3313,9 +4057,9 @@
     ]
   },
   {
-    "internal_name": "GPT_IMAGE_EDIT_API",
-    "class_name": "GPT_IMAGE_EDIT_API",
-    "display_name": "GPT Image Edit",
+    "internal_name": "GPT_IMAGE_I2I_API",
+    "class_name": "GPT_IMAGE_I2I_API",
+    "display_name": "GPT Image 1 Image To Image",
     "category": "BizyTRD/OpenAI",
     "model_name": "gpt-image-1",
     "endpoint_category": "Image To Image",
@@ -3367,12 +4111,81 @@
     ]
   },
   {
-    "internal_name": "Grok_Imagine_Video__API",
-    "class_name": "Grok_Imagine_Video_API",
-    "display_name": "Grok Imagine Video",
+    "internal_name": "Grok_Imagine_T2V_API",
+    "class_name": "Grok_Imagine_T2V_API",
+    "display_name": "Grok Imagine Text To Video",
     "category": "BizyTRD/Grok",
-    "model_name": "grok-imagine-video",
-    "endpoint_category": "Image To Image",
+    "model_name": "grok-imagine",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "chennel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "视频生成提示词。旧节点校验长度为 5 到 20000 字符。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "min": 6,
+        "max": 30,
+        "default": 6,
+        "description": "视频时长，单位秒。",
+        "fieldKey": "duration"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "9:16",
+          "16:9",
+          "1:1",
+          "2:3",
+          "3:2"
+        ],
+        "description": "视频宽高比。",
+        "fieldKey": "aspect_ratio",
+        "default": "16:9"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "480p",
+          "720p"
+        ],
+        "description": "输出分辨率。",
+        "fieldKey": "resolution",
+        "default": "720p"
+      }
+    ]
+  },
+{
+    "internal_name": "Grok_Imagine_I2V_API",
+    "class_name": "Grok_Imagine_I2V_API",
+    "display_name": "Grok Imagine Image To Video",
+    "category": "BizyTRD/Grok",
+    "model_name": "grok-imagine",
+    "endpoint_category": "Image To Video",
     "output_type": "video",
     "params": [
       {
@@ -3411,7 +4224,7 @@
         "type": "IMAGE",
         "required": false,
         "description": "可选参考图。",
-        "fieldKey": "imageUrls",
+        "fieldKey": "image_urls",
         "sendIf": "non_empty"
       },
       {
@@ -3426,7 +4239,7 @@
           "3:2"
         ],
         "description": "视频宽高比。",
-        "fieldKey": "aspectRatio",
+        "fieldKey": "aspect_ratio",
         "default": "16:9"
       },
       {
@@ -3444,12 +4257,12 @@
     ]
   },
   {
-    "internal_name": "Grok_Imagine_Video_Edit_API",
-    "class_name": "Grok_Imagine_Video_Edit_API",
+    "internal_name": "Grok_Imagine_VE_API",
+    "class_name": "Grok_Imagine_VE_API",
     "display_name": "Grok Imagine Video Edit",
     "category": "BizyTRD/Grok",
-    "model_name": "grok-imagine-video-edit",
-    "endpoint_category": "Video To Video",
+    "model_name": "grok-imagine",
+    "endpoint_category": "Video Edit",
     "output_type": "video",
     "params": [
       {
@@ -3457,7 +4270,7 @@
         "type": "VIDEO",
         "required": false,
         "description": "输入待编辑视频。旧节点校验时长为 1 到 8 秒、大小小于 50MB。",
-        "fieldKey": "videoUrls"
+        "fieldKey": "video_urls"
       },
       {
         "name": "prompt",
@@ -3487,6 +4300,280 @@
         "description": "输入视频时长，单位秒。从 video 输入对象读取。",
         "fieldKey": "duration",
         "valueHook": "common.video_duration"
+      }
+    ]
+  },
+  {
+    "internal_name": "GPT_IMAGE_2_T2I_API",
+    "class_name": "GPT_IMAGE_2_T2I_API",
+    "display_name": "GPT Image 2 Text To Image",
+    "category": "BizyTRD/OpenAI",
+    "model_name": "gpt-image-2",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像生成提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "1:1",
+          "2:3",
+          "3:2",
+          "4:5",
+          "5:4",
+          "3:4",
+          "4:3",
+          "16:9",
+          "9:16",
+          "21:9"
+        ],
+        "description": "输出图像宽高比。",
+        "fieldKey": "aspect_ratio",
+        "default": "1:1"
+      },
+      {
+        "name": "resolution",
+        "type": "STRING",
+        "hidden": true,
+        "internal": true,
+        "description": "输出图像分辨率档位。",
+        "default": "1k"
+      },
+      {
+        "name": "size",
+        "type": "STRING",
+        "hidden": true,
+        "fieldKey": "size",
+        "valueHook": "gpt.size_mapping"
+      }
+    ]
+  },
+  {
+    "internal_name": "GPT_IMAGE_2_I2I_API",
+    "class_name": "GPT_IMAGE_2_I2I_API",
+    "display_name": "GPT Image 2 Image To Image",
+    "category": "BizyTRD/OpenAI",
+    "model_name": "gpt-image-2",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "description": "输入参考图，最多 10 张。",
+        "fieldKey": "image_urls",
+        "maxInputNum": 10
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像编辑提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "1:1",
+          "2:3",
+          "3:2",
+          "4:5",
+          "5:4",
+          "3:4",
+          "4:3",
+          "16:9",
+          "9:16",
+          "21:9"
+        ],
+        "description": "输出图像宽高比。",
+        "fieldKey": "aspect_ratio",
+        "default": "1:1"
+      },
+      {
+        "name": "resolution",
+        "type": "STRING",
+        "hidden": true,
+        "internal": true,
+        "description": "输出图像分辨率档位。",
+        "default": "1k"
+      },
+      {
+        "name": "size",
+        "type": "STRING",
+        "hidden": true,
+        "fieldKey": "size",
+        "valueHook": "gpt.size_mapping"
+      }
+    ]
+  },
+  {
+    "internal_name": "GPT_IMAGE_2_Official_T2I_API",
+    "class_name": "GPT_IMAGE_2_Official_T2I_API",
+    "display_name": "GPT Image 2 Official Text To Image",
+    "category": "BizyTRD/OpenAI",
+    "model_name": "gpt-image-2-official",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像生成提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "size",
+        "type": "STRING",
+        "hidden": true,
+        "fieldKey": "size",
+        "valueHook": "gpt.size_mapping"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1:1",
+          "2:3",
+          "3:2",
+          "4:5",
+          "5:4",
+          "3:4",
+          "4:3",
+          "16:9",
+          "9:16",
+          "21:9"
+        ],
+        "description": "输出图像宽高比，会按分辨率档位转换为 size。",
+        "fieldKey": "aspect_ratio",
+        "default": "1:1",
+        "internal": true
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1k",
+          "2k",
+          "4k"
+        ],
+        "description": "输出图像分辨率档位。",
+        "fieldKey": "resolution",
+        "default": "1k"
+      },
+      {
+        "name": "quality",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "description": "输出图像质量档位。",
+        "fieldKey": "quality",
+        "default": "medium"
+      }
+    ]
+  },
+  {
+    "internal_name": "GPT_IMAGE_2_Official_I2I_API",
+    "class_name": "GPT_IMAGE_2_Official_I2I_API",
+    "display_name": "GPT Image 2 Official Image To Image",
+    "category": "BizyTRD/OpenAI",
+    "model_name": "gpt-image-2-official",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "description": "输入参考图，最多 16 张。",
+        "fieldKey": "image_urls",
+        "maxInputNum": 16
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像编辑提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "size",
+        "type": "STRING",
+        "hidden": true,
+        "fieldKey": "size",
+        "valueHook": "gpt.size_mapping"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "1:1",
+          "2:3",
+          "3:2",
+          "4:5",
+          "5:4",
+          "3:4",
+          "4:3",
+          "16:9",
+          "9:16",
+          "21:9"
+        ],
+        "description": "输出图像宽高比，会按分辨率档位转换为 size。",
+        "fieldKey": "size",
+        "default": "1:1",
+        "internal": true
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1k",
+          "2k",
+          "4k"
+        ],
+        "description": "输出图像分辨率档位。",
+        "fieldKey": "resolution",
+        "default": "1k"
+      },
+      {
+        "name": "quality",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "description": "输出图像质量档位。",
+        "fieldKey": "quality",
+        "default": "medium"
       }
     ]
   },

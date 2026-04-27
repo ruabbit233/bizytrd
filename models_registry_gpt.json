@@ -98,5 +98,249 @@
         "default": 1
       }
     ]
+  },
+  {
+    "internal_name": "GPT_IMAGE_2_T2I_API",
+    "class_name": "GPT_IMAGE_2_T2I_API",
+    "display_name": "GPT Image 2 Text To Image",
+    "category": "BizyTRD/OpenAI",
+    "model_name": "gpt-image-2",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像生成提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "1:1",
+          "2:3",
+          "3:2",
+          "4:5",
+          "5:4",
+          "3:4",
+          "4:3",
+          "16:9",
+          "9:16",
+          "21:9"
+        ],
+        "description": "输出图像宽高比。",
+        "fieldKey": "aspect_ratio",
+        "default": "1:1"
+      }
+    ]
+  },
+  {
+    "internal_name": "GPT_IMAGE_2_I2I_API",
+    "class_name": "GPT_IMAGE_2_I2I_API",
+    "display_name": "GPT Image 2 Image To Image",
+    "category": "BizyTRD/OpenAI",
+    "model_name": "gpt-image-2",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "description": "输入参考图，最多 10 张。",
+        "fieldKey": "image_urls",
+        "maxInputNum": 10
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像编辑提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "1:1",
+          "2:3",
+          "3:2",
+          "4:5",
+          "5:4",
+          "3:4",
+          "4:3",
+          "16:9",
+          "9:16",
+          "21:9"
+        ],
+        "description": "输出图像宽高比。",
+        "fieldKey": "aspect_ratio",
+        "default": "1:1"
+      }
+    ]
+  },
+  {
+    "internal_name": "GPT_IMAGE_2_Official_T2I_API",
+    "class_name": "GPT_IMAGE_2_Official_T2I_API",
+    "display_name": "GPT Image 2 Official Text To Image",
+    "category": "BizyTRD/OpenAI",
+    "model_name": "gpt-image-2-official",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像生成提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "size",
+        "type": "STRING",
+        "hidden": true,
+        "fieldKey": "size",
+        "valueHook": "gpt.size_mapping"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1:1",
+          "2:3",
+          "3:2",
+          "4:5",
+          "5:4",
+          "3:4",
+          "4:3",
+          "16:9",
+          "9:16",
+          "21:9"
+        ],
+        "description": "输出图像宽高比，会按分辨率档位转换为 size。",
+        "fieldKey": "aspect_ratio",
+        "default": "1:1",
+        "internal": true
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1k",
+          "2k",
+          "4k"
+        ],
+        "description": "输出图像分辨率档位。",
+        "fieldKey": "resolution",
+        "default": "1k"
+      },
+      {
+        "name": "quality",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "description": "输出图像质量档位。",
+        "fieldKey": "quality",
+        "default": "medium"
+      }
+    ]
+  },
+  {
+    "internal_name": "GPT_IMAGE_2_Official_I2I_API",
+    "class_name": "GPT_IMAGE_2_Official_I2I_API",
+    "display_name": "GPT Image 2 Official Image To Image",
+    "category": "BizyTRD/OpenAI",
+    "model_name": "gpt-image-2-official",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "description": "输入参考图，最多 16 张。",
+        "fieldKey": "image_urls",
+        "maxInputNum": 16
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像编辑提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "size",
+        "type": "STRING",
+        "hidden": true,
+        "fieldKey": "size",
+        "valueHook": "gpt.size_mapping"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "options": [
+          "1:1",
+          "2:3",
+          "3:2",
+          "4:5",
+          "5:4",
+          "3:4",
+          "4:3",
+          "16:9",
+          "9:16",
+          "21:9"
+        ],
+        "description": "输出图像宽高比，会按分辨率档位转换为 size。",
+        "fieldKey": "size",
+        "default": "1:1",
+        "internal": true
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "1k",
+          "2k",
+          "4k"
+        ],
+        "description": "输出图像分辨率档位。",
+        "fieldKey": "resolution",
+        "default": "1k"
+      },
+      {
+        "name": "quality",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "description": "输出图像质量档位。",
+        "fieldKey": "quality",
+        "default": "medium"
+      }
+    ]
   }
 ]

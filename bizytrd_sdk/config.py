@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import configparser
+import logging
 import os
 from dataclasses import dataclass
 from pathlib import Path
@@ -135,29 +136,56 @@ def get_config() -> SDKConfig:
     2. legacy `BIZYAIR_*` compatibility fallbacks
     3. local `api_key.ini`
     4. built-in defaults
+
+    When ``BIZYAIR_TEST_TRD_BASE_URL`` is used as the API base URL (test mode),
+    ``upload_base_url`` falls back to the ``BIZYAIR_DOMAIN``-derived URL instead
+    of the test URL, so that media uploads still route to real infrastructure.
     """
 
     env_values = _load_dotenv()
     legacy_bizyair_base_url = _legacy_bizyair_base_url(env_values)
 
-    api_base_url = (
+    bzytrd_base = (
         _env("BIZYTRD_BASE_URL", env_values)
         or _env("BIZYTRD_API_BASE_URL", env_values)
         or _env("BIZYTRD_SERVER_URL", env_values)
-        or _env("BIZYAIR_TEST_TRD_BASE_URL", env_values)
-        or legacy_bizyair_base_url
-        or DEFAULT_API_BASE_URL
     )
+    test_trd_base_url = _env("BIZYAIR_TEST_TRD_BASE_URL", env_values)
+
+    if bzytrd_base:
+        api_base_url = str(bzytrd_base).strip().rstrip("/")
+        _is_test_mode = False
+    elif test_trd_base_url:
+        api_base_url = str(test_trd_base_url).strip().rstrip("/")
+        _is_test_mode = True
+        logging.info(
+            "BizyTRD test mode: base_url=%s, uploads route to %s",
+            api_base_url,
+            legacy_bizyair_base_url or DEFAULT_UPLOAD_BASE_URL,
+        )
+    elif legacy_bizyair_base_url:
+        api_base_url = legacy_bizyair_base_url
+        _is_test_mode = False
+    else:
+        api_base_url = DEFAULT_API_BASE_URL
+        _is_test_mode = False
+
     api_key = (
         _env("BIZYTRD_API_KEY", env_values)
         or _env("BIZYAIR_API_KEY", env_values)
         or _load_api_key_file()
         or ""
     )
+
+    if _is_test_mode:
+        upload_fallback = legacy_bizyair_base_url or DEFAULT_UPLOAD_BASE_URL
+    else:
+        upload_fallback = api_base_url
+
     upload_base_url = (
         _env("BIZYTRD_UPLOAD_BASE_URL", env_values)
         or _env("BIZYTRD_UPLOAD_URL", env_values)
-        or api_base_url
+        or upload_fallback
     )
 
     return SDKConfig(

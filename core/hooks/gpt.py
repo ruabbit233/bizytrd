@@ -44,6 +44,7 @@ def size_mapping(value: Any, context: HookContext) -> dict[str, int]:
     max_pixels = 8_294_400
     min_pixels = 655_360
     max_edge = 3840
+    MAX_RATIO = 3.0  # 宽高比上限
 
     if width * height > max_pixels or max(width, height) > max_edge:
         scale = min(
@@ -57,5 +58,10 @@ def size_mapping(value: Any, context: HookContext) -> dict[str, int]:
         scale = math.sqrt(min_pixels / (width * height))
         width = align16(int(width * scale), mode="ceil")
         height = align16(int(height * scale), mode="ceil")
+    
+    if width / height > MAX_RATIO:
+        height = align16(math.ceil(width / MAX_RATIO), mode="ceil")
+    elif height / width > MAX_RATIO:
+        width = align16(math.ceil(height / MAX_RATIO), mode="ceil")
 
     return {"width": width, "height": height}

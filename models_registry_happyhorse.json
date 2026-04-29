@@ -1,0 +1,338 @@
+[
+  {
+    "internal_name": "HappyHorse_1_0_T2V_API",
+    "class_name": "HappyHorse_1_0_T2V_API",
+    "display_name": "HappyHorse 1.0 Text To Video",
+    "category": "BizyTRD/HappyHorse",
+    "model_name": "happyhorse-1-0-t2v",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "文本提示词，用于描述期望生成的视频内容。",
+        "fieldKey": "prompt",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "ratio",
+        "options": [
+          "1:1",
+          "4:3",
+          "3:4",
+          "9:16",
+          "16:9"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 3,
+        "max": 15,
+        "step": 1,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否在生成的视频上添加水印标识。水印位于视频右下角，文案固定为\"Happy Horse\"。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "step": 1,
+        "description": "为-1时系统自动生成随机种子。若需提升生成结果的可复现性，建议固定seed值。",
+        "sendIf": "gte_zero"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "happyhorse-1.0-t2v",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "HappyHorse_1_0_I2V_API",
+    "class_name": "HappyHorse_1_0_I2V_API",
+    "display_name": "HappyHorse 1.0 Image To Video",
+    "category": "BizyTRD/HappyHorse",
+    "model_name": "happyhorse-1-0-i2v",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame",
+        "description": "输入首帧图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "description": "视频生成提示词。",
+        "fieldKey": "prompt",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 3,
+        "max": 15,
+        "step": 1,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否在生成的视频上添加水印标识。水印位于视频右下角，文案固定为\"Happy Horse\"。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机数种子，-1 表示不指定（由系统随机生成）。",
+        "sendIf": "gte_zero"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "happyhorse-1.0-i2v",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "HappyHorse_1_0_R2V_API",
+    "class_name": "HappyHorse_1_0_R2V_API",
+    "display_name": "HappyHorse 1.0 Reference To Video",
+    "category": "BizyTRD/HappyHorse",
+    "model_name": "happyhorse-1-0-r2v",
+    "endpoint_category": "Reference To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "视频生成提示词，必填。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "images",
+        "maxInputNum": 9,
+        "description": "参考图片输入，最多 9 张。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1",
+          "4:3",
+          "3:4"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 3,
+        "max": 15,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否在生成的视频上添加水印标识。水印位于视频右下角，文案固定为\"Happy Horse\"。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机种子。设为 -1 时不传此参数，由服务端随机生成。",
+        "sendIf": "gte_zero"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "happyhorse-1.0-r2v",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "HappyHorse_1_0_VIDEOEDIT_API",
+    "class_name": "HappyHorse_1_0_VIDEOEDIT_API",
+    "display_name": "HappyHorse 1.0 Video Edit",
+    "category": "BizyTRD/HappyHorse",
+    "model_name": "happyhorse-1-0-video-edit",
+    "endpoint_category": "Video Edit",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "video",
+        "type": "VIDEO",
+        "required": true,
+        "fieldKey": "video",
+        "description": "输入视频。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "description": "编辑提示词。",
+        "fieldKey": "prompt",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "images",
+        "maxInputNum": 5,
+        "description": "参考图片输入，最多 5 张。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "audio_setting",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "audio_setting",
+        "options": [
+          "auto",
+          "origin"
+        ],
+        "default": "auto",
+        "description": "auto 为模型自动判断；origin 为强制保留输入视频原声。"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否在生成的视频上添加水印标识。水印位于视频右下角，文案固定为\"Happy Horse\"。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机种子。设为 -1 时不传此参数，由服务端随机生成。",
+        "sendIf": "gte_zero"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "happyhorse-1.0-video-edit",
+        "fieldKey": "model"
+      }
+    ]
+  }
+]

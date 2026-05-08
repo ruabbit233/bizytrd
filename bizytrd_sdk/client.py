@@ -309,7 +309,7 @@ class AsyncBizyTRD:
         if original_urls is None:
             original_urls = set()
 
-        url = f"{self.config.base_url.rstrip('/')}/trd_api/{request_id}"
+        url = f"{self.config.base_url.rstrip('/')}/modelzoo/tasks/{request_id}"
         headers = self._build_headers(prompt_id=prompt_id)
         interval = float(
             polling_interval

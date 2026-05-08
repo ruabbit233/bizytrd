@@ -2375,7 +2375,7 @@
         "type": "IMAGE",
         "required": false,
         "description": "可选参考图，最多 5 张。",
-        "fieldKey": "urls",
+        "fieldKey": "image_urls",
         "maxInputNum": 5
       },
       {
@@ -2650,7 +2650,7 @@
         "type": "IMAGE",
         "required": false,
         "description": "可选参考图，最多 14 张。",
-        "fieldKey": "urls",
+        "fieldKey": "image_urls",
         "maxInputNum": 14
       },
       {
@@ -2936,7 +2936,7 @@
         "type": "IMAGE",
         "required": false,
         "description": "可选参考图，最多 14 张。",
-        "fieldKey": "urls",
+        "fieldKey": "image_urls",
         "maxInputNum": 14
       },
       {
@@ -3311,7 +3311,7 @@
         "type": "IMAGE",
         "required": true,
         "description": "输入参考图。(当前数量只是示例，实际支持数量请参考模型说明)",
-        "fieldKey": "urls",
+        "fieldKey": "image_urls",
         "maxInputNum": 8
       },
       {
@@ -3998,7 +3998,7 @@
         "name": "images",
         "type": "IMAGE",
         "required": true,
-        "fieldKey": "images",
+        "fieldKey": "image_urls",
         "maxInputNum": 9,
         "description": "参考图片输入，最多 9 张。"
       },
@@ -4096,7 +4096,7 @@
         "name": "images",
         "type": "IMAGE",
         "required": false,
-        "fieldKey": "images",
+        "fieldKey": "image_urls",
         "maxInputNum": 5,
         "description": "参考图片输入，最多 5 张。"
       },
@@ -4148,6 +4148,4421 @@
         "hidden": true,
         "default": "happyhorse-1.0-video-edit",
         "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "JoyCaption3",
+    "class_name": "JoyCaption3",
+    "display_name": "JoyCaption3",
+    "category": "BizyTRD/SiliconFlow",
+    "model_name": "joycaption3",
+    "endpoint_category": "Vision Language Models",
+    "output_type": "text",
+    "params": [
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image_urls",
+        "description": "输入图片。"
+      },
+      {
+        "name": "do_sample",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "do_sample",
+        "default": false,
+        "description": "是否启用采样"
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": false,
+        "fieldKey": "temperature",
+        "default": 0.5,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.01,
+        "description": "采样温度，值越大生成结果越随机。"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "max_tokens",
+        "default": 256,
+        "min": 16,
+        "max": 512,
+        "step": 16,
+        "description": "生成文本的最大长度，单位为 token。"
+      },
+      {
+        "name": "caption_type",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "caption_type",
+        "options": [
+          "Descriptive", 
+          "Descriptive (Informal)", 
+          "Training Prompt", 
+          "MidJourney",
+          "Booru tag list", 
+          "Booru-like tag list", 
+          "Art Critic",
+          "Product Listing", 
+          "Social Media Post"
+        ] 
+      },
+      {
+        "name": "caption_length",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "caption_length",
+        "options": [
+          "any",
+          "very short",
+          "short",
+          "medium-length",
+          "long",
+          "very long",
+          "20",
+          "30",
+          "40",
+          "50",
+          "60",
+          "70",
+          "80",
+          "90",
+          "100",
+          "110",
+          "120",
+          "130",
+          "140",
+          "150",
+          "160",
+          "170",
+          "180",
+          "190",
+          "200",
+          "210",
+          "220",
+          "230",
+          "240",
+          "250",
+          "260"
+        ]
+      },
+      {
+        "name": "extra_options",
+        "type": "STRING",
+        "required": false,
+        "fieldKey": "extra_options",
+        "default": "",
+        "description": "额外选项。"
+      },
+      {
+        "name": "name_input",
+        "type": "STRING",
+        "required": false,
+        "fieldKey": "name_input",
+        "default": ""
+      },
+      {
+        "name": "custom_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "fieldKey": "custom_prompt",
+        "default": ""
+      }
+    ]
+  },
+  {
+    "internal_name": "Qwen3_TTS",
+    "class_name": "Qwen3_TTS",
+    "display_name": "Qwen3 Text To Audio",
+    "category": "BizyTRD/SiliconFlow",
+    "model_name": "qwen3-tts",
+    "endpoint_category": "Text To Audio",
+    "output_type": "audio",
+    "params": [
+      {
+        "name": "input",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "文本输入，用于生成语音。",
+        "fieldKey": "input"
+      },
+      {
+        "name": "voice",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "voice",
+        "options": [
+          "vivian", "serena", "uncle_fu", "dylan", "eric", "ryan", "aiden", "ono_anna", "sohee"
+        ],
+        "default": "vivian"
+      },
+      {
+        "name": "response_format",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "response_format",
+        "options": [
+          "wav", "mp3", "flac", "pcm", "aac", "opus"
+        ],
+        "default": "wav"
+      },
+      {
+        "name": "stream",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "stream",
+        "default": false
+      },
+      {
+        "name": "instructions",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "fieldKey": "instructions",
+        "default": ""
+      },
+      {
+        "name": "language",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "language",
+        "options": ["Auto", "Chinese", "English", "Japanese", "Korean", "German", "French", "Russian", "Portuguese", "Spanish", "Italian"],
+        "default": "Auto"
+      },
+      {
+        "name": "speed",
+        "type": "FLOAT",
+        "required": false,
+        "fieldKey": "speed",
+        "default": 1.0,
+        "min": 0.5,
+        "max": 2.0,
+        "step": 0.1,
+        "description": "语速，默认为 1.0，范围为 0.5 到 2.0。"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "max_tokens",
+        "default": 2048,
+        "min": 16,
+        "max": 4096,
+        "step": 16,
+        "description": "生成语音的最大长度，单位为 token。"
+      }
+    ]
+  },
+  {
+    "internal_name": "z-image-turbo",
+    "class_name": "ZImageTurbo",
+    "display_name": "Z Image Turbo",
+    "category": "BizyTRD/SiliconFlow",
+    "model_name": "z-image-turbo",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "图像生成提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "description": "反向提示词，用于指定生成图像中不希望出现的元素。",
+        "fieldKey": "negative_prompt"
+      },
+      {
+        "name": "width",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "width",
+        "default": 512,
+        "min": 256,
+        "max": 1024,
+        "step": 64,
+        "description": "生成图像的宽度，单位为像素。",
+        "internal": true
+      },
+      {
+        "name": "height",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "height",
+        "default": 512,
+        "min": 256,
+        "max": 1024,
+        "step": 64,
+        "description": "生成图像的高度，单位为像素。",
+        "internal": true
+      },
+      {
+        "name": "image_size",
+        "type": "STRING",
+        "hidden": true,
+        "fieldKey": "image_size",
+        "valueHook": "siliconflow.size_mapping"
+      },
+      {
+        "name": "batch_size",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "batch_size",
+        "default": 1,
+        "min": 1,
+        "max": 4,
+        "step": 1,
+        "description": "生成图像的批量大小，默认为 1，范围为 1 到 4。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "step": 1,
+        "description": "随机数种子，默认为 -1，表示不指定种子，由系统随机生成。固定种子可以提高生成结果的可复现性。",
+        "sendIf": "gte_zero"
+      }
+    ]
+  },
+  {
+    "internal_name": "Ltx-2-3",
+    "class_name": "Ltx_2_3",
+    "display_name": "Ltx 2.3",
+    "category": "BizyTRD/SiliconFlow",
+    "model_name": "ltx-2-3",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image_url",
+        "description": "输入图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "description": "视频生成提示词。",
+        "fieldKey": "prompt"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 5,
+        "max": 10,
+        "step": 1,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          480,
+          720,
+          1080
+        ],
+        "default": 720,
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "display",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "display",
+        "options": [
+          "vertical",
+          "horizontal"
+        ],
+        "default": "vertical",
+        "description": "显示模式。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "step": 1,
+        "description": "随机数种子，默认为 -1，表示不指定种子，由系统随机生成。固定种子可以提高生成结果的可复现性。",
+        "sendIf": "gte_zero"
+      }
+    ]
+  },
+    {
+    "internal_name": "Wan_2_5_I2V_API",
+    "class_name": "Wan_2_5_I2V_API",
+    "display_name": "Wan 2.5 Image To Video",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-5",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "img_url",
+        "description": "输入图片。"
+      },
+      {
+        "name": "audio",
+        "type": "AUDIO",
+        "required": false,
+        "fieldKey": "audio_url",
+        "description": "驱动音频，模型将使用该音频生成视频。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "480P",
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "auto_audio",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否由模型自动生成声音，优先级低于audio参数。"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan-2-5",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_2_5_T2V_API",
+    "class_name": "Wan_2_5_T2V_API",
+    "display_name": "Wan 2.5 Text To Video",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-5",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "audio",
+        "type": "AUDIO",
+        "required": false,
+        "fieldKey": "audio_url",
+        "description": "驱动音频。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "size",
+        "options": [
+          "832*480",
+          "480*832",
+          "624*624",
+          "1280*720",
+          "720*1280",
+          "960*960",
+          "1088*832",
+          "832*1088",
+          "1920*1080",
+          "1080*1920",
+          "1440*1440",
+          "1632*1248",
+          "1248*1632"
+        ],
+        "default": "1920*1080",
+        "description": "输出尺寸。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "auto_audio",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否由模型自动生成声音，优先级低于audio参数。"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan-2-5",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_2_6_I2V_API",
+    "class_name": "Wan_2_6_I2V_API",
+    "display_name": "Wan 2.6 Image To Video",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-6",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "img_url",
+        "description": "输入图片。"
+      },
+      {
+        "name": "audio",
+        "type": "AUDIO",
+        "required": false,
+        "fieldKey": "audio_url",
+        "description": "驱动音频。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10,
+          15
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "shot_type",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "shot_type",
+        "options": [
+          "single",
+          "multi"
+        ],
+        "default": "single",
+        "description": "镜头类型，single为单镜头，multi为多镜头。"
+      },
+      {
+        "name": "auto_audio",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否由模型自动生成声音，优先级低于audio参数。"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan-2-6",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_2_6_T2V_API",
+    "class_name": "Wan_2_6_T2V_API",
+    "display_name": "Wan 2.6 Text To Video",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-6",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "audio",
+        "type": "AUDIO",
+        "required": false,
+        "fieldKey": "audio_url",
+        "description": "驱动音频。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "size",
+        "options": [
+          "1280*720",
+          "720*1280",
+          "960*960",
+          "1088*832",
+          "832*1088",
+          "1920*1080",
+          "1080*1920",
+          "1440*1440",
+          "1632*1248",
+          "1248*1632"
+        ],
+        "default": "1920*1080",
+        "description": "输出尺寸。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10,
+          15
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "shot_type",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "shot_type",
+        "options": [
+          "single",
+          "multi"
+        ],
+        "default": "single",
+        "description": "镜头类型，single为单镜头，multi为多镜头。"
+      },
+      {
+        "name": "auto_audio",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否由模型自动生成声音，优先级低于audio参数。"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan2.6-t2v",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_2_7_T2V_API",
+    "class_name": "Wan_2_7_T2V_API",
+    "display_name": "Wan 2.7 Text To Video",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-7",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "文本提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "audio",
+        "type": "AUDIO",
+        "required": false,
+        "fieldKey": "audio_url",
+        "description": "驱动音频。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "ratio",
+        "options": [
+          "1:1",
+          "4:3",
+          "3:4",
+          "9:16",
+          "16:9"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 2,
+        "max": 15,
+        "step": 1,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否添加\"AI生成\"水印。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "step": 1,
+        "description": "随机种子。"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan2.7-t2v",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_2_7_I2V_API",
+    "class_name": "Wan_2_7_I2V_API",
+    "display_name": "Wan 2.7 Image To Video",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-7",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame",
+        "description": "输入首帧图片。"
+      },
+      {
+        "name": "last_frame",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame",
+        "description": "输入尾帧图片，有则变为首尾帧生视频。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "audio",
+        "type": "AUDIO",
+        "required": false,
+        "fieldKey": "driving_audio",
+        "description": "驱动音频。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 2,
+        "max": 15,
+        "step": 1,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否添加\"AI生成\"水印。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机种子，-1表示不指定。",
+        "sendIf": "gte_zero"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan2.7-i2v",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_2_7_VideoExtension_API",
+    "class_name": "Wan_2_7_VideoExtension_API",
+    "display_name": "Wan 2.7 Video Extension",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-7",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_clip",
+        "type": "VIDEO",
+        "required": true,
+        "fieldKey": "first_clip",
+        "description": "输入首段视频。"
+      },
+      {
+        "name": "last_frame",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame",
+        "description": "输入尾帧图片，有则变为首段视频+尾帧续写。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频续写提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 2,
+        "max": 15,
+        "step": 1,
+        "description": "续写视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否添加\"AI生成\"水印。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机种子，-1表示不指定。",
+        "sendIf": "gte_zero"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan2.7-i2v",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_2_7_R2V_API",
+    "class_name": "Wan_2_7_R2V_API",
+    "display_name": "Wan 2.7 Reference To Video",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-7",
+    "endpoint_category": "Reference To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词，必填。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "first_frame_image",
+        "description": "可选首帧图像。传入后模型会优先参考首帧构图，ratio参数将被忽略。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_1",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_1",
+        "description": "参考图片1。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_2",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_2",
+        "description": "参考图片2。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_3",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_3",
+        "description": "参考图片3。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_4",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_4",
+        "description": "参考图片4。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_5",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_5",
+        "description": "参考图片5。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_video_1",
+        "type": "VIDEO",
+        "required": false,
+        "fieldKey": "ref_video_1",
+        "description": "参考视频1。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_video_2",
+        "type": "VIDEO",
+        "required": false,
+        "fieldKey": "ref_video_2",
+        "description": "参考视频2。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_video_3",
+        "type": "VIDEO",
+        "required": false,
+        "fieldKey": "ref_video_3",
+        "description": "参考视频3。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_video_4",
+        "type": "VIDEO",
+        "required": false,
+        "fieldKey": "ref_video_4",
+        "description": "参考视频4。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_video_5",
+        "type": "VIDEO",
+        "required": false,
+        "fieldKey": "ref_video_5",
+        "description": "参考视频5。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "reference_voice",
+        "type": "AUDIO",
+        "required": false,
+        "fieldKey": "reference_voice",
+        "description": "参考音色。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1",
+          "4:3",
+          "3:4"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。无首帧图时传入。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 2,
+        "max": 10,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否添加\"AI生成\"水印。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机种子，-1表示不指定。",
+        "sendIf": "gte_zero"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan2.7-r2v",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_V2_7_VIDEOEDIT_API",
+    "class_name": "Wan_V2_7_VIDEOEDIT_API",
+    "display_name": "Wan2.7 Video Edit",
+    "category": "BizyTRD/WanVideo",
+    "model_name": "wan2.7-videoedit",
+    "endpoint_category": "Video Edit",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "video",
+        "type": "VIDEO",
+        "required": true,
+        "fieldKey": "video",
+        "description": "输入视频（2-10秒）。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "编辑提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "first_frame_image",
+        "description": "可选首帧图像，用于更精细地约束编辑后的首帧表现。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_1",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_1",
+        "description": "参考图片1。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_2",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_2",
+        "description": "参考图片2。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_3",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_3",
+        "description": "参考图片3。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "ratio",
+        "options": [
+          "default",
+          "16:9",
+          "9:16",
+          "1:1",
+          "4:3",
+          "3:4"
+        ],
+        "default": "default",
+        "description": "输出宽高比。default表示跟随输入视频；其他值显式传给模型。",
+        "skipValues": ["default"]
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "duration",
+        "default": 0,
+        "min": 0,
+        "max": 10,
+        "description": "0表示保持输入视频时长；2-10表示截断到指定长度。",
+        "skipValues": [0]
+      },
+      {
+        "name": "audio_setting",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "audio_setting",
+        "options": [
+          "auto",
+          "origin"
+        ],
+        "default": "auto",
+        "description": "auto为模型自动判断；origin为强制保留输入视频原声。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否添加\"AI生成\"水印。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机种子，-1表示不指定。",
+        "sendIf": "gte_zero"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan2.7-videoedit",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_V2_7_IMAGE_API",
+    "class_name": "Wan_V2_7_IMAGE_API",
+    "display_name": "Wan2.7 Image",
+    "category": "BizyTRD/WanImage",
+    "model_name": "wan2.7-image",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "图像生成提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "wan2.7-image-pro",
+          "wan2.7-image"
+        ],
+        "default": "wan2.7-image-pro",
+        "description": "模型版本。"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "size",
+        "options": [
+          "1K",
+          "2K",
+          "4K",
+          "Custom"
+        ],
+        "default": "2K",
+        "description": "输出尺寸档位。1K/2K/4K为官方规格，Custom使用自定义宽高。",
+        "valueHook": "wan.custom_size"
+      },
+      {
+        "name": "custom_width",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "custom_width",
+        "default": 2048,
+        "min": 768,
+        "max": 4096,
+        "description": "自定义输出宽度，仅size=Custom时生效。",
+        "internal": true
+      },
+      {
+        "name": "custom_height",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "custom_height",
+        "default": 2048,
+        "min": 768,
+        "max": 4096,
+        "description": "自定义输出高度，仅size=Custom时生效。",
+        "internal": true
+      },
+      {
+        "name": "n",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "n",
+        "default": 4,
+        "min": 1,
+        "max": 12,
+        "description": "生成张数。非组图模式1-4；组图模式1-12。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "urls",
+        "maxInputNum": 9,
+        "description": "参考图输入，最多9张。"
+      },
+      {
+        "name": "enable_sequential",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "enable_sequential",
+        "default": false,
+        "description": "是否启用组图模式。"
+      },
+      {
+        "name": "thinking_mode",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "thinking_mode",
+        "default": true,
+        "description": "仅在文生图且未开启组图模式时生效。"
+      },
+      {
+        "name": "bbox_list",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "bbox_list",
+        "description": "交互式编辑框选区域JSON数组。",
+        "valueHook": "wan.bbox_list"
+      },
+      {
+        "name": "color_palette",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "color_palette",
+        "description": "颜色主题JSON数组，3-10个颜色。",
+        "valueHook": "wan.color_palette"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否添加\"AI生成\"水印。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机种子，-1表示不指定。",
+        "sendIf": "gte_zero"
+      }
+    ]
+  },
+  {
+    "internal_name": "Veo_3_1_T2V_API",
+    "class_name": "Veo_3_1_T2V_API",
+    "display_name": "Veo3.1 Text To Video",
+    "category": "BizyTRD/Veo",
+    "model_name": "veo-3-1",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词，必填。"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "veo3.1-fast",
+          "veo3.1-pro"
+        ],
+        "default": "veo3.1-fast",
+        "description": "模型版本。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "9:16",
+          "16:9"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720p",
+          "1080p",
+          "4k"
+        ],
+        "default": "1080p",
+        "description": "输出分辨率。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Veo_3_1_FLF2V_API",
+    "class_name": "Veo_3_1_FLF2V_API",
+    "display_name": "Veo3.1 First Last Frame To Video",
+    "category": "BizyTRD/Veo",
+    "model_name": "veo-3-1",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词，必填。"
+      },
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame_image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "veo3.1-fast",
+          "veo3.1-pro"
+        ],
+        "default": "veo3.1-fast",
+        "description": "模型版本。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "尾帧图片。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "9:16",
+          "16:9"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720p",
+          "1080p",
+          "4k"
+        ],
+        "default": "1080p",
+        "description": "输出分辨率。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Veo_3_1_I2V_API",
+    "class_name": "Veo_3_1_I2V_API",
+    "display_name": "Veo 3.1 Image To Video",
+    "category": "BizyTRD/Veo",
+    "model_name": "veo-3-1",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词，必填。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "maxInputNum": 3,
+        "fieldKey": "image_urls",
+        "description": "参考图，支持多图输入"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "veo3.1-fast"
+        ],
+        "default": "veo3.1-fast",
+        "description": "模型版本，参考图模式仅支持fast。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720p",
+          "1080p",
+          "4k"
+        ],
+        "default": "1080p",
+        "description": "输出分辨率。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_2_1_T2V_API",
+    "class_name": "Kling_2_1_T2V_API",
+    "display_name": "Kling 2.1 Text To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v2-1",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "negative_prompt",
+        "default": "",
+        "multiline": true,
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v2-1-master"
+        ],
+        "default": "kling-v2-1-master",
+        "description": "模型版本。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_2_1_FLF2V_API",
+    "class_name": "Kling_2_1_FLF2V_API",
+    "display_name": "Kling 2.1 First Last Frame To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v2-1",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame_image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "negative_prompt",
+        "default": "",
+        "multiline": true,
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v2-1-std",
+          "kling-v2-1-pro",
+          "kling-v2-1-master"
+        ],
+        "default": "kling-v2-1-std",
+        "description": "模型版本。std为标准版，pro为专业版，master为大师版。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "末帧图片，只有pro版本支持。",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_2_5_FLF2V_API",
+    "class_name": "Kling_2_5_FLF2V_API",
+    "display_name": "Kling 2.5 First Last Frame To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v2-5",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame_image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "negative_prompt",
+        "default": "",
+        "multiline": true,
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v2-5-turbo"
+        ],
+        "default": "kling-v2-5-turbo",
+        "description": "模型版本。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "末帧图片。",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_2_6_T2V_API",
+    "class_name": "Kling_2_6_T2V_API",
+    "display_name": "Kling 2.6 Text To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v2-6",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "sound",
+        "default": false,
+        "description": "是否开启声音。"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v2-6"
+        ],
+        "default": "kling-v2-6",
+        "description": "模型版本。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_2_6_I2V_API",
+    "class_name": "Kling_2_6_I2V_API",
+    "display_name": "Kling 2.6 Image To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v2-6",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame_image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "sound",
+        "default": false,
+        "description": "是否开启声音。"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v2-6"
+        ],
+        "default": "kling-v2-6",
+        "description": "模型版本。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_3_0_T2V_API",
+    "class_name": "Kling_3_0_T2V_API",
+    "display_name": "Kling 3.0 Text To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v3.0",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "negative_prompt",
+        "default": "",
+        "multiline": true,
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "sound",
+        "default": false,
+        "description": "是否开启声音。"
+      },
+      {
+        "name": "cfg_scale",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "cfg_scale",
+        "default": 0.5,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.05,
+        "description": "CFG缩放系数，控制提示词引导强度。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v3.0-std",
+          "kling-v3.0-pro"
+        ],
+        "default": "kling-v3.0-std",
+        "description": "模型版本。std为标准版，pro为专业版。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 3,
+        "max": 15,
+        "description": "视频时长，单位秒。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_3_0_FLF2V_API",
+    "class_name": "Kling_3_0_FLF2V_API",
+    "display_name": "Kling 3.0 First Last Frame To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v3.0",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame_image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "negative_prompt",
+        "default": "",
+        "multiline": true,
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "sound",
+        "default": false,
+        "description": "是否开启声音。"
+      },
+      {
+        "name": "cfg_scale",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "cfg_scale",
+        "default": 0.5,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.05,
+        "description": "CFG缩放系数，控制提示词引导强度。"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v3.0-std",
+          "kling-v3.0-pro"
+        ],
+        "default": "kling-v3.0-std",
+        "description": "模型版本。std为标准版，pro为专业版。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 3,
+        "max": 15,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "末帧图片。",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_2_T2I_API",
+    "class_name": "Kling_2_T2I_API",
+    "display_name": "Kling 2 Text To Image",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v2",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "negative_prompt",
+        "default": "",
+        "multiline": true,
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v2"
+        ],
+        "default": "kling-v2",
+        "description": "模型版本。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1",
+          "4:3",
+          "3:4",
+          "3:2",
+          "2:3",
+          "21:9"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "1K",
+          "2K"
+        ],
+        "default": "1K",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "variants",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "variants",
+        "default": 1,
+        "min": 1,
+        "max": 9,
+        "description": "生成图片数量。"
+      },
+      {
+        "name": "image_fidelity",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "image_fidelity",
+        "default": 0.5,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.01,
+        "description": "图片保真度。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_2_I2I_API",
+    "class_name": "Kling_2_I2I_API",
+    "display_name": "Kling 2 Image To Image",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v2",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image",
+        "description": "输入图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v2"
+        ],
+        "default": "kling-v2",
+        "description": "模型版本。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1",
+          "4:3",
+          "3:4",
+          "3:2",
+          "2:3",
+          "21:9"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "1K"
+        ],
+        "default": "1K",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "variants",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "variants",
+        "default": 1,
+        "min": 1,
+        "max": 9,
+        "description": "生成图片数量。"
+      },
+      {
+        "name": "image_fidelity",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "image_fidelity",
+        "default": 0.5,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.01,
+        "description": "图片保真度。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O1_T2V_API",
+    "class_name": "Kling_O1_T2V_API",
+    "display_name": "Kling O1 Text To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o1-ti2v",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "mode",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "mode",
+        "options": [
+          "std",
+          "pro"
+        ],
+        "default": "std",
+        "description": "生成模式。std为标准模式，pro为专业模式。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O1_FLF2V_API",
+    "class_name": "Kling_O1_FLF2V_API",
+    "display_name": "Kling O1 First Last Frame To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o1-ti2v",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame_image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "mode",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "mode",
+        "options": [
+          "std",
+          "pro"
+        ],
+        "default": "std",
+        "description": "生成模式。std为标准模式，pro为专业模式。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "末帧图片。",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O1_R2V_API",
+    "class_name": "Kling_O1_R2V_API",
+    "display_name": "Kling O1 Reference To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o1",
+    "endpoint_category": "Reference To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "keep_original_sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "keep_original_sound",
+        "default": false,
+        "description": "选择是否通过参数保留视频原始声音。"
+      },
+      {
+        "name": "mode",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "mode",
+        "options": [
+          "std",
+          "pro"
+        ],
+        "default": "std",
+        "description": "生成模式。std为标准模式，pro为专业模式。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "image_urls",
+        "maxInputNum": 7,
+        "description": "参考图片1。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "videos",
+        "type": "VIDEO",
+        "required": false,
+        "fieldKey": "video_urls",
+        "description": "参考视频。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O1_VIDEO_EDIT_API",
+    "class_name": "Kling_O1_VIDEO_EDIT_API",
+    "display_name": "Kling O1 Video Edit",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o1-edit",
+    "endpoint_category": "Video Edit",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "ref_video",
+        "type": "VIDEO",
+        "required": true,
+        "fieldKey": "video",
+        "description": "参考视频。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "keep_original_sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "keep_original_sound",
+        "default": false,
+        "description": "选择是否通过参数保留视频原始声音。"
+      },
+      {
+        "name": "mode",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "mode",
+        "options": [
+          "std",
+          "pro"
+        ],
+        "default": "std",
+        "description": "生成模式。std为标准模式，pro为专业模式。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "image_urls",
+        "maxInputNum": 4,
+        "description": "参考图片1。",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O3_T2V_API",
+    "class_name": "Kling_O3_T2V_API",
+    "display_name": "Kling O3 Text To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o3-t2v",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 1,
+        "max": 15,
+        "step": 1,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "sound",
+        "default": false,
+        "description": "是否开启声音。"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "kling-o3-t2v-std",
+          "kling-o3-t2v-pro"
+        ],
+        "default": "kling-o3-t2v-std",
+        "description": "模型版本。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "multi_prompt",
+        "type": "STRING",
+        "required": false,
+        "fieldKey": "multi_prompt",
+        "default": "[]",
+        "forceInput": true,
+        "valueHook": "common.json_loads",
+        "description": "来自 Kling O3 MultiPrompt Config 节点的多镜头提示词配置。"
+      },
+      {
+        "name": "multi_shot",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "multi_shot",
+        "default": false,
+        "description": "是否生成多镜头视频。"
+      },
+      {
+        "name": "shot_type",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "shot_type",
+        "options": [
+          "customize",
+          "intelligence"
+        ],
+        "default": "customize",
+        "description": "镜头类型。customize为自定义，intelligence为智能。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O3_FLF2V_API",
+    "class_name": "Kling_O3_FLF2V_API",
+    "display_name": "Kling O3 First Last Frame To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o3-i2v",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "firstFrameImage",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 3,
+        "max": 15,
+        "step": 1,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "sound",
+        "default": false,
+        "description": "是否开启声音。"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "kling-o3-i2v-std",
+          "kling-o3-i2v-pro"
+        ],
+        "default": "kling-o3-i2v-std",
+        "description": "模型版本。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "lastFrameImage",
+        "description": "尾帧图片。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "multi_prompt",
+        "type": "STRING",
+        "required": false,
+        "fieldKey": "multi_prompt",
+        "default": "[]",
+        "forceInput": true,
+        "valueHook": "common.json_loads",
+        "description": "来自 Kling O3 MultiPrompt Config 节点的多镜头提示词配置。"
+      },
+      {
+        "name": "multi_shot",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "multi_shot",
+        "default": false,
+        "description": "是否生成多镜头视频。"
+      },
+      {
+        "name": "shot_type",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "shot_type",
+        "options": [
+          "customize",
+          "intelligence"
+        ],
+        "default": "customize",
+        "description": "镜头类型。customize为自定义，intelligence为智能。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O3_R2V_API",
+    "class_name": "Kling_O3_R2V_API",
+    "display_name": "Kling O3 Reference To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o3",
+    "endpoint_category": "Reference To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 3,
+        "max": 15,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "keep_original_sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "keep_original_sound",
+        "default": false,
+        "description": "选择是否通过参数保留视频原始声音。"
+      },
+      {
+        "name": "sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "sound",
+        "default": false,
+        "description": "是否开启声音。"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "kling-o3-ref-std",
+          "kling-o3-ref-pro"
+        ],
+        "default": "kling-o3-ref-std",
+        "description": "模型版本。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "image_urls",
+        "maxInputNum": 7,
+        "description": "参考图片输入，最多7张。"
+      },
+      {
+        "name": "videos",
+        "type": "VIDEO",
+        "required": false,
+        "fieldKey": "video_urls",
+        "description": "参考视频。"
+      },
+      {
+        "name": "multi_prompt",
+        "type": "STRING",
+        "required": false,
+        "fieldKey": "multi_prompt",
+        "default": "[]",
+        "forceInput": true,
+        "valueHook": "common.json_loads",
+        "description": "来自 Kling O3 MultiPrompt Config 节点的多镜头提示词配置。"
+      },
+      {
+        "name": "multi_shot",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "multi_shot",
+        "default": false,
+        "description": "是否生成多镜头视频。"
+      },
+      {
+        "name": "shot_type",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "shot_type",
+        "options": [
+          "customize",
+          "intelligence"
+        ],
+        "default": "customize",
+        "description": "镜头类型。customize为自定义，intelligence为智能。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O3_VIDEO_EDIT_API",
+    "class_name": "Kling_O3_VIDEO_EDIT_API",
+    "display_name": "Kling O3 Video Edit",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o3-edit",
+    "endpoint_category": "Video Edit",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "videos",
+        "type": "VIDEO",
+        "required": true,
+        "fieldKey": "video_urls",
+        "description": "参考视频。"
+      },
+      {
+        "name": "keep_original_sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "keep_original_sound",
+        "default": false,
+        "description": "选择是否通过参数保留视频原始声音。"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "kling-o3-edit-std",
+          "kling-o3-edit-pro"
+        ],
+        "default": "kling-o3-edit-std",
+        "description": "模型版本。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "image_urls",
+        "maxInputNum": 4,
+        "description": "参考图片输入，最多4张。"
+      }
+    ]
+  },
+    {
+    "internal_name": "LLM_gemini_3_flash_preview_API",
+    "class_name": "LLM_gemini_3_flash_preview_API",
+    "display_name": "gemini-3-flash-preview LLM",
+    "category": "BizyTRD/LLM",
+    "model_name": "gemini-3-flash-preview",
+    "endpoint_category": "large-language-models",
+    "output_type": "text",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "model",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "model",
+        "default": "gemini-3-flash-preview",
+        "internal": true,
+        "description": "模型标识。"
+      },
+      {
+        "name": "system_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "system_prompt",
+        "default": "你是一个有帮助的AI助手。",
+        "multiline": true,
+        "description": "系统提示词。"
+      },
+      {
+        "name": "user_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "user_prompt",
+        "default": "你好，请介绍一下你自己。",
+        "multiline": true,
+        "description": "用户提示词。"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "max_tokens",
+        "default": 32768,
+        "min": 1,
+        "max": 65536,
+        "description": "生成文本的最大长度，单位为 token。"
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "temperature",
+        "default": 1.0,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.01,
+        "description": "采样温度，值越大生成结果越随机。"
+      },
+      {
+        "name": "tools",
+        "type": "STRING",
+        "required": false,
+        "fieldKey": "tools",
+        "default": "[]",
+        "forceInput": true,
+        "valueHook": "common.json_loads",
+        "description": "来自 LLM Tool Config 节点的工具配置。"
+      }
+    ]
+  },
+  {
+    "internal_name": "LLM_gemini_3_pro_preview_API",
+    "class_name": "LLM_gemini_3_pro_preview_API",
+    "display_name": "gemini-3-pro-preview LLM",
+    "category": "BizyTRD/LLM",
+    "model_name": "gemini-3-pro-preview",
+    "endpoint_category": "large-language-models",
+    "output_type": "text",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "model",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "model",
+        "default": "gemini-3-pro-preview",
+        "internal": true,
+        "description": "模型标识。"
+      },
+      {
+        "name": "system_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "system_prompt",
+        "default": "你是一个有帮助的AI助手。",
+        "multiline": true,
+        "description": "系统提示词。"
+      },
+      {
+        "name": "user_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "user_prompt",
+        "default": "你好，请介绍一下你自己。",
+        "multiline": true,
+        "description": "用户提示词。"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "max_tokens",
+        "default": 32768,
+        "min": 1,
+        "max": 65536,
+        "description": "生成文本的最大长度，单位为 token。"
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "temperature",
+        "default": 1.0,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.01,
+        "description": "采样温度，值越大生成结果越随机。"
+      },
+      {
+        "name": "tools",
+        "type": "STRING",
+        "required": false,
+        "fieldKey": "tools",
+        "default": "[]",
+        "forceInput": true,
+        "valueHook": "common.json_loads",
+        "description": "来自 LLM Tool Config 节点的工具配置。"
+      }
+    ]
+  },
+  {
+    "internal_name": "LLM_gemini_3_1_flash_lite_preview_API",
+    "class_name": "LLM_gemini_3_1_flash_lite_preview_API",
+    "display_name": "gemini-3-1-flash-lite-preview LLM",
+    "category": "BizyTRD/LLM",
+    "model_name": "gemini-3-1-flash-lite-preview",
+    "endpoint_category": "large-language-models",
+    "output_type": "text",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "model",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "model",
+        "default": "gemini-3-1-flash-lite-preview",
+        "internal": true,
+        "description": "模型标识。"
+      },
+      {
+        "name": "system_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "system_prompt",
+        "default": "你是一个有帮助的AI助手。",
+        "multiline": true,
+        "description": "系统提示词。"
+      },
+      {
+        "name": "user_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "user_prompt",
+        "default": "你好，请介绍一下你自己。",
+        "multiline": true,
+        "description": "用户提示词。"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "max_tokens",
+        "default": 32768,
+        "min": 1,
+        "max": 65536,
+        "description": "生成文本的最大长度，单位为 token。"
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "temperature",
+        "default": 1.0,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.01,
+        "description": "采样温度，值越大生成结果越随机。"
+      },
+      {
+        "name": "tools",
+        "type": "STRING",
+        "required": false,
+        "fieldKey": "tools",
+        "default": "[]",
+        "forceInput": true,
+        "valueHook": "common.json_loads",
+        "description": "来自 LLM Tool Config 节点的工具配置。"
+      }
+    ]
+  },
+  {
+    "internal_name": "LLM_gemini_3_1_pro_preview_API",
+    "class_name": "LLM_gemini_3_1_pro_preview_API",
+    "display_name": "gemini-3-1-pro-preview LLM",
+    "category": "BizyTRD/LLM",
+    "model_name": "gemini-3-1-pro-preview",
+    "endpoint_category": "large-language-models",
+    "output_type": "text",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "model",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "model",
+        "default": "gemini-3-1-pro-preview",
+        "internal": true,
+        "description": "模型标识。"
+      },
+      {
+        "name": "system_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "system_prompt",
+        "default": "你是一个有帮助的AI助手。",
+        "multiline": true,
+        "description": "系统提示词。"
+      },
+      {
+        "name": "user_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "user_prompt",
+        "default": "你好，请介绍一下你自己。",
+        "multiline": true,
+        "description": "用户提示词。"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "max_tokens",
+        "default": 32768,
+        "min": 1,
+        "max": 65536,
+        "description": "生成文本的最大长度，单位为 token。"
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "temperature",
+        "default": 1.0,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.01,
+        "description": "采样温度，值越大生成结果越随机。"
+      },
+      {
+        "name": "tools",
+        "type": "STRING",
+        "required": false,
+        "fieldKey": "tools",
+        "default": "[]",
+        "forceInput": true,
+        "valueHook": "common.json_loads",
+        "description": "来自 LLM Tool Config 节点的工具配置。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VLM_gemini_3_flash_preview_API",
+    "class_name": "VLM_gemini_3_flash_preview_API",
+    "display_name": "gemini-3-flash-preview VLM",
+    "category": "BizyTRD/VLM",
+    "model_name": "gemini-3-flash-preview",
+    "endpoint_category": "vision-language-models",
+    "output_type": "text",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "model",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "model",
+        "default": "gemini-3-flash-preview",
+        "internal": true,
+        "description": "模型标识。"
+      },
+      {
+        "name": "system_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "system_prompt",
+        "default": "你是一个能分析图像的AI助手。请仔细观察图像，并根据用户的问题提供详细、准确的描述。",
+        "multiline": true,
+        "description": "系统提示词。"
+      },
+      {
+        "name": "user_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "user_prompt",
+        "default": "请描述这张图片的内容，并指出任何有趣或不寻常的细节。",
+        "multiline": true,
+        "description": "用户提示词。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image_urls",
+        "maxInputNum": 900,
+        "description": "输入图片，最多900张。"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "max_tokens",
+        "default": 32768,
+        "min": 1,
+        "max": 65536,
+        "description": "生成文本的最大长度，单位为 token。"
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "temperature",
+        "default": 1.0,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.01,
+        "description": "采样温度，值越大生成结果越随机。"
+      },
+      {
+        "name": "detail",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "detail",
+        "options": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "default": "high",
+        "description": "图片细节级别。"
+      },
+      {
+        "name": "enable_thinking",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "enable_thinking",
+        "default": false,
+        "description": "如果模型支持思考模式，是否开启。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VLM_gemini_3_pro_preview_API",
+    "class_name": "VLM_gemini_3_pro_preview_API",
+    "display_name": "gemini-3-pro-preview VLM",
+    "category": "BizyTRD/VLM",
+    "model_name": "gemini-3-pro-preview",
+    "endpoint_category": "vision-language-models",
+    "output_type": "text",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "model",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "model",
+        "default": "gemini-3-pro-preview",
+        "internal": true,
+        "description": "模型标识。"
+      },
+      {
+        "name": "system_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "system_prompt",
+        "default": "你是一个能分析图像的AI助手。请仔细观察图像，并根据用户的问题提供详细、准确的描述。",
+        "multiline": true,
+        "description": "系统提示词。"
+      },
+      {
+        "name": "user_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "user_prompt",
+        "default": "请描述这张图片的内容，并指出任何有趣或不寻常的细节。",
+        "multiline": true,
+        "description": "用户提示词。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image_urls",
+        "maxInputNum": 900,
+        "description": "输入图片，最多900张。"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "max_tokens",
+        "default": 32768,
+        "min": 1,
+        "max": 65536,
+        "description": "生成文本的最大长度，单位为 token。"
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "temperature",
+        "default": 1.0,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.01,
+        "description": "采样温度，值越大生成结果越随机。"
+      },
+      {
+        "name": "detail",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "detail",
+        "options": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "default": "high",
+        "description": "图片细节级别。"
+      },
+      {
+        "name": "enable_thinking",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "enable_thinking",
+        "default": false,
+        "description": "如果模型支持思考模式，是否开启。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VLM_gemini_3_1_flash_lite_preview_API",
+    "class_name": "VLM_gemini_3_1_flash_lite_preview_API",
+    "display_name": "gemini-3-1-flash-lite-preview VLM",
+    "category": "BizyTRD/VLM",
+    "model_name": "gemini-3-1-flash-lite-preview",
+    "endpoint_category": "vision-language-models",
+    "output_type": "text",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "model",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "model",
+        "default": "gemini-3-1-flash-lite-preview",
+        "internal": true,
+        "description": "模型标识。"
+      },
+      {
+        "name": "system_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "system_prompt",
+        "default": "你是一个能分析图像的AI助手。请仔细观察图像，并根据用户的问题提供详细、准确的描述。",
+        "multiline": true,
+        "description": "系统提示词。"
+      },
+      {
+        "name": "user_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "user_prompt",
+        "default": "请描述这张图片的内容，并指出任何有趣或不寻常的细节。",
+        "multiline": true,
+        "description": "用户提示词。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image_urls",
+        "maxInputNum": 900,
+        "description": "输入图片，最多900张。"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "max_tokens",
+        "default": 32768,
+        "min": 1,
+        "max": 65536,
+        "description": "生成文本的最大长度，单位为 token。"
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "temperature",
+        "default": 1.0,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.01,
+        "description": "采样温度，值越大生成结果越随机。"
+      },
+      {
+        "name": "detail",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "detail",
+        "options": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "default": "high",
+        "description": "图片细节级别。"
+      },
+      {
+        "name": "enable_thinking",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "enable_thinking",
+        "default": false,
+        "description": "如果模型支持思考模式，是否开启。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VLM_gemini_3_1_pro_preview_API",
+    "class_name": "VLM_gemini_3_1_pro_preview_API",
+    "display_name": "gemini-3-1-pro-preview VLM",
+    "category": "BizyTRD/VLM",
+    "model_name": "gemini-3-1-pro-preview",
+    "endpoint_category": "vision-language-models",
+    "output_type": "text",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "model",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "model",
+        "default": "gemini-3-1-pro-preview",
+        "internal": true,
+        "description": "模型标识。"
+      },
+      {
+        "name": "system_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "system_prompt",
+        "default": "你是一个能分析图像的AI助手。请仔细观察图像，并根据用户的问题提供详细、准确的描述。",
+        "multiline": true,
+        "description": "系统提示词。"
+      },
+      {
+        "name": "user_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "user_prompt",
+        "default": "请描述这张图片的内容，并指出任何有趣或不寻常的细节。",
+        "multiline": true,
+        "description": "用户提示词。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image_urls",
+        "maxInputNum": 900,
+        "description": "输入图片，最多900张。"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "max_tokens",
+        "default": 32768,
+        "min": 1,
+        "max": 65536,
+        "description": "生成文本的最大长度，单位为 token。"
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "temperature",
+        "default": 1.0,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.01,
+        "description": "采样温度，值越大生成结果越随机。"
+      },
+      {
+        "name": "detail",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "detail",
+        "options": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "default": "high",
+        "description": "图片细节级别。"
+      },
+      {
+        "name": "enable_thinking",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "enable_thinking",
+        "default": false,
+        "description": "如果模型支持思考模式，是否开启。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VIDU_Q1_T2V_API",
+    "class_name": "VIDU_Q1_T2V_API",
+    "display_name": "Vidu Q1 Text To Video",
+    "category": "BizyTRD/Vidu",
+    "model_name": "vidu-q1",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description": "随机种子。"
+      },
+      {
+        "name": "style",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "style",
+        "options": [
+          "general",
+          "anime"
+        ],
+        "default": "general",
+        "description": "画面风格。general为通用，anime为动漫。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "1080p"
+        ],
+        "default": "1080p",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "movement_amplitude",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "movement_amplitude",
+        "options": [
+          "auto",
+          "small",
+          "medium",
+          "large"
+        ],
+        "default": "auto",
+        "description": "画面中物体的运动幅度。"
+      },
+      {
+        "name": "bgm",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "bgm",
+        "default": false,
+        "description": "当设置为 true 时，系统将自动添加合适的 BGM。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VIDU_Q1_FLF2V_API",
+    "class_name": "VIDU_Q1_FLF2V_API",
+    "display_name": "Vidu Q1 First Last Frame To Video",
+    "category": "BizyTRD/Vidu",
+    "model_name": "vidu-q1",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame_image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description": "随机种子。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "1080p"
+        ],
+        "default": "1080p",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "movement_amplitude",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "movement_amplitude",
+        "options": [
+          "auto",
+          "small",
+          "medium",
+          "large"
+        ],
+        "default": "auto",
+        "description": "画面中物体的运动幅度。"
+      },
+      {
+        "name": "bgm",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "bgm",
+        "default": false,
+        "description": "当设置为 true 时，系统将自动添加合适的 BGM。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "末帧图片。",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "VIDU_Q1_I2V_API",
+    "class_name": "VIDU_Q1_I2V_API",
+    "display_name": "Vidu Q1 Images To Video",
+    "category": "BizyTRD/Vidu",
+    "model_name": "vidu-q1",
+    "endpoint_category": "Images To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image_urls",
+        "maxInputNum": 7,
+        "description": "参考图片1。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description": "随机种子。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "1080p"
+        ],
+        "default": "1080p",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "movement_amplitude",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "movement_amplitude",
+        "options": [
+          "auto",
+          "small",
+          "medium",
+          "large"
+        ],
+        "default": "auto",
+        "description": "画面中物体的运动幅度。"
+      },
+      {
+        "name": "bgm",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "bgm",
+        "default": false,
+        "description": "当设置为 true 时，系统将自动添加合适的 BGM。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VIDU_Q3_T2V_API",
+    "class_name": "VIDU_Q3_T2V_API",
+    "display_name": "Vidu Q3 Text To Video",
+    "category": "BizyTRD/Vidu",
+    "model_name": "vidu-q3-turbo",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description": "随机种子。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 1,
+        "max": 16,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "4:3",
+          "3:4",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "540p",
+          "720p",
+          "1080p"
+        ],
+        "default": "720p",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "audio",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否生成音频。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VIDU_Q3_T2V_API",
+    "class_name": "VIDU_Q3_T2V_API",
+    "display_name": "Vidu Q3 Text To Video",
+    "category": "BizyTRD/Vidu",
+    "model_name": "vidu-q3-pro",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description": "随机种子。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 1,
+        "max": 16,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "4:3",
+          "3:4",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "540p",
+          "720p",
+          "1080p"
+        ],
+        "default": "720p",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "audio",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否生成音频。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VIDU_Q3_FLF2V_API",
+    "class_name": "VIDU_Q3_FLF2V_API",
+    "display_name": "Vidu Q3 First Last Frame To Video",
+    "category": "BizyTRD/Vidu",
+    "model_name": "vidu-q3-pro",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description": "随机种子。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 1,
+        "max": 16,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "540p",
+          "720p",
+          "1080p"
+        ],
+        "default": "720p",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "audio",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否生成音频。"
+      },
+      {
+        "name": "is_rec",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "is_rec",
+        "default": false,
+        "description": "慎重选择！是否使用推荐提示词。启用后每个任务多消耗320个BZ币。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "末帧图片。",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "VIDU_Q3_FLF2V_API",
+    "class_name": "VIDU_Q3_FLF2V_API",
+    "display_name": "Vidu Q3 First Last Frame To Video",
+    "category": "BizyTRD/Vidu",
+    "model_name": "vidu-q3-turbo",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description": "随机种子。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 1,
+        "max": 16,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "540p",
+          "720p",
+          "1080p"
+        ],
+        "default": "720p",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "audio",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否生成音频。"
+      },
+      {
+        "name": "is_rec",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "is_rec",
+        "default": false,
+        "description": "慎重选择！是否使用推荐提示词。启用后每个任务多消耗320个BZ币。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "末帧图片。",
+        "sendIf": "non_empty"
       }
     ]
   }

@@ -1,0 +1,1331 @@
+[
+  {
+    "internal_name": "Kling_2_1_T2V_API",
+    "class_name": "Kling_2_1_T2V_API",
+    "display_name": "Kling 2.1 Text To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v2-1",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "negative_prompt",
+        "default": "",
+        "multiline": true,
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v2-1-master"
+        ],
+        "default": "kling-v2-1-master",
+        "description": "模型版本。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_2_1_FLF2V_API",
+    "class_name": "Kling_2_1_FLF2V_API",
+    "display_name": "Kling 2.1 First Last Frame To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v2-1",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame_image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "negative_prompt",
+        "default": "",
+        "multiline": true,
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v2-1-std",
+          "kling-v2-1-pro",
+          "kling-v2-1-master"
+        ],
+        "default": "kling-v2-1-std",
+        "description": "模型版本。std为标准版，pro为专业版，master为大师版。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "末帧图片，只有pro版本支持。",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_2_5_FLF2V_API",
+    "class_name": "Kling_2_5_FLF2V_API",
+    "display_name": "Kling 2.5 First Last Frame To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v2-5",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame_image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "negative_prompt",
+        "default": "",
+        "multiline": true,
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v2-5-turbo"
+        ],
+        "default": "kling-v2-5-turbo",
+        "description": "模型版本。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "末帧图片。",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_2_6_T2V_API",
+    "class_name": "Kling_2_6_T2V_API",
+    "display_name": "Kling 2.6 Text To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v2-6",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "sound",
+        "default": false,
+        "description": "是否开启声音。"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v2-6"
+        ],
+        "default": "kling-v2-6",
+        "description": "模型版本。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_2_6_I2V_API",
+    "class_name": "Kling_2_6_I2V_API",
+    "display_name": "Kling 2.6 Image To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v2-6",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame_image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "sound",
+        "default": false,
+        "description": "是否开启声音。"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v2-6"
+        ],
+        "default": "kling-v2-6",
+        "description": "模型版本。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_3_0_T2V_API",
+    "class_name": "Kling_3_0_T2V_API",
+    "display_name": "Kling 3.0 Text To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v3.0",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "negative_prompt",
+        "default": "",
+        "multiline": true,
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "sound",
+        "default": false,
+        "description": "是否开启声音。"
+      },
+      {
+        "name": "cfg_scale",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "cfg_scale",
+        "default": 0.5,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.05,
+        "description": "CFG缩放系数，控制提示词引导强度。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v3.0-std",
+          "kling-v3.0-pro"
+        ],
+        "default": "kling-v3.0-std",
+        "description": "模型版本。std为标准版，pro为专业版。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 3,
+        "max": 15,
+        "description": "视频时长，单位秒。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_3_0_FLF2V_API",
+    "class_name": "Kling_3_0_FLF2V_API",
+    "display_name": "Kling 3.0 First Last Frame To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v3.0",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame_image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "negative_prompt",
+        "default": "",
+        "multiline": true,
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "sound",
+        "default": false,
+        "description": "是否开启声音。"
+      },
+      {
+        "name": "cfg_scale",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "cfg_scale",
+        "default": 0.5,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.05,
+        "description": "CFG缩放系数，控制提示词引导强度。"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v3.0-std",
+          "kling-v3.0-pro"
+        ],
+        "default": "kling-v3.0-std",
+        "description": "模型版本。std为标准版，pro为专业版。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 3,
+        "max": 15,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "末帧图片。",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_2_T2I_API",
+    "class_name": "Kling_2_T2I_API",
+    "display_name": "Kling 2 Text To Image",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v2",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "negative_prompt",
+        "default": "",
+        "multiline": true,
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v2"
+        ],
+        "default": "kling-v2",
+        "description": "模型版本。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1",
+          "4:3",
+          "3:4",
+          "3:2",
+          "2:3",
+          "21:9"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "1K",
+          "2K"
+        ],
+        "default": "1K",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "variants",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "variants",
+        "default": 1,
+        "min": 1,
+        "max": 9,
+        "description": "生成图片数量。"
+      },
+      {
+        "name": "image_fidelity",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "image_fidelity",
+        "default": 0.5,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.01,
+        "description": "图片保真度。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_2_I2I_API",
+    "class_name": "Kling_2_I2I_API",
+    "display_name": "Kling 2 Image To Image",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-v2",
+    "endpoint_category": "Image To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image",
+        "description": "输入图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "model_name",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model_name",
+        "options": [
+          "kling-v2"
+        ],
+        "default": "kling-v2",
+        "description": "模型版本。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1",
+          "4:3",
+          "3:4",
+          "3:2",
+          "2:3",
+          "21:9"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "1K"
+        ],
+        "default": "1K",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "variants",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "variants",
+        "default": 1,
+        "min": 1,
+        "max": 9,
+        "description": "生成图片数量。"
+      },
+      {
+        "name": "image_fidelity",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "image_fidelity",
+        "default": 0.5,
+        "min": 0.0,
+        "max": 1.0,
+        "step": 0.01,
+        "description": "图片保真度。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O1_T2V_API",
+    "class_name": "Kling_O1_T2V_API",
+    "display_name": "Kling O1 Text To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o1-ti2v",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "mode",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "mode",
+        "options": [
+          "std",
+          "pro"
+        ],
+        "default": "std",
+        "description": "生成模式。std为标准模式，pro为专业模式。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O1_FLF2V_API",
+    "class_name": "Kling_O1_FLF2V_API",
+    "display_name": "Kling O1 First Last Frame To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o1-ti2v",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame_image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "mode",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "mode",
+        "options": [
+          "std",
+          "pro"
+        ],
+        "default": "std",
+        "description": "生成模式。std为标准模式，pro为专业模式。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "末帧图片。",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O1_R2V_API",
+    "class_name": "Kling_O1_R2V_API",
+    "display_name": "Kling O1 Reference To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o1",
+    "endpoint_category": "Reference To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "keep_original_sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "keep_original_sound",
+        "default": false,
+        "description": "选择是否通过参数保留视频原始声音。"
+      },
+      {
+        "name": "mode",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "mode",
+        "options": [
+          "std",
+          "pro"
+        ],
+        "default": "std",
+        "description": "生成模式。std为标准模式，pro为专业模式。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "image_urls",
+        "maxInputNum": 7,
+        "description": "参考图片1。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "videos",
+        "type": "VIDEO",
+        "required": false,
+        "fieldKey": "video_urls",
+        "description": "参考视频。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O1_VIDEO_EDIT_API",
+    "class_name": "Kling_O1_VIDEO_EDIT_API",
+    "display_name": "Kling O1 Video Edit",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o1-edit",
+    "endpoint_category": "Video Edit",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "ref_video",
+        "type": "VIDEO",
+        "required": true,
+        "fieldKey": "video",
+        "description": "参考视频。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "keep_original_sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "keep_original_sound",
+        "default": false,
+        "description": "选择是否通过参数保留视频原始声音。"
+      },
+      {
+        "name": "mode",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "mode",
+        "options": [
+          "std",
+          "pro"
+        ],
+        "default": "std",
+        "description": "生成模式。std为标准模式，pro为专业模式。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "image_urls",
+        "maxInputNum": 4,
+        "description": "参考图片1。",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O3_T2V_API",
+    "class_name": "Kling_O3_T2V_API",
+    "display_name": "Kling O3 Text To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o3-t2v",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 1,
+        "max": 15,
+        "step": 1,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "sound",
+        "default": false,
+        "description": "是否开启声音。"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "kling-o3-t2v-std",
+          "kling-o3-t2v-pro"
+        ],
+        "default": "kling-o3-t2v-std",
+        "description": "模型版本。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "multi_prompt",
+        "type": "STRING",
+        "required": false,
+        "fieldKey": "multi_prompt",
+        "default": "[]",
+        "forceInput": true,
+        "valueHook": "common.json_loads",
+        "description": "来自 Kling O3 MultiPrompt Config 节点的多镜头提示词配置。"
+      },
+      {
+        "name": "multi_shot",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "multi_shot",
+        "default": false,
+        "description": "是否生成多镜头视频。"
+      },
+      {
+        "name": "shot_type",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "shot_type",
+        "options": [
+          "customize",
+          "intelligence"
+        ],
+        "default": "customize",
+        "description": "镜头类型。customize为自定义，intelligence为智能。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O3_FLF2V_API",
+    "class_name": "Kling_O3_FLF2V_API",
+    "display_name": "Kling O3 First Last Frame To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o3-i2v",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "firstFrameImage",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 3,
+        "max": 15,
+        "step": 1,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "sound",
+        "default": false,
+        "description": "是否开启声音。"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "kling-o3-i2v-std",
+          "kling-o3-i2v-pro"
+        ],
+        "default": "kling-o3-i2v-std",
+        "description": "模型版本。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "lastFrameImage",
+        "description": "尾帧图片。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "multi_prompt",
+        "type": "STRING",
+        "required": false,
+        "fieldKey": "multi_prompt",
+        "default": "[]",
+        "forceInput": true,
+        "valueHook": "common.json_loads",
+        "description": "来自 Kling O3 MultiPrompt Config 节点的多镜头提示词配置。"
+      },
+      {
+        "name": "multi_shot",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "multi_shot",
+        "default": false,
+        "description": "是否生成多镜头视频。"
+      },
+      {
+        "name": "shot_type",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "shot_type",
+        "options": [
+          "customize",
+          "intelligence"
+        ],
+        "default": "customize",
+        "description": "镜头类型。customize为自定义，intelligence为智能。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O3_R2V_API",
+    "class_name": "Kling_O3_R2V_API",
+    "display_name": "Kling O3 Reference To Video",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o3",
+    "endpoint_category": "Reference To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 3,
+        "max": 15,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "keep_original_sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "keep_original_sound",
+        "default": false,
+        "description": "选择是否通过参数保留视频原始声音。"
+      },
+      {
+        "name": "sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "sound",
+        "default": false,
+        "description": "是否开启声音。"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "kling-o3-ref-std",
+          "kling-o3-ref-pro"
+        ],
+        "default": "kling-o3-ref-std",
+        "description": "模型版本。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "image_urls",
+        "maxInputNum": 7,
+        "description": "参考图片输入，最多7张。"
+      },
+      {
+        "name": "videos",
+        "type": "VIDEO",
+        "required": false,
+        "fieldKey": "video_urls",
+        "description": "参考视频。"
+      },
+      {
+        "name": "multi_prompt",
+        "type": "STRING",
+        "required": false,
+        "fieldKey": "multi_prompt",
+        "default": "[]",
+        "forceInput": true,
+        "valueHook": "common.json_loads",
+        "description": "来自 Kling O3 MultiPrompt Config 节点的多镜头提示词配置。"
+      },
+      {
+        "name": "multi_shot",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "multi_shot",
+        "default": false,
+        "description": "是否生成多镜头视频。"
+      },
+      {
+        "name": "shot_type",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "shot_type",
+        "options": [
+          "customize",
+          "intelligence"
+        ],
+        "default": "customize",
+        "description": "镜头类型。customize为自定义，intelligence为智能。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Kling_O3_VIDEO_EDIT_API",
+    "class_name": "Kling_O3_VIDEO_EDIT_API",
+    "display_name": "Kling O3 Video Edit",
+    "category": "BizyTRD/Kling",
+    "model_name": "kling-o3-edit",
+    "endpoint_category": "Video Edit",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "videos",
+        "type": "VIDEO",
+        "required": true,
+        "fieldKey": "video_urls",
+        "description": "参考视频。"
+      },
+      {
+        "name": "keep_original_sound",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "keep_original_sound",
+        "default": false,
+        "description": "选择是否通过参数保留视频原始声音。"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "kling-o3-edit-std",
+          "kling-o3-edit-pro"
+        ],
+        "default": "kling-o3-edit-std",
+        "description": "模型版本。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "image_urls",
+        "maxInputNum": 4,
+        "description": "参考图片输入，最多4张。"
+      }
+    ]
+  }
+]

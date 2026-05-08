@@ -1,0 +1,1211 @@
+[
+  {
+    "internal_name": "Wan_2_5_I2V_API",
+    "class_name": "Wan_2_5_I2V_API",
+    "display_name": "Wan 2.5 Image To Video",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-5",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "img_url",
+        "description": "输入图片。"
+      },
+      {
+        "name": "audio",
+        "type": "AUDIO",
+        "required": false,
+        "fieldKey": "audio_url",
+        "description": "驱动音频，模型将使用该音频生成视频。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "480P",
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "auto_audio",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否由模型自动生成声音，优先级低于audio参数。"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan-2-5",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_2_5_T2V_API",
+    "class_name": "Wan_2_5_T2V_API",
+    "display_name": "Wan 2.5 Text To Video",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-5",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "audio",
+        "type": "AUDIO",
+        "required": false,
+        "fieldKey": "audio_url",
+        "description": "驱动音频。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "size",
+        "options": [
+          "832*480",
+          "480*832",
+          "624*624",
+          "1280*720",
+          "720*1280",
+          "960*960",
+          "1088*832",
+          "832*1088",
+          "1920*1080",
+          "1080*1920",
+          "1440*1440",
+          "1632*1248",
+          "1248*1632"
+        ],
+        "default": "1920*1080",
+        "description": "输出尺寸。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "auto_audio",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否由模型自动生成声音，优先级低于audio参数。"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan-2-5",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_2_6_I2V_API",
+    "class_name": "Wan_2_6_I2V_API",
+    "display_name": "Wan 2.6 Image To Video",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-6",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "img_url",
+        "description": "输入图片。"
+      },
+      {
+        "name": "audio",
+        "type": "AUDIO",
+        "required": false,
+        "fieldKey": "audio_url",
+        "description": "驱动音频。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10,
+          15
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "shot_type",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "shot_type",
+        "options": [
+          "single",
+          "multi"
+        ],
+        "default": "single",
+        "description": "镜头类型，single为单镜头，multi为多镜头。"
+      },
+      {
+        "name": "auto_audio",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否由模型自动生成声音，优先级低于audio参数。"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan-2-6",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_2_6_T2V_API",
+    "class_name": "Wan_2_6_T2V_API",
+    "display_name": "Wan 2.6 Text To Video",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-6",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "audio",
+        "type": "AUDIO",
+        "required": false,
+        "fieldKey": "audio_url",
+        "description": "驱动音频。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "size",
+        "options": [
+          "1280*720",
+          "720*1280",
+          "960*960",
+          "1088*832",
+          "832*1088",
+          "1920*1080",
+          "1080*1920",
+          "1440*1440",
+          "1632*1248",
+          "1248*1632"
+        ],
+        "default": "1920*1080",
+        "description": "输出尺寸。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "duration",
+        "options": [
+          5,
+          10,
+          15
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "shot_type",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "shot_type",
+        "options": [
+          "single",
+          "multi"
+        ],
+        "default": "single",
+        "description": "镜头类型，single为单镜头，multi为多镜头。"
+      },
+      {
+        "name": "auto_audio",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否由模型自动生成声音，优先级低于audio参数。"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan2.6-t2v",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_2_7_T2V_API",
+    "class_name": "Wan_2_7_T2V_API",
+    "display_name": "Wan 2.7 Text To Video",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-7",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "文本提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "audio",
+        "type": "AUDIO",
+        "required": false,
+        "fieldKey": "audio_url",
+        "description": "驱动音频。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "ratio",
+        "options": [
+          "1:1",
+          "4:3",
+          "3:4",
+          "9:16",
+          "16:9"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 2,
+        "max": 15,
+        "step": 1,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否添加\"AI生成\"水印。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "step": 1,
+        "description": "随机种子。"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan2.7-t2v",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_2_7_I2V_API",
+    "class_name": "Wan_2_7_I2V_API",
+    "display_name": "Wan 2.7 Image To Video",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-7",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_frame",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame",
+        "description": "输入首帧图片。"
+      },
+      {
+        "name": "last_frame",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame",
+        "description": "输入尾帧图片，有则变为首尾帧生视频。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "audio",
+        "type": "AUDIO",
+        "required": false,
+        "fieldKey": "driving_audio",
+        "description": "驱动音频。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 2,
+        "max": 15,
+        "step": 1,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否添加\"AI生成\"水印。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机种子，-1表示不指定。",
+        "sendIf": "gte_zero"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan2.7-i2v",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_2_7_VideoExtension_API",
+    "class_name": "Wan_2_7_VideoExtension_API",
+    "display_name": "Wan 2.7 Video Extension",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-7",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "first_clip",
+        "type": "VIDEO",
+        "required": true,
+        "fieldKey": "first_clip",
+        "description": "输入首段视频。"
+      },
+      {
+        "name": "last_frame",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame",
+        "description": "输入尾帧图片，有则变为首段视频+尾帧续写。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频续写提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 2,
+        "max": 15,
+        "step": 1,
+        "description": "续写视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否添加\"AI生成\"水印。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机种子，-1表示不指定。",
+        "sendIf": "gte_zero"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan2.7-i2v",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_2_7_R2V_API",
+    "class_name": "Wan_2_7_R2V_API",
+    "display_name": "Wan 2.7 Reference To Video",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-7",
+    "endpoint_category": "Reference To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词，必填。"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "first_frame_image",
+        "description": "可选首帧图像。传入后模型会优先参考首帧构图，ratio参数将被忽略。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_1",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_1",
+        "description": "参考图片1。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_2",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_2",
+        "description": "参考图片2。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_3",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_3",
+        "description": "参考图片3。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_4",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_4",
+        "description": "参考图片4。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_5",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_5",
+        "description": "参考图片5。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_video_1",
+        "type": "VIDEO",
+        "required": false,
+        "fieldKey": "ref_video_1",
+        "description": "参考视频1。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_video_2",
+        "type": "VIDEO",
+        "required": false,
+        "fieldKey": "ref_video_2",
+        "description": "参考视频2。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_video_3",
+        "type": "VIDEO",
+        "required": false,
+        "fieldKey": "ref_video_3",
+        "description": "参考视频3。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_video_4",
+        "type": "VIDEO",
+        "required": false,
+        "fieldKey": "ref_video_4",
+        "description": "参考视频4。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_video_5",
+        "type": "VIDEO",
+        "required": false,
+        "fieldKey": "ref_video_5",
+        "description": "参考视频5。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "reference_voice",
+        "type": "AUDIO",
+        "required": false,
+        "fieldKey": "reference_voice",
+        "description": "参考音色。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1",
+          "4:3",
+          "3:4"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。无首帧图时传入。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 2,
+        "max": 10,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否添加\"AI生成\"水印。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机种子，-1表示不指定。",
+        "sendIf": "gte_zero"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan2.7-r2v",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_V2_7_VIDEOEDIT_API",
+    "class_name": "Wan_V2_7_VIDEOEDIT_API",
+    "display_name": "Wan2.7 Video Edit",
+    "category": "BizyTRD/WanVideo",
+    "model_name": "wan2.7-videoedit",
+    "endpoint_category": "Video Edit",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "video",
+        "type": "VIDEO",
+        "required": true,
+        "fieldKey": "video",
+        "description": "输入视频（2-10秒）。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "编辑提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "negative_prompt",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "negative_prompt",
+        "description": "反向提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "first_frame_image",
+        "description": "可选首帧图像，用于更精细地约束编辑后的首帧表现。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_1",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_1",
+        "description": "参考图片1。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_2",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_2",
+        "description": "参考图片2。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "ref_image_3",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "ref_image_3",
+        "description": "参考图片3。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720P",
+          "1080P"
+        ],
+        "default": "1080P",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "ratio",
+        "options": [
+          "default",
+          "16:9",
+          "9:16",
+          "1:1",
+          "4:3",
+          "3:4"
+        ],
+        "default": "default",
+        "description": "输出宽高比。default表示跟随输入视频；其他值显式传给模型。",
+        "skipValues": ["default"]
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "duration",
+        "default": 0,
+        "min": 0,
+        "max": 10,
+        "description": "0表示保持输入视频时长；2-10表示截断到指定长度。",
+        "skipValues": [0]
+      },
+      {
+        "name": "audio_setting",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "audio_setting",
+        "options": [
+          "auto",
+          "origin"
+        ],
+        "default": "auto",
+        "description": "auto为模型自动判断；origin为强制保留输入视频原声。"
+      },
+      {
+        "name": "prompt_extend",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "prompt_extend",
+        "default": true,
+        "description": "是否开启prompt智能改写。"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否添加\"AI生成\"水印。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机种子，-1表示不指定。",
+        "sendIf": "gte_zero"
+      },
+      {
+        "name": "request_model",
+        "hidden": true,
+        "default": "wan2.7-videoedit",
+        "fieldKey": "model"
+      }
+    ]
+  },
+  {
+    "internal_name": "Wan_V2_7_IMAGE_API",
+    "class_name": "Wan_V2_7_IMAGE_API",
+    "display_name": "Wan2.7 Image",
+    "category": "BizyTRD/WanImage",
+    "model_name": "wan2.7-image",
+    "endpoint_category": "Text To Image",
+    "output_type": "image",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "图像生成提示词。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "wan2.7-image-pro",
+          "wan2.7-image"
+        ],
+        "default": "wan2.7-image-pro",
+        "description": "模型版本。"
+      },
+      {
+        "name": "size",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "size",
+        "options": [
+          "1K",
+          "2K",
+          "4K",
+          "Custom"
+        ],
+        "default": "2K",
+        "description": "输出尺寸档位。1K/2K/4K为官方规格，Custom使用自定义宽高。",
+        "valueHook": "wan.custom_size"
+      },
+      {
+        "name": "custom_width",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "custom_width",
+        "default": 2048,
+        "min": 768,
+        "max": 4096,
+        "description": "自定义输出宽度，仅size=Custom时生效。",
+        "internal": true
+      },
+      {
+        "name": "custom_height",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "custom_height",
+        "default": 2048,
+        "min": 768,
+        "max": 4096,
+        "description": "自定义输出高度，仅size=Custom时生效。",
+        "internal": true
+      },
+      {
+        "name": "n",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "n",
+        "default": 4,
+        "min": 1,
+        "max": 12,
+        "description": "生成张数。非组图模式1-4；组图模式1-12。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "urls",
+        "maxInputNum": 9,
+        "description": "参考图输入，最多9张。"
+      },
+      {
+        "name": "enable_sequential",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "enable_sequential",
+        "default": false,
+        "description": "是否启用组图模式。"
+      },
+      {
+        "name": "thinking_mode",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "thinking_mode",
+        "default": true,
+        "description": "仅在文生图且未开启组图模式时生效。"
+      },
+      {
+        "name": "bbox_list",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "bbox_list",
+        "description": "交互式编辑框选区域JSON数组。",
+        "valueHook": "wan.bbox_list"
+      },
+      {
+        "name": "color_palette",
+        "type": "STRING",
+        "required": false,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "color_palette",
+        "description": "颜色主题JSON数组，3-10个颜色。",
+        "valueHook": "wan.color_palette"
+      },
+      {
+        "name": "watermark",
+        "type": "BOOLEAN",
+        "required": false,
+        "fieldKey": "watermark",
+        "default": false,
+        "description": "是否添加\"AI生成\"水印。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "seed",
+        "default": -1,
+        "min": -1,
+        "max": 2147483647,
+        "description": "随机种子，-1表示不指定。",
+        "sendIf": "gte_zero"
+      }
+    ]
+  }
+]

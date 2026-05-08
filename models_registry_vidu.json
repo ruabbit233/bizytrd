@@ -1,0 +1,592 @@
+[
+  {
+    "internal_name": "VIDU_Q1_T2V_API",
+    "class_name": "VIDU_Q1_T2V_API",
+    "display_name": "Vidu Q1 Text To Video",
+    "category": "BizyTRD/Vidu",
+    "model_name": "vidu-q1",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description": "随机种子。"
+      },
+      {
+        "name": "style",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "style",
+        "options": [
+          "general",
+          "anime"
+        ],
+        "default": "general",
+        "description": "画面风格。general为通用，anime为动漫。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "1080p"
+        ],
+        "default": "1080p",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "movement_amplitude",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "movement_amplitude",
+        "options": [
+          "auto",
+          "small",
+          "medium",
+          "large"
+        ],
+        "default": "auto",
+        "description": "画面中物体的运动幅度。"
+      },
+      {
+        "name": "bgm",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "bgm",
+        "default": false,
+        "description": "当设置为 true 时，系统将自动添加合适的 BGM。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VIDU_Q1_FLF2V_API",
+    "class_name": "VIDU_Q1_FLF2V_API",
+    "display_name": "Vidu Q1 First Last Frame To Video",
+    "category": "BizyTRD/Vidu",
+    "model_name": "vidu-q1",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame_image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description": "随机种子。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "1080p"
+        ],
+        "default": "1080p",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "movement_amplitude",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "movement_amplitude",
+        "options": [
+          "auto",
+          "small",
+          "medium",
+          "large"
+        ],
+        "default": "auto",
+        "description": "画面中物体的运动幅度。"
+      },
+      {
+        "name": "bgm",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "bgm",
+        "default": false,
+        "description": "当设置为 true 时，系统将自动添加合适的 BGM。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "末帧图片。",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "VIDU_Q1_I2V_API",
+    "class_name": "VIDU_Q1_I2V_API",
+    "display_name": "Vidu Q1 Images To Video",
+    "category": "BizyTRD/Vidu",
+    "model_name": "vidu-q1",
+    "endpoint_category": "Images To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image_urls",
+        "maxInputNum": 7,
+        "description": "参考图片1。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description": "随机种子。"
+      },
+      {
+        "name": "duration",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "duration",
+        "options": [
+          5
+        ],
+        "default": 5,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "1080p"
+        ],
+        "default": "1080p",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "movement_amplitude",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "movement_amplitude",
+        "options": [
+          "auto",
+          "small",
+          "medium",
+          "large"
+        ],
+        "default": "auto",
+        "description": "画面中物体的运动幅度。"
+      },
+      {
+        "name": "bgm",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "bgm",
+        "default": false,
+        "description": "当设置为 true 时，系统将自动添加合适的 BGM。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VIDU_Q3_T2V_API",
+    "class_name": "VIDU_Q3_T2V_API",
+    "display_name": "Vidu Q3 Text To Video",
+    "category": "BizyTRD/Vidu",
+    "model_name": "vidu-q3-turbo",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description": "随机种子。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 1,
+        "max": 16,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "4:3",
+          "3:4",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "540p",
+          "720p",
+          "1080p"
+        ],
+        "default": "720p",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "audio",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否生成音频。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VIDU_Q3_T2V_API",
+    "class_name": "VIDU_Q3_T2V_API",
+    "display_name": "Vidu Q3 Text To Video",
+    "category": "BizyTRD/Vidu",
+    "model_name": "vidu-q3-pro",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description": "随机种子。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 1,
+        "max": 16,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16",
+          "4:3",
+          "3:4",
+          "1:1"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "540p",
+          "720p",
+          "1080p"
+        ],
+        "default": "720p",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "audio",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否生成音频。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VIDU_Q3_FLF2V_API",
+    "class_name": "VIDU_Q3_FLF2V_API",
+    "display_name": "Vidu Q3 First Last Frame To Video",
+    "category": "BizyTRD/Vidu",
+    "model_name": "vidu-q3-pro",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description": "随机种子。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 1,
+        "max": 16,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "540p",
+          "720p",
+          "1080p"
+        ],
+        "default": "720p",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "audio",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否生成音频。"
+      },
+      {
+        "name": "is_rec",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "is_rec",
+        "default": false,
+        "description": "慎重选择！是否使用推荐提示词。启用后每个任务多消耗320个BZ币。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "末帧图片。",
+        "sendIf": "non_empty"
+      }
+    ]
+  },
+  {
+    "internal_name": "VIDU_Q3_FLF2V_API",
+    "class_name": "VIDU_Q3_FLF2V_API",
+    "display_name": "Vidu Q3 First Last Frame To Video",
+    "category": "BizyTRD/Vidu",
+    "model_name": "vidu-q3-turbo",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "prompt",
+        "default": "",
+        "multiline": true,
+        "description": "提示词。"
+      },
+      {
+        "name": "seed",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "seed",
+        "default": 0,
+        "min": 0,
+        "max": 2147483647,
+        "description": "随机种子。"
+      },
+      {
+        "name": "duration",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "duration",
+        "default": 5,
+        "min": 1,
+        "max": 16,
+        "description": "视频时长，单位秒。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "resolution",
+        "options": [
+          "540p",
+          "720p",
+          "1080p"
+        ],
+        "default": "720p",
+        "description": "输出分辨率。"
+      },
+      {
+        "name": "audio",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "audio",
+        "default": true,
+        "description": "是否生成音频。"
+      },
+      {
+        "name": "is_rec",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "is_rec",
+        "default": false,
+        "description": "慎重选择！是否使用推荐提示词。启用后每个任务多消耗320个BZ币。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "末帧图片。",
+        "sendIf": "non_empty"
+      }
+    ]
+  }
+]

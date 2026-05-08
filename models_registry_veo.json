@@ -1,0 +1,195 @@
+[
+  {
+    "internal_name": "Veo_3_1_T2V_API",
+    "class_name": "Veo_3_1_T2V_API",
+    "display_name": "Veo3.1 Text To Video",
+    "category": "BizyTRD/Veo",
+    "model_name": "veo-3-1",
+    "endpoint_category": "Text To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词，必填。"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "veo3.1-fast",
+          "veo3.1-pro"
+        ],
+        "default": "veo3.1-fast",
+        "description": "模型版本。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "9:16",
+          "16:9"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720p",
+          "1080p",
+          "4k"
+        ],
+        "default": "1080p",
+        "description": "输出分辨率。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Veo_3_1_FLF2V_API",
+    "class_name": "Veo_3_1_FLF2V_API",
+    "display_name": "Veo3.1 First Last Frame To Video",
+    "category": "BizyTRD/Veo",
+    "model_name": "veo-3-1",
+    "endpoint_category": "FLF To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词，必填。"
+      },
+      {
+        "name": "first_frame_image",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "first_frame_image",
+        "description": "首帧图片。"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "veo3.1-fast",
+          "veo3.1-pro"
+        ],
+        "default": "veo3.1-fast",
+        "description": "模型版本。"
+      },
+      {
+        "name": "last_frame_image",
+        "type": "IMAGE",
+        "required": false,
+        "fieldKey": "last_frame_image",
+        "description": "尾帧图片。",
+        "sendIf": "non_empty"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "9:16",
+          "16:9"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720p",
+          "1080p",
+          "4k"
+        ],
+        "default": "1080p",
+        "description": "输出分辨率。"
+      }
+    ]
+  },
+  {
+    "internal_name": "Veo_3_1_I2V_API",
+    "class_name": "Veo_3_1_I2V_API",
+    "display_name": "Veo 3.1 Image To Video",
+    "category": "BizyTRD/Veo",
+    "model_name": "veo-3-1",
+    "endpoint_category": "Image To Video",
+    "output_type": "video",
+    "params": [
+      {
+        "name": "prompt",
+        "type": "STRING",
+        "required": true,
+        "multiline": true,
+        "default": "",
+        "fieldKey": "prompt",
+        "description": "视频生成提示词，必填。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "maxInputNum": 3,
+        "fieldKey": "image_urls",
+        "description": "参考图，支持多图输入"
+      },
+      {
+        "name": "model",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "model",
+        "options": [
+          "veo3.1-fast"
+        ],
+        "default": "veo3.1-fast",
+        "description": "模型版本，参考图模式仅支持fast。"
+      },
+      {
+        "name": "aspect_ratio",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "aspect_ratio",
+        "options": [
+          "16:9",
+          "9:16"
+        ],
+        "default": "16:9",
+        "description": "输出宽高比。"
+      },
+      {
+        "name": "resolution",
+        "type": "LIST",
+        "required": false,
+        "fieldKey": "resolution",
+        "options": [
+          "720p",
+          "1080p",
+          "4k"
+        ],
+        "default": "1080p",
+        "description": "输出分辨率。"
+      }
+    ]
+  }
+]

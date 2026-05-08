@@ -1,0 +1,442 @@
+[
+  {
+    "internal_name": "VLM_gemini_3_flash_preview_API",
+    "class_name": "VLM_gemini_3_flash_preview_API",
+    "display_name": "gemini-3-flash-preview VLM",
+    "category": "BizyTRD/VLM",
+    "model_name": "gemini-3-flash-preview",
+    "endpoint_category": "vision-language-models",
+    "output_type": "text",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "model",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "model",
+        "default": "gemini-3-flash-preview",
+        "internal": true,
+        "description": "模型标识。"
+      },
+      {
+        "name": "system_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "system_prompt",
+        "default": "你是一个能分析图像的AI助手。请仔细观察图像，并根据用户的问题提供详细、准确的描述。",
+        "multiline": true,
+        "description": "系统提示词。"
+      },
+      {
+        "name": "user_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "user_prompt",
+        "default": "请描述这张图片的内容，并指出任何有趣或不寻常的细节。",
+        "multiline": true,
+        "description": "用户提示词。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image_urls",
+        "maxInputNum": 200,
+        "description": "输入图片，最多200张。"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "max_tokens",
+        "default": 32768,
+        "min": 1,
+        "max": 65536,
+        "description": "生成文本的最大长度，单位为 token。"
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "temperature",
+        "default": 1.0,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.01,
+        "description": "采样温度，值越大生成结果越随机。"
+      },
+      {
+        "name": "detail",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "detail",
+        "options": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "default": "high",
+        "description": "图片细节级别。"
+      },
+      {
+        "name": "enable_thinking",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "enable_thinking",
+        "default": false,
+        "description": "如果模型支持思考模式，是否开启。"
+      },
+      {
+        "name": "inputcount",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "inputcount",
+        "default": 1,
+        "min": 1,
+        "max": 900,
+        "description": "动态控制输入的参考图数量，范围1-900。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VLM_gemini_3_pro_preview_API",
+    "class_name": "VLM_gemini_3_pro_preview_API",
+    "display_name": "gemini-3-pro-preview VLM",
+    "category": "BizyTRD/VLM",
+    "model_name": "gemini-3-pro-preview",
+    "endpoint_category": "vision-language-models",
+    "output_type": "text",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "model",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "model",
+        "default": "gemini-3-pro-preview",
+        "internal": true,
+        "description": "模型标识。"
+      },
+      {
+        "name": "system_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "system_prompt",
+        "default": "你是一个能分析图像的AI助手。请仔细观察图像，并根据用户的问题提供详细、准确的描述。",
+        "multiline": true,
+        "description": "系统提示词。"
+      },
+      {
+        "name": "user_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "user_prompt",
+        "default": "请描述这张图片的内容，并指出任何有趣或不寻常的细节。",
+        "multiline": true,
+        "description": "用户提示词。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image_urls",
+        "maxInputNum": 200,
+        "description": "输入图片，最多200张。"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "max_tokens",
+        "default": 32768,
+        "min": 1,
+        "max": 65536,
+        "description": "生成文本的最大长度，单位为 token。"
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "temperature",
+        "default": 1.0,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.01,
+        "description": "采样温度，值越大生成结果越随机。"
+      },
+      {
+        "name": "detail",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "detail",
+        "options": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "default": "high",
+        "description": "图片细节级别。"
+      },
+      {
+        "name": "enable_thinking",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "enable_thinking",
+        "default": false,
+        "description": "如果模型支持思考模式，是否开启。"
+      },
+      {
+        "name": "inputcount",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "inputcount",
+        "default": 1,
+        "min": 1,
+        "max": 900,
+        "description": "动态控制输入的参考图数量，范围1-900。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VLM_gemini_3_1_flash_lite_preview_API",
+    "class_name": "VLM_gemini_3_1_flash_lite_preview_API",
+    "display_name": "gemini-3-1-flash-lite-preview VLM",
+    "category": "BizyTRD/VLM",
+    "model_name": "gemini-3-1-flash-lite-preview",
+    "endpoint_category": "vision-language-models",
+    "output_type": "text",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "model",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "model",
+        "default": "gemini-3-1-flash-lite-preview",
+        "internal": true,
+        "description": "模型标识。"
+      },
+      {
+        "name": "system_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "system_prompt",
+        "default": "你是一个能分析图像的AI助手。请仔细观察图像，并根据用户的问题提供详细、准确的描述。",
+        "multiline": true,
+        "description": "系统提示词。"
+      },
+      {
+        "name": "user_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "user_prompt",
+        "default": "请描述这张图片的内容，并指出任何有趣或不寻常的细节。",
+        "multiline": true,
+        "description": "用户提示词。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image_urls",
+        "maxInputNum": 200,
+        "description": "输入图片，最多200张。"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "max_tokens",
+        "default": 32768,
+        "min": 1,
+        "max": 65536,
+        "description": "生成文本的最大长度，单位为 token。"
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "temperature",
+        "default": 1.0,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.01,
+        "description": "采样温度，值越大生成结果越随机。"
+      },
+      {
+        "name": "detail",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "detail",
+        "options": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "default": "high",
+        "description": "图片细节级别。"
+      },
+      {
+        "name": "enable_thinking",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "enable_thinking",
+        "default": false,
+        "description": "如果模型支持思考模式，是否开启。"
+      },
+      {
+        "name": "inputcount",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "inputcount",
+        "default": 1,
+        "min": 1,
+        "max": 900,
+        "description": "动态控制输入的参考图数量，范围1-900。"
+      }
+    ]
+  },
+  {
+    "internal_name": "VLM_gemini_3_1_pro_preview_API",
+    "class_name": "VLM_gemini_3_1_pro_preview_API",
+    "display_name": "gemini-3-1-pro-preview VLM",
+    "category": "BizyTRD/VLM",
+    "model_name": "gemini-3-1-pro-preview",
+    "endpoint_category": "vision-language-models",
+    "output_type": "text",
+    "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道，official 表示官方模型，base 表示三方模型。前者稳定性更好价格更高，后者价格更低但可能存在波动。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
+        "name": "model",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "model",
+        "default": "gemini-3-1-pro-preview",
+        "internal": true,
+        "description": "模型标识。"
+      },
+      {
+        "name": "system_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "system_prompt",
+        "default": "你是一个能分析图像的AI助手。请仔细观察图像，并根据用户的问题提供详细、准确的描述。",
+        "multiline": true,
+        "description": "系统提示词。"
+      },
+      {
+        "name": "user_prompt",
+        "type": "STRING",
+        "required": true,
+        "fieldKey": "user_prompt",
+        "default": "请描述这张图片的内容，并指出任何有趣或不寻常的细节。",
+        "multiline": true,
+        "description": "用户提示词。"
+      },
+      {
+        "name": "images",
+        "type": "IMAGE",
+        "required": true,
+        "fieldKey": "image_urls",
+        "maxInputNum": 200,
+        "description": "输入图片，最多200张。"
+      },
+      {
+        "name": "max_tokens",
+        "type": "INT",
+        "required": true,
+        "fieldKey": "max_tokens",
+        "default": 32768,
+        "min": 1,
+        "max": 65536,
+        "description": "生成文本的最大长度，单位为 token。"
+      },
+      {
+        "name": "temperature",
+        "type": "FLOAT",
+        "required": true,
+        "fieldKey": "temperature",
+        "default": 1.0,
+        "min": 0.0,
+        "max": 2.0,
+        "step": 0.01,
+        "description": "采样温度，值越大生成结果越随机。"
+      },
+      {
+        "name": "detail",
+        "type": "LIST",
+        "required": true,
+        "fieldKey": "detail",
+        "options": [
+          "low",
+          "medium",
+          "high"
+        ],
+        "default": "high",
+        "description": "图片细节级别。"
+      },
+      {
+        "name": "enable_thinking",
+        "type": "BOOLEAN",
+        "required": true,
+        "fieldKey": "enable_thinking",
+        "default": false,
+        "description": "如果模型支持思考模式，是否开启。"
+      },
+      {
+        "name": "inputcount",
+        "type": "INT",
+        "required": false,
+        "fieldKey": "inputcount",
+        "default": 1,
+        "min": 1,
+        "max": 900,
+        "description": "动态控制输入的参考图数量，范围1-900。"
+      }
+    ]
+  }
+]

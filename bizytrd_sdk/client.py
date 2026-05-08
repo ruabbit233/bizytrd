@@ -343,10 +343,10 @@ class AsyncBizyTRD:
                 )
                 continue
 
-            status = data.get("status")
+            status = str(data.get("status") or "").strip()
             if not status:
                 logging.error(
-                    "Task %s status api resp no status: %s",
+                    "Task %s status api resp no status field",
                     request_id,
                     status_api_resp,
                 )
@@ -354,16 +354,17 @@ class AsyncBizyTRD:
 
             logging.debug("Task %s status: %s", request_id, status)
 
-            if status in FAILED_STATUSES:
+            status_lower = status.lower()
+            if status_lower in FAILED_STATUSES:
                 logging.error("Task %s failed: %s", request_id, status_api_resp)
                 raise BizyTRDResponseError(
                     f"Task {request_id} failed: {status_api_resp}"
                 )
 
-            if status in RUNNING_STATUSES:
+            if status_lower in RUNNING_STATUSES:
                 continue
 
-            if status == SAVING_STATUS:
+            if status_lower == SAVING_STATUS:
                 outputs = data.get("outputs") or {}
                 if isinstance(outputs, dict):
                     for video_url in outputs.get("videos") or []:

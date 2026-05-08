@@ -75,6 +75,13 @@ def _make_placeholder_image(error_msg: str) -> torch.Tensor:
         return torch.from_numpy(arr).unsqueeze(0)
 
 
+def _make_placeholder_audio(error_msg: str) -> dict[str, Any]:
+    """Generate a silent 1-second ComfyUI AUDIO dict as placeholder."""
+    sample_rate = 44100
+    waveform = torch.zeros(1, 1, sample_rate, dtype=torch.float32)
+    return {"waveform": waveform, "sample_rate": sample_rate}
+
+
 def _render_placeholder_canvas(error_msg: str, Image, ImageDraw, ImageFont):
     width, height = 512, 512
     img = Image.new("RGB", (width, height), (80, 10, 10))
@@ -257,16 +264,19 @@ class BizyTRDBaseNode(ABC):
                         )
                     placeholder_video = []
                     placeholder_image = []
+                    placeholder_audio = []
                     if self.OUTPUT_TYPE == "video":
                         video = _make_placeholder_video(error_msg)
                         if video is not None:
                             placeholder_video = [video]
                     elif self.OUTPUT_TYPE == "image":
                         placeholder_image = [_make_placeholder_image(error_msg)]
+                    elif self.OUTPUT_TYPE == "audio":
+                        placeholder_audio = [_make_placeholder_audio(error_msg)]
                     outputs = [
                         placeholder_video,
                         placeholder_image,
-                        [],
+                        placeholder_audio,
                         [error_msg],
                         urls_str,
                     ]
@@ -328,19 +338,21 @@ class BizyTRDBaseNode(ABC):
         videos, images, audios, texts, urls_str = outputs
 
         if self.OUTPUT_TYPE == "video":
-            primary = videos[0] if videos else ""
+            primary = videos[0] if videos else _make_placeholder_video("No video output from API")
+            if primary is None and not videos:
+                primary = _make_placeholder_image("No video output from API")
             return {
                 "ui": {"text": [urls_str]},
                 "result": (primary, urls_str),
             }
         elif self.OUTPUT_TYPE == "image":
-            primary = images[0] if images else ""
+            primary = images[0] if images else _make_placeholder_image("No image output from API")
             return {
                 "ui": {"text": [urls_str]},
                 "result": (primary, urls_str),
             }
         elif self.OUTPUT_TYPE == "audio":
-            primary = audios[0] if audios else (texts[0] if texts else urls_str)
+            primary = audios[0] if audios else _make_placeholder_audio("No audio output from API")
             return {
                 "ui": {"text": [urls_str]},
                 "result": (primary, urls_str),

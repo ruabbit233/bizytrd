@@ -9,6 +9,56 @@ from typing import Any
 from bizytrd_sdk import AsyncBizyTRD
 
 
+def _audio_bytes_to_comfy(audio_bytes: bytes) -> dict[str, Any]:
+    """Convert raw audio bytes to ComfyUI AUDIO dict {"waveform": Tensor, "sample_rate": int}.
+
+    Uses PyAV for decoding.  Fallback when comfy_api_nodes.util.conversions
+    is not available.
+    """
+    import torch
+
+    try:
+        import av
+    except ImportError as exc:
+        raise RuntimeError(
+            "Audio output requires the 'av' package for decoding. "
+            "Install it with: pip install av"
+        ) from exc
+
+    from_bytesio = io.BytesIO(audio_bytes)
+    with av.open(from_bytesio) as container:
+        if not container.streams.audio:
+            raise ValueError("No audio stream found in downloaded audio.")
+        stream = container.streams.audio[0]
+        sample_rate = int(stream.codec_context.sample_rate)
+        n_channels = stream.channels or 1
+
+        frames: list = []
+        for frame in container.decode(streams=stream.index):
+            arr = frame.to_ndarray()
+            buf = torch.from_numpy(arr)
+            if buf.ndim == 1:
+                buf = buf.unsqueeze(0)
+            elif buf.shape[0] != n_channels and buf.shape[-1] == n_channels:
+                buf = buf.transpose(0, 1).contiguous()
+            elif buf.shape[0] != n_channels:
+                buf = buf.reshape(-1, n_channels).t().contiguous()
+            frames.append(buf)
+
+    if not frames:
+        raise ValueError("Decoded zero audio frames.")
+
+    wav = torch.cat(frames, dim=1)  # [C, T]
+    if wav.dtype == torch.int16:
+        wav = wav.float() / (2**15)
+    elif wav.dtype == torch.int32:
+        wav = wav.float() / (2**31)
+    elif not wav.dtype.is_floating_point:
+        wav = wav.float()
+
+    return {"waveform": wav.unsqueeze(0).contiguous(), "sample_rate": sample_rate}
+
+
 async def download_outputs(
     client: AsyncBizyTRD,
     outputs: dict[str, Any],
@@ -43,7 +93,13 @@ async def download_outputs(
         except ImportError:
             images.append(io.BytesIO(image_content))
 
-    audios.extend(io.BytesIO(audio_content) for audio_content in downloaded.audios)
+    for audio_content in downloaded.audios:
+        try:
+            from comfy_api_nodes.util.conversions import audio_bytes_to_audio_input
+
+            audios.append(audio_bytes_to_audio_input(audio_content))
+        except ImportError:
+            audios.append(_audio_bytes_to_comfy(audio_content))
     texts.extend(downloaded.texts)
 
     urls_str = json.dumps(downloaded.urls)

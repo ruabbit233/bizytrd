@@ -3252,111 +3252,11 @@
     ]
   },
   {
-    "internal_name": "GPT_IMAGE_1_T2I_API",
-    "class_name": "GPT_IMAGE_1_T2I_API",
-    "display_name": "GPT Image 1 Text To Image",
-    "category": "BizyTRD/OpenAI",
-    "model_name": "gpt-image-1",
-    "endpoint_category": "Text To Image",
-    "output_type": "image",
-    "params": [
-      {
-        "name": "prompt",
-        "type": "STRING",
-        "required": true,
-        "multiline": true,
-        "default": "",
-        "description": "图像生成提示词。",
-        "fieldKey": "prompt"
-      },
-      {
-        "name": "size",
-        "type": "LIST",
-        "required": true,
-        "options": [
-          "1:1",
-          "2:3",
-          "3:2"
-        ],
-        "description": "输出图像比例。",
-        "fieldKey": "size",
-        "default": "1:1"
-      },
-      {
-        "name": "variants",
-        "type": "LIST",
-        "required": true,
-        "options": [
-          1,
-          2,
-          4
-        ],
-        "description": "生成图片数量。旧节点在 variants=4 时会设置 provider=KieAI；当前草稿未表达该条件字段。",
-        "fieldKey": "variants",
-        "default": 1
-      }
-    ]
-  },
-  {
-    "internal_name": "GPT_IMAGE_1_I2I_API",
-    "class_name": "GPT_IMAGE_1_I2I_API",
-    "display_name": "GPT Image 1 Image To Image",
-    "category": "BizyTRD/OpenAI",
-    "model_name": "gpt-image-1",
-    "endpoint_category": "Image To Image",
-    "output_type": "image",
-    "params": [
-      {
-        "name": "images",
-        "type": "IMAGE",
-        "required": true,
-        "description": "输入参考图。(当前数量只是示例，实际支持数量请参考模型说明)",
-        "fieldKey": "image_urls",
-        "maxInputNum": 8
-      },
-      {
-        "name": "prompt",
-        "type": "STRING",
-        "required": true,
-        "multiline": true,
-        "default": "",
-        "description": "图像编辑提示词。",
-        "fieldKey": "prompt"
-      },
-      {
-        "name": "size",
-        "type": "LIST",
-        "required": true,
-        "options": [
-          "1:1",
-          "2:3",
-          "3:2"
-        ],
-        "description": "输出图像比例。",
-        "fieldKey": "size",
-        "default": "1:1"
-      },
-      {
-        "name": "variants",
-        "type": "LIST",
-        "required": true,
-        "options": [
-          1,
-          2,
-          4
-        ],
-        "description": "生成图片数量。旧节点在 variants=4 时会设置 provider=KieAI；当前草稿未表达该条件字段。",
-        "fieldKey": "variants",
-        "default": 1
-      }
-    ]
-  },
-  {
     "internal_name": "GPT_IMAGE_2_T2I_API",
     "class_name": "GPT_IMAGE_2_T2I_API",
     "display_name": "GPT Image 2 Text To Image",
     "category": "BizyTRD/OpenAI",
-    "model_name": "gpt-image-2",
+    "model_name": "gpt-image-2-base",
     "endpoint_category": "Text To Image",
     "output_type": "image",
     "params": [
@@ -3411,7 +3311,7 @@
     "class_name": "GPT_IMAGE_2_I2I_API",
     "display_name": "GPT Image 2 Image To Image",
     "category": "BizyTRD/OpenAI",
-    "model_name": "gpt-image-2",
+    "model_name": "gpt-image-2-base",
     "endpoint_category": "Image To Image",
     "output_type": "image",
     "params": [
@@ -3820,7 +3720,7 @@
     "class_name": "HappyHorse_1_0_T2V_API",
     "display_name": "HappyHorse 1.0 Text To Video",
     "category": "BizyTRD/HappyHorse",
-    "model_name": "happyhorse-1-0-t2v",
+    "model_name": "happyhorse-1-0-official",
     "endpoint_category": "Text To Video",
     "output_type": "video",
     "params": [
@@ -3905,7 +3805,7 @@
     "class_name": "HappyHorse_1_0_I2V_API",
     "display_name": "HappyHorse 1.0 Image To Video",
     "category": "BizyTRD/HappyHorse",
-    "model_name": "happyhorse-1-0-i2v",
+    "model_name": "happyhorse-1-0-official",
     "endpoint_category": "Image To Video",
     "output_type": "video",
     "params": [
@@ -4283,7 +4183,7 @@
     "class_name": "Qwen3_TTS",
     "display_name": "Qwen3 Text To Audio",
     "category": "BizyTRD/SiliconFlow",
-    "model_name": "qwen3-tts",
+    "model_name": "qwen3TTS-custom-voice",
     "endpoint_category": "Text To Audio",
     "output_type": "audio",
     "params": [
@@ -6896,7 +6796,7 @@
     "class_name": "Kling_O3_T2V_API",
     "display_name": "Kling O3 Text To Video",
     "category": "BizyTRD/Kling",
-    "model_name": "kling-o3-t2v",
+    "model_name": "kling-o3",
     "endpoint_category": "Text To Video",
     "output_type": "video",
     "params": [
@@ -6929,16 +6829,17 @@
         "description": "是否开启声音。"
       },
       {
-        "name": "model",
+        "name": "channel",
         "type": "LIST",
         "required": true,
-        "fieldKey": "model",
+        "internal": true,
+        "fieldKey": "channel",
         "options": [
-          "kling-o3-t2v-std",
-          "kling-o3-t2v-pro"
+          "base",
+          "official"
         ],
-        "default": "kling-o3-t2v-std",
-        "description": "模型版本。"
+        "default": "base",
+        "description": "模型渠道。"
       },
       {
         "name": "aspect_ratio",
@@ -6990,7 +6891,7 @@
     "class_name": "Kling_O3_FLF2V_API",
     "display_name": "Kling O3 First Last Frame To Video",
     "category": "BizyTRD/Kling",
-    "model_name": "kling-o3-i2v",
+    "model_name": "kling-o3",
     "endpoint_category": "FLF To Video",
     "output_type": "video",
     "params": [
@@ -7007,7 +6908,7 @@
         "name": "first_frame_image",
         "type": "IMAGE",
         "required": true,
-        "fieldKey": "firstFrameImage",
+        "fieldKey": "first_frame_image",
         "description": "首帧图片。"
       },
       {
@@ -7030,22 +6931,23 @@
         "description": "是否开启声音。"
       },
       {
-        "name": "model",
+        "name": "channel",
         "type": "LIST",
         "required": true,
-        "fieldKey": "model",
+        "internal": true,
+        "fieldKey": "channel",
         "options": [
-          "kling-o3-i2v-std",
-          "kling-o3-i2v-pro"
+          "base",
+          "official"
         ],
-        "default": "kling-o3-i2v-std",
-        "description": "模型版本。"
+        "default": "base",
+        "description": "模型渠道。"
       },
       {
         "name": "last_frame_image",
         "type": "IMAGE",
         "required": false,
-        "fieldKey": "lastFrameImage",
+        "fieldKey": "last_frame_image",
         "description": "尾帧图片。",
         "sendIf": "non_empty"
       },
@@ -7126,16 +7028,17 @@
         "description": "是否开启声音。"
       },
       {
-        "name": "model",
+        "name": "channel",
         "type": "LIST",
         "required": true,
-        "fieldKey": "model",
+        "internal": true,
+        "fieldKey": "channel",
         "options": [
-          "kling-o3-ref-std",
-          "kling-o3-ref-pro"
+          "base",
+          "official"
         ],
-        "default": "kling-o3-ref-std",
-        "description": "模型版本。"
+        "default": "base",
+        "description": "模型渠道。"
       },
       {
         "name": "aspect_ratio",
@@ -7202,7 +7105,7 @@
     "class_name": "Kling_O3_VIDEO_EDIT_API",
     "display_name": "Kling O3 Video Edit",
     "category": "BizyTRD/Kling",
-    "model_name": "kling-o3-edit",
+    "model_name": "kling-o3",
     "endpoint_category": "Video Edit",
     "output_type": "video",
     "params": [
@@ -7231,16 +7134,17 @@
         "description": "选择是否通过参数保留视频原始声音。"
       },
       {
-        "name": "model",
+        "name": "channel",
         "type": "LIST",
         "required": true,
-        "fieldKey": "model",
+        "internal": true,
+        "fieldKey": "channel",
         "options": [
-          "kling-o3-edit-std",
-          "kling-o3-edit-pro"
+          "base",
+          "official"
         ],
-        "default": "kling-o3-edit-std",
-        "description": "模型版本。"
+        "default": "base",
+        "description": "模型渠道。"
       },
       {
         "name": "images",

@@ -70,7 +70,7 @@ def _return_signature(output_type: str) -> tuple[tuple[str, ...], tuple[str, ...
         "image": (("IMAGE", "STRING"), ("image", "urls")),
         "video": (("VIDEO", "STRING"), ("video", "urls")),
         "audio": (("AUDIO", "STRING"), ("audio", "urls")),
-        "string": (("STRING", "STRING"), ("result", "urls")),
+        "string": (("STRING", ), ("result", )),
     }
     return mapping.get(output_type, mapping["string"])
 

@@ -581,7 +581,7 @@
       }
     ]
   },
-{
+  {
     "internal_name": "Seedream_4_0_T2I_API",
     "class_name": "Seedream_4_0_T2I_API",
     "display_name": "Seedream 4.0 Text To Image",
@@ -590,6 +590,18 @@
     "endpoint_category": "Text To Image",
     "output_type": "image",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -603,17 +615,17 @@
         "type": "LIST",
         "required": true,
         "options": [
-            "1K Square (1024x1024)",
-            "2K Square (2048x2048)",
-            "4K Square (4096x4096)",
-            "HD 16:9 (1920x1080)",
-            "2K 16:9 (2560x1440)",
-            "4K 16:9 (3840x2160)",
-            "Portrait 9:16 (1080x1920)",
-            "Portrait 3:4 (1536x2048)",
-            "Landscape 4:3 (2048x1536)",
-            "Ultra-wide 21:9 (3440x1440)",
-            "Custom"
+          "1K Square (1024x1024)",
+          "2K Square (2048x2048)",
+          "4K Square (4096x4096)",
+          "HD 16:9 (1920x1080)",
+          "2K 16:9 (2560x1440)",
+          "4K 16:9 (3840x2160)",
+          "Portrait 9:16 (1080x1920)",
+          "Portrait 3:4 (1536x2048)",
+          "Landscape 4:3 (2048x1536)",
+          "Ultra-wide 21:9 (3440x1440)",
+          "Custom"
         ],
         "default": "HD 16:9 (1920x1080)",
         "valueHook": "doubao.custom_size_sd40"
@@ -662,6 +674,18 @@
     "output_type": "image",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -674,17 +698,17 @@
         "type": "LIST",
         "required": true,
         "options": [
-            "1K Square (1024x1024)",
-            "2K Square (2048x2048)",
-            "4K Square (4096x4096)",
-            "HD 16:9 (1920x1080)",
-            "2K 16:9 (2560x1440)",
-            "4K 16:9 (3840x2160)",
-            "Portrait 9:16 (1080x1920)",
-            "Portrait 3:4 (1536x2048)",
-            "Landscape 4:3 (2048x1536)",
-            "Ultra-wide 21:9 (3440x1440)",
-            "Custom"
+          "1K Square (1024x1024)",
+          "2K Square (2048x2048)",
+          "4K Square (4096x4096)",
+          "HD 16:9 (1920x1080)",
+          "2K 16:9 (2560x1440)",
+          "4K 16:9 (3840x2160)",
+          "Portrait 9:16 (1080x1920)",
+          "Portrait 3:4 (1536x2048)",
+          "Landscape 4:3 (2048x1536)",
+          "Ultra-wide 21:9 (3440x1440)",
+          "Custom"
         ],
         "default": "HD 16:9 (1920x1080)",
         "valueHook": "doubao.custom_size_sd40"
@@ -731,7 +755,7 @@
       }
     ]
   },
-{
+  {
     "internal_name": "Seedream_4_5_T2I_API",
     "class_name": "Seedream_4_5_T2I_API",
     "display_name": "Seedream 4.5 Text To Image",
@@ -740,6 +764,18 @@
     "endpoint_category": "Text To Image",
     "output_type": "image",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -812,6 +848,18 @@
     "output_type": "image",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -881,7 +929,7 @@
       }
     ]
   },
-{
+  {
     "internal_name": "Seedream_5_0_T2I_API",
     "class_name": "Seedream_5_0_T2I_API",
     "display_name": "Seedream 5.0 Text To Image",
@@ -890,6 +938,18 @@
     "endpoint_category": "Text To Image",
     "output_type": "image",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -971,6 +1031,18 @@
     "endpoint_category": "Image To Image",
     "output_type": "image",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -1061,6 +1133,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -1118,7 +1202,7 @@
         ],
         "description": "帧率固定24",
         "fieldKey": "fps",
-        "default": 24 
+        "default": 24
       },
       {
         "name": "camerafixed",
@@ -1155,6 +1239,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -1212,7 +1308,7 @@
         ],
         "description": "帧率固定24",
         "fieldKey": "fps",
-        "default": 24 
+        "default": 24
       },
       {
         "name": "camerafixed",
@@ -1248,6 +1344,18 @@
     "endpoint_category": "FLF To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "first_frame_image",
         "type": "IMAGE",
@@ -1357,6 +1465,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "first_frame_image",
         "type": "IMAGE",
         "required": true,
@@ -1465,6 +1585,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -1568,6 +1700,18 @@
     "endpoint_category": "FLF To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "first_frame_image",
         "type": "IMAGE",
@@ -1687,6 +1831,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "image",
         "type": "IMAGE",
         "required": true,
@@ -1710,7 +1866,7 @@
       }
     ]
   },
-{
+  {
     "internal_name": "Flux_Kontext_Pro_T2I_API",
     "class_name": "Flux_Kontext_Pro_T2I_API",
     "display_name": "Flux Kontext Pro Text to Image",
@@ -1719,6 +1875,18 @@
     "endpoint_category": "Text To Image",
     "output_type": "image",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -1766,6 +1934,18 @@
     "output_type": "image",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -1809,7 +1989,7 @@
       }
     ]
   },
-{
+  {
     "internal_name": "Flux_Kontext_Max_T2I_API",
     "class_name": "Flux_Kontext_Max_T2I_API",
     "display_name": "Flux Kontext Max Text to Image",
@@ -1818,6 +1998,18 @@
     "endpoint_category": "Text To Image",
     "output_type": "image",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -1865,6 +2057,18 @@
     "output_type": "image",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -1908,7 +2112,7 @@
       }
     ]
   },
-{
+  {
     "internal_name": "Flux_2_Pro_T2I_API",
     "class_name": "Flux_2_Pro_T2I_API",
     "display_name": "Flux 2 Pro Text to Image",
@@ -1917,6 +2121,18 @@
     "endpoint_category": "Text To Image",
     "output_type": "image",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -1998,6 +2214,18 @@
     "output_type": "image",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -2076,7 +2304,7 @@
       }
     ]
   },
-{
+  {
     "internal_name": "Flux_2_Flex_T2I_API",
     "class_name": "Flux_2_Flex_T2I_API",
     "display_name": "Flux 2 Flex Text to Image",
@@ -2085,6 +2313,18 @@
     "endpoint_category": "Text To Image",
     "output_type": "image",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -2166,6 +2406,18 @@
     "output_type": "image",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -2244,7 +2496,7 @@
       }
     ]
   },
-{
+  {
     "internal_name": "NanoBanana_T2I_API",
     "class_name": "NanoBanana_T2I_API",
     "display_name": "NanoBanana Text to Image",
@@ -2253,6 +2505,18 @@
     "endpoint_category": "Text To Image",
     "output_type": "image",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -2371,6 +2635,18 @@
     "output_type": "image",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "images",
         "type": "IMAGE",
         "required": false,
@@ -2486,7 +2762,7 @@
       }
     ]
   },
-{
+  {
     "internal_name": "NanoBananaPro_T2I_API",
     "class_name": "NanoBananaPro_T2I_API",
     "display_name": "NanoBananaPro Text to Image",
@@ -2794,7 +3070,7 @@
       }
     ]
   },
-{
+  {
     "internal_name": "NanoBanana2_T2I_API",
     "class_name": "NanoBanana2_T2I_API",
     "display_name": "NanoBanana 2 Text to Image",
@@ -3127,7 +3403,7 @@
       }
     ]
   },
-{
+  {
     "internal_name": "Grok_Imagine_I2V_API",
     "class_name": "Grok_Imagine_I2V_API",
     "display_name": "Grok Imagine Image To Video",
@@ -3213,6 +3489,18 @@
     "endpoint_category": "Video Edit",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "video",
         "type": "VIDEO",
@@ -3535,6 +3823,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -3579,6 +3879,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -3622,6 +3934,18 @@
     "endpoint_category": "Image To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "first_frame_image",
         "type": "IMAGE",
@@ -3673,6 +3997,18 @@
     "endpoint_category": "Image To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "first_frame_image",
         "type": "IMAGE",
@@ -3886,6 +4222,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -3976,6 +4324,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "video",
         "type": "VIDEO",
         "required": true,
@@ -4058,8 +4418,20 @@
     "category": "BizyTRD/SiliconFlow",
     "model_name": "joycaption3",
     "endpoint_category": "Vision Language Models",
-    "output_type": "text",
+    "output_type": "string",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "images",
         "type": "IMAGE",
@@ -4103,16 +4475,16 @@
         "required": false,
         "fieldKey": "caption_type",
         "options": [
-          "Descriptive", 
-          "Descriptive (Informal)", 
-          "Training Prompt", 
+          "Descriptive",
+          "Descriptive (Informal)",
+          "Training Prompt",
           "MidJourney",
-          "Booru tag list", 
-          "Booru-like tag list", 
+          "Booru tag list",
+          "Booru-like tag list",
           "Art Critic",
-          "Product Listing", 
+          "Product Listing",
           "Social Media Post"
-        ] 
+        ]
       },
       {
         "name": "caption_length",
@@ -4188,6 +4560,18 @@
     "output_type": "audio",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "input",
         "type": "STRING",
         "required": true,
@@ -4202,7 +4586,15 @@
         "required": true,
         "fieldKey": "voice",
         "options": [
-          "vivian", "serena", "uncle_fu", "dylan", "eric", "ryan", "aiden", "ono_anna", "sohee"
+          "vivian",
+          "serena",
+          "uncle_fu",
+          "dylan",
+          "eric",
+          "ryan",
+          "aiden",
+          "ono_anna",
+          "sohee"
         ],
         "default": "vivian"
       },
@@ -4212,7 +4604,12 @@
         "required": true,
         "fieldKey": "response_format",
         "options": [
-          "wav", "mp3", "flac", "pcm", "aac", "opus"
+          "wav",
+          "mp3",
+          "flac",
+          "pcm",
+          "aac",
+          "opus"
         ],
         "default": "wav"
       },
@@ -4236,7 +4633,19 @@
         "type": "LIST",
         "required": false,
         "fieldKey": "language",
-        "options": ["Auto", "Chinese", "English", "Japanese", "Korean", "German", "French", "Russian", "Portuguese", "Spanish", "Italian"],
+        "options": [
+          "Auto",
+          "Chinese",
+          "English",
+          "Japanese",
+          "Korean",
+          "German",
+          "French",
+          "Russian",
+          "Portuguese",
+          "Spanish",
+          "Italian"
+        ],
         "default": "Auto"
       },
       {
@@ -4272,6 +4681,18 @@
     "endpoint_category": "Text To Image",
     "output_type": "image",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -4356,6 +4777,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "image",
         "type": "IMAGE",
         "required": true,
@@ -4421,7 +4854,7 @@
       }
     ]
   },
-    {
+  {
     "internal_name": "Wan_2_5_I2V_API",
     "class_name": "Wan_2_5_I2V_API",
     "display_name": "Wan 2.5 Image To Video",
@@ -4430,6 +4863,18 @@
     "endpoint_category": "Image To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "image",
         "type": "IMAGE",
@@ -4522,6 +4967,18 @@
     "endpoint_category": "Text To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -4617,6 +5074,18 @@
     "endpoint_category": "Image To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "image",
         "type": "IMAGE",
@@ -4722,6 +5191,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -4826,6 +5307,18 @@
     "endpoint_category": "Text To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -4936,6 +5429,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "first_frame",
         "type": "IMAGE",
         "required": true,
@@ -5045,6 +5550,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "first_clip",
         "type": "VIDEO",
         "required": true,
@@ -5146,6 +5663,18 @@
     "endpoint_category": "Reference To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -5333,14 +5862,26 @@
     ]
   },
   {
-    "internal_name": "Wan_V2_7_VIDEOEDIT_API",
-    "class_name": "Wan_V2_7_VIDEOEDIT_API",
-    "display_name": "Wan2.7 Video Edit",
-    "category": "BizyTRD/WanVideo",
-    "model_name": "wan2.7-videoedit",
+    "internal_name": "Wan_2_7_VIDEOEDIT_API",
+    "class_name": "Wan_2_7_VIDEOEDIT_API",
+    "display_name": "Wan 2.7 Video Edit",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-7",
     "endpoint_category": "Video Edit",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "video",
         "type": "VIDEO",
@@ -5427,7 +5968,9 @@
         ],
         "default": "default",
         "description": "输出宽高比。default表示跟随输入视频；其他值显式传给模型。",
-        "skipValues": ["default"]
+        "skipValues": [
+          "default"
+        ]
       },
       {
         "name": "duration",
@@ -5438,7 +5981,9 @@
         "min": 0,
         "max": 10,
         "description": "0表示保持输入视频时长；2-10表示截断到指定长度。",
-        "skipValues": [0]
+        "skipValues": [
+          0
+        ]
       },
       {
         "name": "audio_setting",
@@ -5488,14 +6033,26 @@
     ]
   },
   {
-    "internal_name": "Wan_V2_7_IMAGE_API",
-    "class_name": "Wan_V2_7_IMAGE_API",
-    "display_name": "Wan2.7 Image",
-    "category": "BizyTRD/WanImage",
-    "model_name": "wan2.7-image",
+    "internal_name": "Wan_2_7_IMAGE_API",
+    "class_name": "Wan_2_7_IMAGE_API",
+    "display_name": "Wan 2.7 Image",
+    "category": "BizyTRD/Wan",
+    "model_name": "wan-2-7",
     "endpoint_category": "Text To Image",
     "output_type": "image",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -5640,6 +6197,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -5696,6 +6265,18 @@
     "endpoint_category": "FLF To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -5769,6 +6350,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -5832,6 +6425,18 @@
     "endpoint_category": "Text To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -5898,6 +6503,18 @@
     "endpoint_category": "FLF To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "first_frame_image",
         "type": "IMAGE",
@@ -5982,6 +6599,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "first_frame_image",
         "type": "IMAGE",
         "required": true,
@@ -6050,6 +6679,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -6114,6 +6755,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "first_frame_image",
         "type": "IMAGE",
         "required": true,
@@ -6171,6 +6824,18 @@
     "endpoint_category": "Text To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -6255,6 +6920,18 @@
     "endpoint_category": "FLF To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "first_frame_image",
         "type": "IMAGE",
@@ -6341,6 +7018,18 @@
     "endpoint_category": "Text To Image",
     "output_type": "image",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -6434,6 +7123,18 @@
     "output_type": "image",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "image",
         "type": "IMAGE",
         "required": true,
@@ -6522,6 +7223,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -6578,6 +7291,18 @@
     "endpoint_category": "FLF To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -6650,6 +7375,18 @@
     "endpoint_category": "Reference To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -6731,6 +7468,18 @@
     "endpoint_category": "Video Edit",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "prompt",
         "type": "STRING",
@@ -7156,14 +7905,14 @@
       }
     ]
   },
-    {
+  {
     "internal_name": "LLM_gemini_3_flash_preview_API",
     "class_name": "LLM_gemini_3_flash_preview_API",
     "display_name": "gemini-3-flash-preview LLM",
     "category": "BizyTRD/LLM",
     "model_name": "gemini-3-flash-preview",
     "endpoint_category": "large-language-models",
-    "output_type": "text",
+    "output_type": "string",
     "params": [
       {
         "name": "channel",
@@ -7244,7 +7993,7 @@
     "category": "BizyTRD/LLM",
     "model_name": "gemini-3-pro-preview",
     "endpoint_category": "large-language-models",
-    "output_type": "text",
+    "output_type": "string",
     "params": [
       {
         "name": "channel",
@@ -7325,7 +8074,7 @@
     "category": "BizyTRD/LLM",
     "model_name": "gemini-3-1-flash-lite-preview",
     "endpoint_category": "large-language-models",
-    "output_type": "text",
+    "output_type": "string",
     "params": [
       {
         "name": "channel",
@@ -7406,7 +8155,7 @@
     "category": "BizyTRD/LLM",
     "model_name": "gemini-3-1-pro-preview",
     "endpoint_category": "large-language-models",
-    "output_type": "text",
+    "output_type": "string",
     "params": [
       {
         "name": "channel",
@@ -7487,7 +8236,7 @@
     "category": "BizyTRD/VLM",
     "model_name": "gemini-3-flash-preview",
     "endpoint_category": "vision-language-models",
-    "output_type": "text",
+    "output_type": "string",
     "params": [
       {
         "name": "channel",
@@ -7587,7 +8336,7 @@
     "category": "BizyTRD/VLM",
     "model_name": "gemini-3-pro-preview",
     "endpoint_category": "vision-language-models",
-    "output_type": "text",
+    "output_type": "string",
     "params": [
       {
         "name": "channel",
@@ -7687,7 +8436,7 @@
     "category": "BizyTRD/VLM",
     "model_name": "gemini-3-1-flash-lite-preview",
     "endpoint_category": "vision-language-models",
-    "output_type": "text",
+    "output_type": "string",
     "params": [
       {
         "name": "channel",
@@ -7787,7 +8536,7 @@
     "category": "BizyTRD/VLM",
     "model_name": "gemini-3-1-pro-preview",
     "endpoint_category": "vision-language-models",
-    "output_type": "text",
+    "output_type": "string",
     "params": [
       {
         "name": "channel",
@@ -7890,6 +8639,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -7989,6 +8750,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -8078,6 +8851,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -8160,6 +8945,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -8236,6 +9033,18 @@
     "output_type": "video",
     "params": [
       {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
+      {
         "name": "prompt",
         "type": "STRING",
         "required": true,
@@ -8311,6 +9120,18 @@
     "endpoint_category": "FLF To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "image",
         "type": "IMAGE",
@@ -8395,6 +9216,18 @@
     "endpoint_category": "FLF To Video",
     "output_type": "video",
     "params": [
+      {
+        "name": "channel",
+        "type": "LIST",
+        "required": true,
+        "options": [
+          "base",
+          "official"
+        ],
+        "description": "模型供应渠道。base表示第三方渠道，official表示官方渠道。",
+        "fieldKey": "channel",
+        "default": "official"
+      },
       {
         "name": "image",
         "type": "IMAGE",
